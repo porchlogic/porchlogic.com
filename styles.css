@@ -1,0 +1,77 @@
+/* Basic resets */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'YourCustomFont', sans-serif;
+	background-color: #1A1A1A;
+	color: #fff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+.container {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+.content {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.product-image {
+	width: 45%;
+	max-width: 500px;
+	height: auto;
+}
+
+.text-section {
+	width: 45%;
+	max-width: 500px;
+	color: #ff7aa0;
+	text-align: left;
+}
+
+h1 {
+	font-size: 3rem;
+	font-weight: bold;
+	color: #fff;
+}
+
+p {
+	font-size: 1.2rem;
+	color: #ff7aa0;
+	margin-top: 20px;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+	.content {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.product-image, .text-section {
+		width: 100%;
+		max-width: none;
+		text-align: center;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+	}
+	
+	p {
+		font-size: 1rem;
+	}
+}
