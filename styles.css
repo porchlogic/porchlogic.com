@@ -33,6 +33,7 @@ body {
 	width: 45%;
 	max-width: 500px;
 	height: auto;
+	order: 2; /* Set to display second */
 }
 
 .text-section {
@@ -40,6 +41,7 @@ body {
 	max-width: 500px;
 	color: #ff7aa0;
 	text-align: left;
+	order: 1; /* Set to display first */
 }
 
 h1 {
