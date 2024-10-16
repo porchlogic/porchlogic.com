@@ -1,3 +1,10 @@
+@font-face {
+	font-family: 'stealth57';
+	src: url('fonts/stealth57.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
 /* Basic resets */
 * {
 	margin: 0;
@@ -6,13 +13,26 @@
 }
 
 body {
-	font-family: 'stealth57', sans-serif;
+	font-family: 'Arial', sans-serif; /* Use a standard font for the rest of the page */
 	background-color: #1A1A1A;
 	color: #fff;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
 	align-items: center;
 	min-height: 100vh;
+}
+
+h1 {
+	font-family: 'stealth57', sans-serif; /* Set the title to use stealth57 */
+	font-size: 3rem;
+	font-weight: bold;
+	color: #fff;
+}
+
+.youtube-embed {
+	width: 100%;
+	height: 500px;
+	margin-bottom: 20px;
 }
 
 .container {
@@ -42,12 +62,6 @@ body {
 	color: #ff7aa0;
 	text-align: left;
 	order: 1; /* Set to display first */
-}
-
-h1 {
-	font-size: 3rem;
-	font-weight: bold;
-	color: #fff;
 }
 
 p {
