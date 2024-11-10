@@ -64,6 +64,7 @@
 				width: 100%;
 				height: auto;
 				margin-bottom: 20px;
+				display: none; /* Hide the embed until stream is confirmed */
 			}
 
 			#placeholder-image-section {
@@ -357,6 +358,7 @@
 		document.addEventListener("DOMContentLoaded", function() {
 			const iframe = document.getElementById("youtube-iframe");
 			const youtubeContainer = document.getElementById("youtube-container");
+			const placeholderImage = document.getElementById("placeholder-image-section");
 
 			// YouTube API Key and Channel ID
 			const apiKey = 'YOUR_API_KEY';
@@ -369,17 +371,19 @@
 					if (data.items && data.items.length > 0) {
 						// Live stream is active
 						youtubeContainer.style.display = "block";
+						placeholderImage.style.display = "none";
 					} else {
 						// No live stream
 						youtubeContainer.style.display = "none";
+						placeholderImage.style.display = "block";
 					}
 				})
 				.catch(error => {
 					console.error('Error fetching YouTube API:', error);
 					youtubeContainer.style.display = "none";
+					placeholderImage.style.display = "block";
 				});
 		});
 	</script>
 </body>
 </html>
-
