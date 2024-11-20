@@ -10,6 +10,16 @@
 		<!-- Corrected link to Font Awesome CSS -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		
+		<script>
+			function loadHTML(elementId, file) {
+				fetch(file)
+					.then(response => response.text())
+					.then(data => {
+						document.getElementById(elementId).innerHTML = data;
+					});
+			}
+			
+		</script>
 		
 		<style>
 			@font-face {
@@ -17,6 +27,10 @@
 				src: url('fonts/stealth57.ttf') format('truetype');
 				font-weight: normal;
 				font-style: normal;
+			}
+
+			html {
+				scroll-behavior: smooth;
 			}
 
 			/* Basic resets */
@@ -43,15 +57,47 @@
 				font-weight: bold;
 				color: #fff;
 				text-align: center;
+				line-height: 120%;
+			}
+
+			a {
+				color: #00bfff;
 			}
 
 			.intro-section {
 				width: 100%;
 				max-width: 1000px;
-				margin: 40px auto;
+				margin: 5px auto;
 				padding: 40px;
 				text-align: left;
+				display: none;
+				/* background-color: #2A2A2A; */
+				border-radius: 10px;
 			}
+
+			.intro-section.active {
+				display: block;
+			}
+
+			.intro-header {
+				width: 100%;
+				max-width: 1000px;
+				padding: 20px;
+				color: #959595;
+				cursor: pointer;
+				display: flex;
+				align-items: center; /* Center content vertically */
+				gap: 10px; /* Space between text and line */
+				font-size: 1.5rem;
+				margin-bottom: 40px;
+			}
+
+			.intro-header::after {
+				content: "";
+				flex-grow: 1; /* Allows the line to extend to the right edge */
+				border-bottom: 1px solid #474747;
+			}
+
 
 			.intro-section p {
 				font-size: 1.2rem;
@@ -62,46 +108,32 @@
 
 			.youtube-embed {
 				width: 100%;
-				height: auto;
-				margin-bottom: 20px;
-				display: none; /* Hide the embed until stream is confirmed */
-			}
-
-			#placeholder-image-section {
 				position: relative;
-				display: flex;
-				align-items: center;
-				justify-content: center;
+				padding-bottom: 56.25%; /* 16:9 aspect ratio */
+				margin-bottom: 20px;
 			}
 
-			#placeholder-image {
-				object-fit: contain;
-				width: 100%;
-				height: auto;
-			}
-
-			.social-buttons-on-image {
+			.youtube-embed iframe {
 				position: absolute;
-				top: 50%;
-				left: 10%;
-				transform: translateY(-50%);
-				display: flex;
-				flex-direction: column;
-				gap: 10px;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
 			}
 
-			.button-with-text {
+			.social-buttons {
 				display: flex;
-				align-items: center;
-				gap: 10px;
+				justify-content: space-around;
+				margin: 50px 0px 100px 0px;
+				width: 100%;
+				max-width: 1000px;
 			}
 
-			.social-buttons-on-image a {
+			.social-button {
 				display: inline-flex;
 				align-items: center;
 				justify-content: center;
-				width: 50px; /* Fixed width for uniformity */
-				height: 50px;
+				padding: 10px 15px;
 				background-color: #1a1a1a;
 				border: 2px solid #00bfff;
 				border-radius: 5px;
@@ -109,27 +141,44 @@
 				box-shadow: 0 0 10px rgba(0, 191, 255, 0.7);
 				color: #00bfff;
 				transition: all 0.3s ease;
+				gap: 10px;
+				font-size: 1rem;
+				text-align: center;
 			}
 
-			.social-buttons-on-image a img {
+			/* Responsive layout: make buttons stack vertically on smaller screens */
+			@media (max-width: 600px) {
+				.social-buttons {
+					flex-direction: column; /* Stack buttons vertically */
+					gap: 15px; /* Adjust gap for smaller screen */
+					width: 90%;
+				}
+			}
+
+
+			.discord-button {
+				box-shadow: 0 0 10px rgba(26, 189, 1, 0.7), 0 0 20px rgba(1, 215, 215, 0.59);
+				color: #00db28;
+				border: 2px solid #079d3c;
+			}
+
+			.shop-button {
+				box-shadow: 0 0 10px rgba(243, 1, 150, 0.7), 0 0 20px rgba(208, 1, 111, 0.654);
+				color: #e7058c;
+				border: 2px solid #c80466;
+			}
+
+			.social-button img {
 				width: 30px; /* Adjust icon size as necessary */
 				height: auto;
 			}
 
-			.social-buttons-on-image span {
-				font-size: 1rem; /* Adjust text size as necessary */
-				color: #ff7aa0; /* New color for better distinction */
-				cursor: pointer;
-				display: inline-flex;
-				align-items: center;
-			}
-
-			.social-buttons-on-image a:hover {
+			.social-button:hover {
 				background-color: #00bfff;
 				color: #fff;
 			}
 
-			.social-buttons-on-image a:hover img {
+			.social-button:hover img {
 				filter: brightness(0) invert(1); /* Invert the color of SVG icons if necessary */
 			}
 
@@ -139,18 +188,29 @@
 				margin: 0 auto;
 				padding: 20px;
 			}
+			
+			.shop {
+				width: 100%;
+				background-color: #2a2a2a21;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				min-height: 100vh;
+				position: relative;
+			}
 
 			.content {
 				display: flex;
 				align-items: center;
 				justify-content: space-around;
 				flex-wrap: wrap;
-				gap: 20px;
+				gap: 40px;
 				margin-top: 60px;
 				margin-bottom: 60px;
-				background-color: #2A2A2A; /* Slightly different background color to distinguish section */
+				/* background-color: #2a2a2a21; */
 				padding: 40px;
 				border-radius: 10px;
+				max-width: 1000px;
 			}
 
 			.product-image {
@@ -158,13 +218,29 @@
 				max-width: 500px;
 				height: auto;
 				order: 2; /* Set to display second */
+				/* border-style: solid; */
+				/* border-width: 1px; */
+				/* border-color: #00bfff; */
+				border-radius: 8px;
+				background-color:#4a4d4f;
+				cursor: pointer;
+			}
+
+			.product-description {
+				display: none;
+				width: 100%;
+				margin-top: 10px;
+				font-size: 1rem;
+				color: #72ac83;
+				text-align: center;
+				order: 3;
 			}
 
 			.text-section {
 				width: 45%;
 				max-width: 500px;
-				color: #ff7aa0;
-				text-align: center;
+				color: #7affb8;
+				text-align: center;				
 				order: 1; /* Set to display first */
 				display: flex;
 				flex-direction: column;
@@ -176,7 +252,7 @@
 
 			p {
 				font-size: 1.2rem;
-				color: #ff7aa0;
+				color: #7affa6;
 				margin-top: 20px;
 			}
 
@@ -200,41 +276,147 @@
 				box-shadow: 0 0 20px rgba(0, 191, 255, 1);
 			}
 
-			.social-buttons a {
-				display: inline-flex;
-				align-items: center;
-				justify-content: center;
-				width: 50px; /* Fixed width for uniformity */
-				height: 50px;
-				background-color: #1a1a1a;
-				border: 2px solid #00bfff;
-				border-radius: 5px;
-				text-decoration: none;
-				box-shadow: 0 0 10px rgba(0, 191, 255, 0.7);
-				color: #00bfff;
-				transition: all 0.3s ease;
-			}
 
-			.social-buttons a img {
-				width: 30px; /* Adjust icon size as necessary */
-				height: auto;
-			}
 
-			.social-buttons span {
-				font-size: 1rem; /* Adjust text size as necessary */
-				color: #00bfff; /* Match the icon color */
-				cursor: pointer;
-			}
+/* Product Card */
+.product-card {
+	width: 100%;
+	max-width: 1000px;
+	cursor: pointer;
+	position: relative;
+	background-color: transparent;
+	border-radius: 12px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	transition: all 0.3s ease;
+}
 
-			.social-buttons a:hover {
-				background-color: #00bfff;
-				color: #fff;
-			}
+.product-card.expanded {
+	background-color: #333333;
+	padding: 20px;
+	height: auto;
+}
 
-			.social-buttons a:hover img {
-				filter: brightness(0) invert(1); /* Invert the color of SVG icons if necessary */
-			}
-		
+.product-layout {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 20px;
+	width: 100%;
+}
+
+.product-card.expanded .product-layout {
+	margin-bottom: 20px; /* Spacing before description */
+}
+
+.product-description {
+	display: none;
+	color: #b5b4b4;
+	font-size: 1rem;
+	line-height: 1.5;
+	text-align: center;
+	opacity: 0;
+	transform: translateY(-20px);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+	width: 100%;
+}
+
+.product-card.expanded .product-description {
+	display: block;
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.product-image {
+	width: 45%;
+	max-width: 500px;
+	height: auto;
+	transition: all 0.3s ease;
+	/* border-style: solid; */
+	/* border-width: 1px; */
+	/* border-color: #00bfff; */
+	border-radius: 8px;
+	/* background-color: #4a4d4f; */
+}
+
+.text-section {
+	width: 45%;
+	max-width: 500px;
+	text-align: left;
+}
+
+@media (max-width: 768px) {
+	.product-layout {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.product-image, .text-section {
+		width: 100%;
+		max-width: none;
+	}
+}
+
+.product-section {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	margin-bottom: 20px;
+}
+
+.product-section.reverse {
+	flex-direction: row-reverse;
+}
+
+.section-image {
+	width: 65%;
+	max-width: 500px;
+	height: auto;
+	border-radius: 8px;
+	/* background-color: #4a4d4f; */
+	/* border: 1px solid #00bfff; */
+}
+
+.section-text {
+	width: 50%;
+	max-width: 500px;
+	color: #b5b4b4;
+	text-align: left;
+}
+
+.section-text h2 {
+	color: #ff7aa0;
+	font-size: 1.5rem;
+	margin-bottom: 10px;
+}
+
+.section-text p {
+	font-size: 1rem;
+	line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+	.product-section,
+	.product-section.reverse {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.section-image,
+	.section-text {
+		width: 100%;
+		max-width: none;
+	}
+}
+
+
+
+
+
+
 			/* Responsive behavior */
 			@media (max-width: 768px) {
 				.content {
@@ -260,45 +442,66 @@
 	</head>
 	
 
-<body>
-	<div id="placeholder-image-section">
-		<img id="placeholder-image" src="images/workbench.png" alt="Live Stream Placeholder">
-		<div class="social-buttons-on-image">
-			<div class="button-with-text">
-				<a href="https://www.youtube.com/@porchlogic" target="_blank">
-					<img src="images/Youtube_white.svg" alt="Youtube">
-				</a>
-				<span onclick="window.open('https://www.youtube.com/@porchlogic', '_blank')">YouTube</span>
-			</div>
-			<div class="button-with-text">
-				<a href="https://www.instagram.com/porchlogic" target="_blank">
-					<img src="images/Instagram_white.svg" alt="Instagram">
-				</a>
-				<span onclick="window.open('https://www.instagram.com/porchlogic', '_blank')">Instagram</span>
-			</div>
-			<div class="button-with-text">
-				<a href="https://www.reddit.com/user/porchlogic/" target="_blank">
-					<img src="images/Reddit_white.svg" alt="Reddit">
-				</a>
-				<span onclick="window.open('https://www.reddit.com/user/porchlogic/', '_blank')">Reddit</span>
-			</div>
-			<div class="button-with-text">
-				<a href="https://discord.gg/4vESv5ZD" target="_blank">
-					<img src="images/Discord_white.svg" alt="Discord">
-				</a>
-				<span onclick="window.open('https://discord.gg/4vESv5ZD', '_blank')">Discord</span>
-			</div>
-		</div>
-	</div>
+<body onload="loadHTML('header', 'header.html'); loadHTML('footer', 'footer.html');">
+	
+	<div id="header"></div>
+
 
 	<div class="youtube-embed" id="youtube-container">
-		<iframe id="youtube-iframe" width="100%" height="100%" src="https://www.youtube.com/embed/MW2TUWE-rEE?si=oPPUH3aN-3PR7rs1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		<iframe id="youtube-iframe" src="https://www.youtube.com/embed/MW2TUWE-rEE?si=oPPUH3aN-3PR7rs1&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 	</div>
 
-	<div class="intro-section">
+	<div class="social-buttons">
+		<a href="https://discord.gg/PgeDHETwYq" target="_blank" class="social-button discord-button">
+			<img src="images/Discord_white.svg" alt="Discord">
+			<span>Discord</span>
+		</a>
+		<button type="button" id="shop-link" class="social-button shop-button">
+			<img src="images/Shop_white.svg" alt="Shop">
+			<span>Shop</span>
+		</button>
+		<a href="https://www.youtube.com/@porchlogic" target="_blank" class="social-button">
+			<img src="images/Youtube_white.svg" alt="Youtube">
+			<span>YouTube</span>
+		</a>
+		<a href="https://www.instagram.com/porchlogic" target="_blank" class="social-button">
+			<img src="images/Instagram_white.svg" alt="Instagram">
+			<span>Instagram</span>
+		</a>
+		<a href="https://www.reddit.com/user/porchlogic/" target="_blank" class="social-button">
+			<img src="images/Reddit_white.svg" alt="Reddit">
+			<span>Reddit</span>
+		</a>
+	</div>
+
+	<div class="intro-header" onclick="toggleSection('intro1')">Update: Nov 20, 2024</div>
+	<div class="intro-section active" id="intro1">
 		<p>
-			Update: Nov 1, 2024
+			I'm going against my inclination to build everything from scratch and starting a Discord server. 
+			(I really want to build a custom UI for decentralized communication with protocols like Nostr, Lemmy, Mastadon, Bluesky, etc., but that's for later).
+			I think Discord is the best option right now for coordinating group rides/performances, and working on other projects with people. 
+			Too much of my mind energy over the years has gone into ideas that never see the light of day, because I don't end up sparking any collaboration with them. 
 			<br/><br/>
+			In my most creative moments, I start imagining building things with people I know who specialize in this or that, 
+			and I want a low-friction place to loop those people in on the initial sparks.
+			<br/><br/>
+			So, I'm going to try creating a new channel for each of these projects, and inviting those people to participate at will. 
+			I guess that's asynchronous work.
+			<br/><br/>
+			Anyway, if you'd like to join the server, come say hi and ask me what the current project is:
+			<br/><br/>
+			<a href="https://discord.gg/PgeDHETwYq" target="_blank">PorchLogic Discord Server</a>
+
+			
+			<br/><br/>
+			
+			-EN
+		</p>
+	</div>
+
+	<div class="intro-header" onclick="toggleSection('intro2')">Update: Nov 1, 2024</div>
+	<div class="intro-section" id="intro2">
+		<p>
 			I've been working on this cyberpack for a couple years now. It's meant to be a mobile audio-visual boom box that coordinates an orchestra of cyborgs roaming the streets on electric unicycles (EUCs) and other personal electric vehicles (PEVs).
 			<br/><br/>
 			I originally wanted to simply build a protective case for my speaker on my backpack when I started riding with the PDX Friday Night Ride, but it quickly escalated to a mobile computer system, with MS Surface showing visuals synced with music, and a processor + camera arm for live-streaming the ride (this being a temporary measure until I have a drone that follows us around as a camera-bot)
@@ -313,77 +516,147 @@
 			<br/><br/>
 			-EN
 		</p>
-		
 	</div>
 
-	<hr style="width: 100%; border: 1px solid #ff7aa0; margin: 40px 0;">
-		<div style="text-align: center; color: #ff7aa0; margin-bottom: 20px; font-size: 1.5rem;">Shop</div>
+	<!-- <hr style="width: 100%; border: 1px solid #ff7aa0; margin: 40px 0;"> -->
+		
 
-		<div style="margin-top: 20px;">
-			
-		</div>
 
-		<div class="content">
+
+		<section class="shop" id="shop">
+
+			<div style="text-align: center; color: #ff7aa0; margin-bottom: 20px; margin-top: 20px; font-size: 1.5rem;">Shop</div>
+
+		<!-- <div class="content">
 			<div class="text-section">
-				<h1>CyberPack Mini Print</h1>
+				<h1>CPMicro1</h1>
 				<p>Support PorchLogic</br> includes beta components </br> for playing along</p>
-				<!-- <script async
-				src="https://js.stripe.com/v3/buy-button.js">
-				</script>
-
-				<stripe-buy-button
-				buy-button-id="buy_btn_1QAc0TABTHjSuIhXQqqgYdUY"
-				publishable-key="pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr"
-				>
-				</stripe-buy-button> -->
-				<!-- <a href="https://buy.stripe.com/14k6sv8C0bVi9qw289" class="contact-link">$42</a> -->
-				<a href="mailto:ian@porchlogic.com" class="contact-link">Available Soon</a>
+				<a href="https://buy.stripe.com/14k6sv8C0bVi9qw289" class="contact-link">$42</a>
 			</div>
-			<img src="images/cyberpack-mini.png" alt="cyberpack mini" class="product-image">
-		</div>
+			<img src="images/CPMicro_0.9_black_standing.png" alt="cyberpack micro" class="product-image" onclick="toggleDescription('description1')">
+			<div id="description1" class="product-description">
+
+				Plug this little pal into your phone/tablet/desktop/midi-host (any device that talks USB MIDI) and it will receive 
+			</div>
+		</div> -->
 
 		<div class="content">
+			<div class="product-card" onclick="toggleCard(this)">
+				<div class="product-layout">
+					<div class="text-section">
+						<h1>CPMicro1</h1>
+						<p>Wireless MIDI Orchestra</p>
+						<a href="https://buy.stripe.com/14k6sv8C0bVi9qw289" class="contact-link">$42</a>
+					</div>
+					<img src="images/CPMicro_0.9_black_standing.png" alt="cyberpack micro" class="product-image">
+				</div>
+				<div class="product-description">
+					<!-- Mini product page content -->
+					<div class="product-section">
+						<img src="images/CPMicro_scene.png" alt="Placeholder 1" class="section-image">
+						<div class="section-text">
+							<h2>...</h2>
+							<p>Uses ESP32-S3, for those who want to hack.</p>
+						</div>
+					</div>
+					<div class="product-section reverse">
+						<div class="section-text">
+							<h2>...</h2>
+							<p>Carry it with you around the metropolis, and sync your sounds with nearby cyborgs.</p>
+						</div>
+						<img src="images/CPMicro_pants.png" alt="Placeholder 2" class="section-image">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- <div class="content">
 			<div class="text-section">
 				<h1>VR Face Hug</h1>
 				<p>A bespoke pillow </br> perfectly molds to your face, </br> works with the Quest 3</p>
 				<a href="mailto:fits@porchlogic.com" class="contact-link">Get in touch for your custom fitting</a>
 			</div>
-			<img src="images/VR-Face-Hug.png" alt="VR Face Hug Product" class="product-image">
-		</div>
+			<img src="images/VR-Face-Hug.png" alt="VR Face Hug Product" class="product-image" onclick="toggleDescription('description2')">
+			<div id="description2" class="product-description">The VR Face Hug is a bespoke pillow that perfectly molds to your face, designed to work seamlessly with the Quest 3.</div>
+		</div> -->
 
+		<div class="content">
+			<div class="product-card" onclick="toggleCard(this)">
+				<div class="product-layout">
+					<div class="text-section">
+						<h1>VR Face Hug</h1>
+						<p>A bespoke pillow </br> perfectly molds to your face, </br> works with the Quest 3</p>
+						<a href="mailto:fits@porchlogic.com" class="contact-link">Get in touch for your custom fitting</a>
+					</div>
+					<img src="images/VR-Face-Hug.png" alt="VR Face Hug Product" class="product-image">
+				</div>
+				<div class="product-description">
+					<!-- Mini product page content -->
+					<div class="product-section">
+						<!-- <img src="images/placeholder1.png" alt="Placeholder 1" class="section-image"> -->
+						<div class="section-text">
+							<h2></h2>
+							<p></p>
+						</div>
+					</div>
+					<div class="product-section reverse">
+						<div class="section-text">
+							<h2></h2>
+							<p></p>
+						</div>
+						<!-- <img src="images/placeholder2.png" alt="Placeholder 2" class="section-image"> -->
+					</div>
+				</div>
+			</div>
+		</div>
 		
+
+		</section>
+
+
 	</div>
 
 	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-			const iframe = document.getElementById("youtube-iframe");
-			const youtubeContainer = document.getElementById("youtube-container");
-			const placeholderImage = document.getElementById("placeholder-image-section");
+		function toggleSection(sectionId) {
+			const sections = document.querySelectorAll('.intro-section');
+			sections.forEach(section => {
+				if (section.id === sectionId) {
+					section.classList.toggle('active');
+				} else {
+					section.classList.remove('active');
+				}
+			});
+		}
 
-			// YouTube API Key and Channel ID
-			const apiKey = 'YOUR_API_KEY';
-			const channelId = 'YOUR_CHANNEL_ID';
-			const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&type=video&eventType=live&key=${apiKey}`;
+		function toggleDescription(descriptionId) {
+			const description = document.getElementById(descriptionId);
+			description.style.display = description.style.display === 'block' ? 'none' : 'block';
+		}
 
-			fetch(apiUrl)
-				.then(response => response.json())
-				.then(data => {
-					if (data.items && data.items.length > 0) {
-						// Live stream is active
-						youtubeContainer.style.display = "block";
-						placeholderImage.style.display = "none";
-					} else {
-						// No live stream
-						youtubeContainer.style.display = "none";
-						placeholderImage.style.display = "block";
-					}
-				})
-				.catch(error => {
-					console.error('Error fetching YouTube API:', error);
-					youtubeContainer.style.display = "none";
-					placeholderImage.style.display = "block";
-				});
-		});
+		function toggleCard(card) {
+			const isExpanded = card.classList.contains('expanded');
+			const allCards = document.querySelectorAll('.product-card');
+			allCards.forEach(c => c.classList.remove('expanded')); // Collapse all other cards
+			if (!isExpanded) card.classList.add('expanded'); // Expand clicked card
+		}
+
+
 	</script>
+
+
+	
+	
+	<div id="footer"></div>
+
+	
+	<script>
+    const shopLink = document.getElementById('shop-link');
+    const shopSection = document.getElementById('shop');
+	shopLink.addEventListener("click", () => {
+		shopSection.scrollIntoView({ behavior: "smooth", block: "end" });
+	});
+	</script>
+	
+
 </body>
 </html>
