@@ -77,23 +77,28 @@
 
 			.intro-section.active {
 				display: block;
+				background-color: #121213;
 			}
 
 			.intro-header {
-				width: 100%;
-				max-width: 1000px;
-				padding: 20px;
+				width: 100%; /* Optional: ensures it scales initially */
+				max-width: clamp(300px, 90%, 1000px);
+				padding: 10px;
 				color: #959595;
 				cursor: pointer;
 				display: flex;
 				align-items: center; /* Center content vertically */
 				gap: 10px; /* Space between text and line */
-				font-size: 1.5rem;
-				margin-bottom: 40px;
+				font-size: 1.0rem;
+				margin-bottom: 5px;
 				border: 1px solid #959595;
 				border-radius: 5px;
 				text-decoration: none;
 				box-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
+			}
+
+			.intro-header:hover {
+				filter: brightness(1.2) ;
 			}
 
 			.intro-header::after {
@@ -107,7 +112,7 @@
 				font-size: 1.2rem;
 				color: #b5b4b4;
 				line-height: 1.5;
-				margin-bottom: 20px;
+				margin-bottom: 50px;
 			}
 
 			.youtube-embed {
@@ -154,7 +159,7 @@
 			@media (max-width: 900px) {
 				.social-buttons {
 					flex-direction: column; /* Stack buttons vertically */
-					gap: 15px; /* Adjust gap for smaller screen */
+					gap: 35px; /* Adjust gap for smaller screen */
 					width: 90%;
 				}
 			}
@@ -201,6 +206,7 @@
 				align-items: center;
 				min-height: 100vh;
 				position: relative;
+				margin-top: 40px;
 			}
 
 			.content {
