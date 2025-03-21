@@ -1,0 +1,131 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@font-face {
+	font-family: "stealth57";
+	src: url("fonts/stealth57.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Global reset & base styles */
+body {
+	@apply bg-bg text-white font-sans flex flex-col items-center min-h-screen;
+}
+
+
+h1 {
+	@apply font-stealth text-4xl lg:text-5xl font-bold leading-tight text-white;
+}
+
+/* Layout structure */
+.main {
+	@apply flex flex-col items-start gap-6 p-4;
+
+	.header {
+		@apply text-3xl font-bold;
+
+		.porch {
+			@apply text-green-600;
+		}
+
+		.logic {
+			@apply text-blue-600;
+		}
+	}
+
+	.hero {
+		@apply w-full relative overflow-hidden rounded-lg mb-4;
+	
+		img {
+			@apply w-full h-auto aspect-video object-cover;
+		}
+	
+		.hero-text {
+			@apply absolute top-0 right-0 h-full w-1/2 flex flex-col items-center justify-center text-black text-center;
+	
+			h2 {
+				@apply text-7xl lg:text-9xl font-black drop-shadow-lg;
+			}
+	
+			p {
+				@apply text-2xl lg:text-3xl font-light drop-shadow-md mt-2;
+			}
+		}
+
+		.hero-button {
+			@apply flex justify-center mt-6;
+		
+			.buy-button {
+				@apply inline-block px-8 py-4 text-lg font-bold rounded-lg border-2 transition;
+				@apply bg-black text-neonBlue border-neonBlue shadow-neonBlue;
+				@apply hover:bg-neonBlue hover:text-black hover:shadow-lg;
+			}
+		}
+		
+	}
+	
+	
+	
+
+	.social-buttons {
+		@apply flex flex-wrap justify-center items-center w-full max-w-3xl mx-auto gap-6 mt-10;
+	
+		.social-button {
+			@apply inline-flex items-center justify-center gap-2 px-6 py-3 border-2 rounded-lg text-base font-medium transition text-center shadow-md;
+			@apply bg-black text-neonBlue border-neonBlue shadow-neonBlue;
+	
+			i {
+				@apply text-lg;
+			}
+	
+			&:hover {
+				@apply bg-neonBlue text-black shadow-lg;
+			}
+	
+			&.discord {
+				@apply text-neonGreen border-[#079d3c] shadow-neonGreen;
+	
+				&:hover {
+					@apply bg-neonGreen text-black shadow-lg;
+				}
+			}
+	
+			&.shop {
+				@apply text-pink-500 border-[#c80466] shadow-neonPink;
+	
+				&:hover {
+					@apply bg-pink-500 text-black shadow-lg;
+				}
+			}
+	
+			&.youtube {
+				@apply text-neonBlue border-neonBlue shadow-neonBlue;
+	
+				&:hover {
+					@apply bg-neonBlue text-black shadow-lg;
+				}
+			}
+	
+			&.instagram {
+				@apply text-neonBlue border-neonBlue shadow-neonBlue;
+	
+				&:hover {
+					@apply bg-neonBlue text-black shadow-lg;
+				}
+			}
+	
+			&.reddit {
+				@apply text-neonBlue border-neonBlue shadow-neonBlue;
+	
+				&:hover {
+					@apply bg-neonBlue text-black shadow-lg;
+				}
+			}
+		}
+	}
+	
+	
+	
+}

@@ -1,0 +1,175 @@
+@font-face {
+	font-family: 'stealth57';
+	src: url('fonts/stealth57.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Basic resets */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Arial', sans-serif; /* Use a standard font for the rest of the page */
+	background-color: #1A1A1A;
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: 100vh;
+}
+
+h1 {
+	font-family: 'stealth57', sans-serif; /* Set the title to use stealth57 */
+	font-size: 3rem;
+	font-weight: bold;
+	color: #fff;
+}
+
+.youtube-embed {
+	width: 100%;
+	height: 500px;
+	margin-bottom: 20px;
+}
+
+.container {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+.content {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+
+
+.text-section {
+	width: 45%;
+	max-width: 500px;
+	color: #ff7aa0;
+	text-align: left;
+	order: 1; /* Set to display first */
+}
+
+p {
+	font-size: 1.2rem;
+	color: #ff7aa0;
+	margin-top: 20px;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+	.content {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.product-image, .text-section {
+		width: 100%;
+		max-width: none;
+		text-align: center;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+	}
+	
+	p {
+		font-size: 1rem;
+	}
+}
+
+
+/* Aligns title and price button in one row */
+.title-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between; /* Pushes price button to the right */
+	gap: 10px;
+	width: 100%;
+}
+
+/* Ensure h1 stays on the left */
+.title-row h1 {
+	margin: 0;
+	flex-grow: 1; /* Allows h1 to take up available space */
+	white-space: nowrap; /* Prevents title from wrapping */
+}
+
+
+
+
+
+/* Make flagship section full width */
+.flagship {
+	width: 100%;
+	background-color: #2a2a2a; /* Match full-width section below */
+	padding: 60px 0;
+	display: flex;
+	justify-content: center;
+}
+
+/* Flagship content container */
+.flagship-content {
+	width: 100%;
+	max-width: 1400px; /* Allows it to be larger */
+	padding: 0 20px;
+	display: flex;
+	justify-content: center;
+}
+
+/* Align title and price button */
+.title-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	width: 100%;
+}
+
+/* Allow h1 to expand and push price button to the right */
+.title-row h1 {
+	margin: 0;
+	flex-grow: 1;
+	white-space: nowrap;
+}
+
+/* Small blue price button */
+.price-button {
+	padding: 6px 12px;
+	font-size: 1rem;
+	text-decoration: none;
+	color: #fff;
+	background-color: #007bff;
+	border: 2px solid #0056b3;
+	border-radius: 5px;
+	text-align: center;
+	transition: all 0.3s ease;
+	display: inline-block;
+	box-shadow: 0 0 10px rgba(0, 123, 255, 0.7);
+	white-space: nowrap;
+}
+
+.price-button:hover {
+	background-color: #0056b3;
+	color: #fff;
+	box-shadow: 0 0 15px rgba(0, 123, 255, 1);
+}
+
+/* Make the product image larger */
+.product-image {
+	width: 130%;
+	max-width: 600px;
+	margin-left: -15%;
+	transition: all 0.3s ease;
+	border-radius: 8px;
+	background-color: #4a4d4f;
+}
