@@ -68,8 +68,8 @@
 			const { error } = await stripe.redirectToCheckout({
 				lineItems: [{ price: "price_1Qts1fABTHjSuIhXxYnrZG7j", quantity: 1 }], // Your Stripe price ID
 				mode: "payment",
-				successUrl: "https://yourwebsite.com/success",
-				cancelUrl: "https://yourwebsite.com/cancel",
+				successUrl: "https://porchlogic.com/stripe/success",
+				cancelUrl: "https://porchlogic.com/stripe/cancel",
 			});
 	
 			if (error) {
