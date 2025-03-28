@@ -10,14 +10,16 @@
 
 
 </head>
-<body class="bg-bg text-white font-sans">
 
+<body onload="initPage();" class="bg-bg text-white font-sans">
+
+	<!-- Dynamic Header -->
+	<div id="header"></div>
 
 	<div class="main">
-		<header class="header">
-			<h1 class="font-stealth text-neonBlue text-4xl">porch<span class="text-neonGreen">Logic</span></h1>
+		
 
-		</header>
+
 
 		<section class="hero">
 			<img src="/images/smb1_hero.jpg" alt="Hero Image" />
@@ -25,6 +27,7 @@
 				<h2 class="font-stealth text-7xl lg:text-9xl drop-shadow-lg">SMB1</h2>
 				<p class="text-2xl lg:text-3xl font-light drop-shadow-md mt-2">mobile music sync</p>
 				<div class="hero-button">
+					<!-- todo:  -->
 					<button id="buy-button" class="buy-button">
 						Buy Now – $42
 					</button>
@@ -35,28 +38,23 @@
 			
 		</section>
 		
+		<!-- Dynamic Header -->
+		<div id="social-buttons"></div>
 
-		<div class="social-buttons">
-			<a href="https://discord.gg/PgeDHETwYq" class="social-button discord" target="_blank">
-				<i class="fa-brands fa-discord"></i> <span>Discord</span>
-			</a>
-			<a href="#" class="social-button shop">
-				<i class="fa fa-shopping-bag"></i> <span>Shop</span>
-			</a>
-			<a href="https://www.youtube.com/@porchlogic" class="social-button youtube" target="_blank">
-				<i class="fa-brands fa-youtube"></i> <span>YouTube</span>
-			</a>
-			<a href="https://www.instagram.com/porchlogic" class="social-button instagram" target="_blank">
-				<i class="fa-brands fa-instagram"></i> <span>Instagram</span>
-			</a>
-			<a href="https://www.reddit.com/user/porchlogic/" class="social-button reddit" target="_blank">
-				<i class="fa-brands fa-reddit"></i> <span>Reddit</span>
-			</a>
-		</div>
-		
+
+
+
+		<!-- Dynamic Footer -->
+		<div id="footer"></div>
 		
 		
 	</div>
+
+	
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.2.12/marked.min.js"></script>
+	<script src="js/main.js"></script>
 
 	<script>
 		// Initialize Stripe with your public key
@@ -68,8 +66,8 @@
 			const { error } = await stripe.redirectToCheckout({
 				lineItems: [{ price: "price_1Qts1fABTHjSuIhXxYnrZG7j", quantity: 1 }], // Your Stripe price ID
 				mode: "payment",
-				successUrl: "https://porchlogic.com/stripe/success",
-				cancelUrl: "https://porchlogic.com/stripe/cancel",
+				successUrl: "https://porchlogic.com/success",
+				cancelUrl: "https://porchlogic.com/cancel",
 			});
 	
 			if (error) {

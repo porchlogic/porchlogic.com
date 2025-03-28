@@ -77,17 +77,45 @@ function loadSVGData() {
 		.catch((err) => console.error("Error loading SVG data:", err));
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+	const containers = document.querySelectorAll(".markdown-content");
+
+	containers.forEach(async (el) => {
+		const fileName = el.dataset.src;
+		if (!fileName) {
+			console.warn("Missing data-src on .markdown-content element — skipping.");
+			return;
+		}
+
+		// Optional: show a temporary loading state
+		el.innerHTML = `<p>Loading...</p>`;
+
+		try {
+			const res = await fetch(`/markdown/${fileName}`);
+			if (!res.ok) throw new Error(`Failed to load markdown/${fileName}`);
+
+			const markdown = await res.text();
+			el.innerHTML = marked.parse(markdown);
+		} catch (err) {
+			console.error(`Error loading markdown for ${fileName}:`, err);
+			el.innerHTML = `<p style="color:red;">Error loading content.</p>`;
+		}
+	});
+});
+
+
 // Initialize the page by loading dynamic content and attaching events
 function initPage() {
-	loadHTML("header", "header.html");
-	loadHTML("footer", "footer.html");
-	loadLogUpdates();
-	loadSVGData();
+	loadHTML("header", "/header.html");
+	loadHTML("footer", "/footer.html");
+	loadHTML("social-buttons", "/social-buttons.html");
+	// loadLogUpdates();
+	// loadSVGData();
 
 	// Scroll to shop section when shop button is clicked
-	const shopLink = document.getElementById("shop-link");
-	const shopSection = document.getElementById("shop");
-	shopLink.addEventListener("click", () => {
-		shopSection.scrollIntoView({ behavior: "smooth", block: "end" });
-	});
+	// const shopLink = document.getElementById("shop-link");
+	// const shopSection = document.getElementById("shop");
+	// shopLink.addEventListener("click", () => {
+	// 	shopSection.scrollIntoView({ behavior: "smooth", block: "end" });
+	// });
 }
