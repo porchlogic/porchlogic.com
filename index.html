@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Porch Logic</title>
-	<link rel="stylesheet" href="styles.css" />
+	<link rel="stylesheet" href="styles_new.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 	<script src="https://js.stripe.com/v3/"></script>
 
@@ -16,32 +16,80 @@
 	<!-- Dynamic Header -->
 	<div id="header"></div>
 
-	<div class="main">
 		
 
-
-
-		<section class="hero">
-			<img src="/images/smb1_hero.jpg" alt="Hero Image" />
-			<div class="hero-text">
-				<h2 class="font-stealth text-7xl lg:text-9xl drop-shadow-lg">SMB1</h2>
-				<p class="text-2xl lg:text-3xl font-light drop-shadow-md mt-2">mobile music sync</p>
-				<div class="hero-button">
-					<!-- todo:  -->
-					<button id="buy-button" class="buy-button">
-						Buy Now – $42
-					</button>
-				</div>
-				
+	<section class="live">
+		<!-- <div class="live-text">
+			<h2>SMB1</h2>
+			<p>mobile music sync</p>
+			<div class="live-button">
+				<button id="buy-button" class="buy-button">
+					Buy
+				</button>
 			</div>
-			
-			
-		</section>
+		</div> -->
+	</section>
+
+	<div class="main">
+	<!-- Dynamic Header -->
+	<div id="social-buttons"></div>
+
+	
+	<div class="markdown-content">
+
+		<h1>This summer,</h1>
+
+<p>We're cruising the PDX grid on electric wheels, 
+	swarming with a 3d synchronized sound field as we glide through the sprawl. 
+	Riders link up using SMB1:
+
+
+
+<p><a href="https://www.youtube.com/@porchlogic" class="social-button youtube" target="_blank">Watch Live</a> → on YouTube</p>
+
+<p><a href="https://discord.gg/PgeDHETwYq" class="social-button discord" target="_blank">Join a ride</a> → Pop into the Discord for info</p>
+
+
+<p>Support the band ▼</p>
+<!-- <hr> -->
+<h2></h2>
+	</div>
+	
+
+</div>
+
+	
+
+
+
+
+
+
+	<section class="hero" id="hero">
+		<div class="hero-text">
+			<h2>SMB1</h2>
+			<p>mobile music performance</p>
+			<div class="hero-button">
+				<button id="buy-button" class="buy-button">
+					$42
+				</button>
+				<p>delivery in Portland, OR</p>
+			</div>
+		</div>
+	</section>
+
+	<div class="main">
+
 		
-		<!-- Dynamic Header -->
-		<div id="social-buttons"></div>
 
+		
+		
+		
+		
 
+		
+
+		<div class="markdown-content" data-src="smb1.md"></div>
 
 
 		<!-- Dynamic Footer -->
@@ -66,8 +114,8 @@
 			const { error } = await stripe.redirectToCheckout({
 				lineItems: [{ price: "price_1Qts1fABTHjSuIhXxYnrZG7j", quantity: 1 }], // Your Stripe price ID
 				mode: "payment",
-				successUrl: "https://porchlogic.com/success",
-				cancelUrl: "https://porchlogic.com/cancel",
+				successUrl: "https://porchlogic.com/stripe/success",
+				cancelUrl: "https://porchlogic.com/stripe/cancel",
 			});
 	
 			if (error) {

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Advanced Flexbox Layout Builder</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body, html {
+			height: 100%;
+			font-family: Arial, sans-serif;
+		}
+
+		#container {
+			display: flex;
+			height: 100%;
+		}
+
+		#editor {
+			flex: 3;
+			border-right: 1px solid #ccc;
+			position: relative;
+			background: #f9f9f9;
+			overflow: auto;
+			padding: 10px;
+		}
+
+		#settings {
+			flex: 1;
+			padding: 10px;
+			overflow-y: auto;
+			min-width: 350px;
+		}
+
+		.flexbox {
+			display: flex;
+			/* No inline styles – all rules are in the generated CSS */
+			border: 1px dashed #aaa;
+			margin: 10px;
+			padding: 10px;
+			position: relative;
+			min-height: 50px;
+		}
+
+		.flexbox.selected {
+			border-color: #007BFF;
+		}
+
+		.add-button {
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			display: none;
+			background: #007BFF;
+			color: #fff;
+			border: none;
+			border-radius: 50%;
+			width: 25px;
+			height: 25px;
+			cursor: pointer;
+		}
+
+		.flexbox:hover .add-button {
+			display: block;
+		}
+
+		#add-root-button {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			display: none;
+			background: #007BFF;
+			color: #fff;
+			border: none;
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			cursor: pointer;
+		}
+
+		#editor.empty #add-root-button {
+			display: block;
+		}
+
+		label {
+			display: inline-block;
+			margin-top: 10px;
+			width: 140px;
+		}
+
+		input[type="text"],
+		select {
+			margin-top: 10px;
+			width: calc(100% - 150px);
+		}
+
+		textarea {
+			font-family: monospace;
+			width: 100%;
+		}
+
+		.field-group {
+			margin-bottom: 20px;
+			border-bottom: 1px solid #ccc;
+			padding-bottom: 10px;
+		}
+
+		.field-group h3 {
+			margin-bottom: 10px;
+		}
+
+		hr {
+			margin: 20px 0;
+		}
+	</style>
+	<style id="generated-styles">
+		/* Generated CSS rules will appear here */
+	</style>
+</head>
+<body>
+	<div id="container">
+		<div id="editor" class="empty">
+			<button id="add-root-button">+</button>
+		</div>
+		<div id="settings">
+			<h2>Flexbox Properties</h2>
+			<div id="settings-content">
+				<p>Select a flexbox to edit its properties.</p>
+			</div>
+			<hr>
+			<h2>Output Code</h2>
+			<button id="generate-code">Generate Code</button>
+			<h3>HTML</h3>
+			<textarea id="htmlOutput" rows="10"></textarea>
+			<h3>CSS</h3>
+			<textarea id="cssOutput" rows="10"></textarea>
+		</div>
+	</div>
+	<script>
+		// Global counters and maps
+		let flexboxCounter = 0;
+		let selectedFlexbox = null;
+		// Map each flexbox id to its CSS properties
+		let cssRules = {};
+
+		// Update the <style id="generated-styles"> block with current CSS rules
+		function updateCSSRules() {
+			let cssText = "";
+			for (let id in cssRules) {
+				let rules = cssRules[id];
+				let ruleText = "";
+				for (let prop in rules) {
+					if (rules[prop]) {
+						ruleText += "\t" + prop + ": " + rules[prop] + ";\n";
+					}
+				}
+				if (ruleText) {
+					cssText += "#" + id + " {\n" + ruleText + "}\n";
+				}
+			}
+			document.getElementById("generated-styles").textContent = cssText;
+		}
+
+		// Create a new flexbox element with a unique id and empty CSS rule
+		function createFlexbox() {
+			let flexbox = document.createElement("div");
+			flexbox.classList.add("flexbox");
+			flexboxCounter++;
+			flexbox.id = "flexbox-" + flexboxCounter;
+			cssRules[flexbox.id] = {}; // start with an empty rule
+
+			// Create a container for inner content
+			let contentDiv = document.createElement("div");
+			contentDiv.classList.add("content");
+			flexbox.appendChild(contentDiv);
+
+			// Add plus button to add a child flexbox
+			let addBtn = document.createElement("button");
+			addBtn.classList.add("add-button");
+			addBtn.textContent = "+";
+			addBtn.addEventListener("click", function(e) {
+				e.stopPropagation();
+				let child = createFlexbox();
+				flexbox.appendChild(child);
+			});
+			flexbox.appendChild(addBtn);
+
+			// Selecting a flexbox to edit its properties
+			flexbox.addEventListener("click", function(e) {
+				e.stopPropagation();
+				selectFlexbox(flexbox);
+			});
+
+			return flexbox;
+		}
+
+		// Update inner content based on dataset (content tag and text)
+		function updateFlexboxContent(flexbox) {
+			let contentDiv = flexbox.querySelector(".content");
+			let tag = flexbox.dataset.contentTag || "";
+			let text = flexbox.dataset.contentText || "";
+			if (text) {
+				if (tag && tag !== "none") {
+					contentDiv.innerHTML = "<" + tag + ">" + text + "</" + tag + ">";
+				} else {
+					contentDiv.textContent = text;
+				}
+			} else {
+				contentDiv.innerHTML = "";
+			}
+		}
+
+		// Set the selected flexbox and update the properties panel
+		function selectFlexbox(el) {
+			if (selectedFlexbox) {
+				selectedFlexbox.classList.remove("selected");
+			}
+			selectedFlexbox = el;
+			selectedFlexbox.classList.add("selected");
+			updateSettingsPanel();
+		}
+
+		// Helper function to create a labeled field
+		function createField(labelText, inputElement) {
+			let wrapper = document.createElement("div");
+			let label = document.createElement("label");
+			label.textContent = labelText;
+			wrapper.appendChild(label);
+			wrapper.appendChild(inputElement);
+			return wrapper;
+		}
+
+		// Helper to create a dropdown with a blank default option
+		function createDropdown(options, currentValue) {
+			let select = document.createElement("select");
+			// Blank option
+			let blankOption = document.createElement("option");
+			blankOption.value = "";
+			blankOption.textContent = "";
+			select.appendChild(blankOption);
+			options.forEach(function(val) {
+				let option = document.createElement("option");
+				option.value = val;
+				option.textContent = val;
+				if (currentValue === val) {
+					option.selected = true;
+				}
+				select.appendChild(option);
+			});
+			return select;
+		}
+
+		// Build the properties panel with organized sections
+		function updateSettingsPanel() {
+			let panel = document.getElementById("settings-content");
+			panel.innerHTML = "";
+			if (!selectedFlexbox) {
+				panel.innerHTML = "<p>Select a flexbox to edit its properties.</p>";
+				return;
+			}
+
+			let id = selectedFlexbox.id;
+
+			// --- Container Properties ---
+			let containerGroup = document.createElement("div");
+			containerGroup.classList.add("field-group");
+			let containerHeader = document.createElement("h3");
+			containerHeader.textContent = "Container Properties";
+			containerGroup.appendChild(containerHeader);
+
+			// Flex Direction
+			let fdSelect = createDropdown(["row", "row-reverse", "column", "column-reverse"], cssRules[id]["flex-direction"] || "");
+			fdSelect.addEventListener("change", function() {
+				cssRules[id]["flex-direction"] = fdSelect.value;
+				updateCSSRules();
+			});
+			containerGroup.appendChild(createField("Flex Direction:", fdSelect));
+
+			// Justify Content
+			let jcSelect = createDropdown(["flex-start", "flex-end", "center", "space-between", "space-around", "space-evenly"], cssRules[id]["justify-content"] || "");
+			jcSelect.addEventListener("change", function() {
+				cssRules[id]["justify-content"] = jcSelect.value;
+				updateCSSRules();
+			});
+			containerGroup.appendChild(createField("Justify Content:", jcSelect));
+
+			// Align Items
+			let aiSelect = createDropdown(["stretch", "flex-start", "flex-end", "center", "baseline"], cssRules[id]["align-items"] || "");
+			aiSelect.addEventListener("change", function() {
+				cssRules[id]["align-items"] = aiSelect.value;
+				updateCSSRules();
+			});
+			containerGroup.appendChild(createField("Align Items:", aiSelect));
+
+			// Flex Wrap
+			let fwSelect = createDropdown(["nowrap", "wrap", "wrap-reverse"], cssRules[id]["flex-wrap"] || "");
+			fwSelect.addEventListener("change", function() {
+				cssRules[id]["flex-wrap"] = fwSelect.value;
+				updateCSSRules();
+			});
+			containerGroup.appendChild(createField("Flex Wrap:", fwSelect));
+
+			// Align Content
+			let acSelect = createDropdown(["stretch", "flex-start", "flex-end", "center", "space-between", "space-around"], cssRules[id]["align-content"] || "");
+			acSelect.addEventListener("change", function() {
+				cssRules[id]["align-content"] = acSelect.value;
+				updateCSSRules();
+			});
+			containerGroup.appendChild(createField("Align Content:", acSelect));
+
+			panel.appendChild(containerGroup);
+
+			// --- Layout Properties ---
+			let layoutGroup = document.createElement("div");
+			layoutGroup.classList.add("field-group");
+			let layoutHeader = document.createElement("h3");
+			layoutHeader.textContent = "Layout Properties";
+			layoutGroup.appendChild(layoutHeader);
+
+			// Width
+			let widthInput = document.createElement("input");
+			widthInput.type = "text";
+			widthInput.placeholder = "e.g., 100px or auto";
+			widthInput.value = cssRules[id]["width"] || "";
+			widthInput.addEventListener("input", function() {
+				cssRules[id]["width"] = widthInput.value;
+				updateCSSRules();
+			});
+			layoutGroup.appendChild(createField("Width:", widthInput));
+
+			// Height
+			let heightInput = document.createElement("input");
+			heightInput.type = "text";
+			heightInput.placeholder = "e.g., 100px or auto";
+			heightInput.value = cssRules[id]["height"] || "";
+			heightInput.addEventListener("input", function() {
+				cssRules[id]["height"] = heightInput.value;
+				updateCSSRules();
+			});
+			layoutGroup.appendChild(createField("Height:", heightInput));
+
+			// Margin
+			let marginInput = document.createElement("input");
+			marginInput.type = "text";
+			marginInput.placeholder = "e.g., 10px";
+			marginInput.value = cssRules[id]["margin"] || "";
+			marginInput.addEventListener("input", function() {
+				cssRules[id]["margin"] = marginInput.value;
+				updateCSSRules();
+			});
+			layoutGroup.appendChild(createField("Margin:", marginInput));
+
+			// Padding
+			let paddingInput = document.createElement("input");
+			paddingInput.type = "text";
+			paddingInput.placeholder = "e.g., 10px";
+			paddingInput.value = cssRules[id]["padding"] || "";
+			paddingInput.addEventListener("input", function() {
+				cssRules[id]["padding"] = paddingInput.value;
+				updateCSSRules();
+			});
+			layoutGroup.appendChild(createField("Padding:", paddingInput));
+
+			// Aspect Ratio
+			let aspectInput = document.createElement("input");
+			aspectInput.type = "text";
+			aspectInput.placeholder = "e.g., 16/9";
+			aspectInput.value = cssRules[id]["aspect-ratio"] || "";
+			aspectInput.addEventListener("input", function() {
+				cssRules[id]["aspect-ratio"] = aspectInput.value;
+				updateCSSRules();
+			});
+			layoutGroup.appendChild(createField("Aspect Ratio:", aspectInput));
+
+			// Overflow
+			let overflowSelect = createDropdown(["visible", "hidden", "scroll", "auto"], cssRules[id]["overflow"] || "");
+			overflowSelect.addEventListener("change", function() {
+				cssRules[id]["overflow"] = overflowSelect.value;
+				updateCSSRules();
+			});
+			layoutGroup.appendChild(createField("Overflow:", overflowSelect));
+
+			panel.appendChild(layoutGroup);
+
+			// --- Flex Item Properties ---
+			let itemGroup = document.createElement("div");
+			itemGroup.classList.add("field-group");
+			let itemHeader = document.createElement("h3");
+			itemHeader.textContent = "Flex Item Properties";
+			itemGroup.appendChild(itemHeader);
+
+			// Order
+			let orderInput = document.createElement("input");
+			orderInput.type = "text";
+			orderInput.placeholder = "e.g., 0";
+			orderInput.value = cssRules[id]["order"] || "";
+			orderInput.addEventListener("input", function() {
+				cssRules[id]["order"] = orderInput.value;
+				updateCSSRules();
+			});
+			itemGroup.appendChild(createField("Order:", orderInput));
+
+			// Flex Grow
+			let growInput = document.createElement("input");
+			growInput.type = "text";
+			growInput.placeholder = "e.g., 0";
+			growInput.value = cssRules[id]["flex-grow"] || "";
+			growInput.addEventListener("input", function() {
+				cssRules[id]["flex-grow"] = growInput.value;
+				updateCSSRules();
+			});
+			itemGroup.appendChild(createField("Flex Grow:", growInput));
+
+			// Flex Shrink
+			let shrinkInput = document.createElement("input");
+			shrinkInput.type = "text";
+			shrinkInput.placeholder = "e.g., 1";
+			shrinkInput.value = cssRules[id]["flex-shrink"] || "";
+			shrinkInput.addEventListener("input", function() {
+				cssRules[id]["flex-shrink"] = shrinkInput.value;
+				updateCSSRules();
+			});
+			itemGroup.appendChild(createField("Flex Shrink:", shrinkInput));
+
+			// Flex Basis
+			let basisInput = document.createElement("input");
+			basisInput.type = "text";
+			basisInput.placeholder = "e.g., auto or 100px";
+			basisInput.value = cssRules[id]["flex-basis"] || "";
+			basisInput.addEventListener("input", function() {
+				cssRules[id]["flex-basis"] = basisInput.value;
+				updateCSSRules();
+			});
+			itemGroup.appendChild(createField("Flex Basis:", basisInput));
+
+			panel.appendChild(itemGroup);
+
+			// --- Styling Properties ---
+			let styleGroup = document.createElement("div");
+			styleGroup.classList.add("field-group");
+			let styleHeader = document.createElement("h3");
+			styleHeader.textContent = "Styling Properties";
+			styleGroup.appendChild(styleHeader);
+
+			// Background Color
+			let bgInput = document.createElement("input");
+			bgInput.type = "text";
+			bgInput.placeholder = "e.g., #ffffff";
+			bgInput.value = cssRules[id]["background-color"] || "";
+			bgInput.addEventListener("input", function() {
+				cssRules[id]["background-color"] = bgInput.value;
+				updateCSSRules();
+			});
+			styleGroup.appendChild(createField("Background Color:", bgInput));
+
+			// Border
+			let borderInput = document.createElement("input");
+			borderInput.type = "text";
+			borderInput.placeholder = "e.g., 1px solid #000";
+			borderInput.value = cssRules[id]["border"] || "";
+			borderInput.addEventListener("input", function() {
+				cssRules[id]["border"] = borderInput.value;
+				updateCSSRules();
+			});
+			styleGroup.appendChild(createField("Border:", borderInput));
+
+			// Text Color
+			let textColorInput = document.createElement("input");
+			textColorInput.type = "text";
+			textColorInput.placeholder = "e.g., #000000";
+			textColorInput.value = cssRules[id]["color"] || "";
+			textColorInput.addEventListener("input", function() {
+				cssRules[id]["color"] = textColorInput.value;
+				updateCSSRules();
+			});
+			styleGroup.appendChild(createField("Text Color:", textColorInput));
+
+			panel.appendChild(styleGroup);
+
+			// --- Content Properties ---
+			let contentGroup = document.createElement("div");
+			contentGroup.classList.add("field-group");
+			let contentHeader = document.createElement("h3");
+			contentHeader.textContent = "Content Properties";
+			contentGroup.appendChild(contentHeader);
+
+			// Content Tag
+			let tagSelect = createDropdown(["none", "h1", "h2", "p"], selectedFlexbox.dataset.contentTag || "");
+			tagSelect.addEventListener("change", function() {
+				selectedFlexbox.dataset.contentTag = tagSelect.value;
+				updateFlexboxContent(selectedFlexbox);
+			});
+			contentGroup.appendChild(createField("Content Tag:", tagSelect));
+
+			// Content Text
+			let contentTextInput = document.createElement("input");
+			contentTextInput.type = "text";
+			contentTextInput.placeholder = "Enter text content";
+			contentTextInput.value = selectedFlexbox.dataset.contentText || "";
+			contentTextInput.addEventListener("input", function() {
+				selectedFlexbox.dataset.contentText = contentTextInput.value;
+				updateFlexboxContent(selectedFlexbox);
+			});
+			contentGroup.appendChild(createField("Content Text:", contentTextInput));
+
+			panel.appendChild(contentGroup);
+		}
+
+		// Clicking on the editor background unselects any flexbox
+		document.getElementById("editor").addEventListener("click", function() {
+			if (selectedFlexbox) {
+				selectedFlexbox.classList.remove("selected");
+				selectedFlexbox = null;
+				updateSettingsPanel();
+			}
+		});
+
+		// Root add button handler
+		let addRootBtn = document.getElementById("add-root-button");
+		addRootBtn.addEventListener("click", function(e) {
+			e.stopPropagation();
+			let rootFlex = createFlexbox();
+			document.getElementById("editor").appendChild(rootFlex);
+			document.getElementById("editor").classList.remove("empty");
+		});
+
+		// Check if the editor is empty to show the root add button
+		function checkEditorEmpty() {
+			let editor = document.getElementById("editor");
+			if (!editor.querySelector(".flexbox")) {
+				editor.classList.add("empty");
+			} else {
+				editor.classList.remove("empty");
+			}
+		}
+		setInterval(checkEditorEmpty, 500);
+
+		// Recursively generate HTML for output (without inline styles)
+		function generateHTML(el) {
+			if (!el.classList.contains("flexbox")) return "";
+			let html = '<div class="flexbox" id="' + el.id + '">';
+			let tag = el.dataset.contentTag || "";
+			let text = el.dataset.contentText || "";
+			if (text) {
+				if (tag && tag !== "none") {
+					html += "<" + tag + ">" + text + "</" + tag + ">";
+				} else {
+					html += text;
+				}
+			}
+			let children = el.querySelectorAll(":scope > .flexbox");
+			children.forEach(function(child) {
+				html += generateHTML(child);
+			});
+			html += "</div>";
+			return html;
+		}
+
+		// Generate the final HTML and CSS output
+		function generateCode() {
+			let editor = document.getElementById("editor");
+			let htmlOutput = "";
+			let roots = editor.querySelectorAll(":scope > .flexbox");
+			roots.forEach(function(root) {
+				htmlOutput += generateHTML(root) + "\n";
+			});
+			document.getElementById("htmlOutput").value = htmlOutput;
+			let cssOutput = document.getElementById("generated-styles").textContent;
+			document.getElementById("cssOutput").value = cssOutput;
+		}
+
+		document.getElementById("generate-code").addEventListener("click", generateCode);
+	</script>
+</body>
+</html>

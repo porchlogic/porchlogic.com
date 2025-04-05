@@ -153,61 +153,46 @@ h1 {
 		
 
 	#social-buttons {
-		@apply flex flex-wrap justify-center items-center w-full max-w-3xl mx-auto gap-6 mt-10;
-	
+		@apply flex flex-wrap justify-between items-center w-full max-w-3xl mx-auto gap-6 mt-10;
+
 		.social-button {
-			@apply opacity-70 inline-flex items-center justify-center gap-2 px-6 py-3 border-2 rounded-lg text-base font-medium transition text-center shadow-md;
+			@apply opacity-70 inline-flex items-center justify-center gap-2 px-4 py-2 border-2 rounded-lg text-sm font-medium transition text-center shadow-md;
 			@apply bg-black text-neonBlue border-neonBlue shadow-neonBlue;
-	
+
 			i {
-				@apply text-lg;
+				@apply text-base;
 			}
-	
+
 			&:hover {
 				@apply bg-neonBlue text-black shadow-lg;
 			}
-	
+
 			&.discord {
 				@apply text-neonGreen border-[#079d3c] shadow-neonGreen;
-	
+
 				&:hover {
 					@apply bg-neonGreen text-black shadow-lg;
 				}
 			}
-	
+
 			&.shop {
 				@apply text-pink-500 border-[#c80466] shadow-neonPink;
-	
+
 				&:hover {
 					@apply bg-pink-500 text-black shadow-lg;
 				}
 			}
-	
-			&.youtube {
-				@apply text-neonBlue border-neonBlue shadow-neonBlue;
-	
-				&:hover {
-					@apply bg-neonBlue text-black shadow-lg;
-				}
-			}
-	
-			&.instagram {
-				@apply text-neonBlue border-neonBlue shadow-neonBlue;
-	
-				&:hover {
-					@apply bg-neonBlue text-black shadow-lg;
-				}
-			}
-	
+
+			&.youtube,
+			&.instagram,
 			&.reddit {
 				@apply text-neonBlue border-neonBlue shadow-neonBlue;
-	
+
 				&:hover {
 					@apply bg-neonBlue text-black shadow-lg;
 				}
 			}
 		}
-	}
 	
 	#footer {
 		@apply flex flex-wrap justify-center items-center w-full max-w-3xl mx-auto gap-6 mt-10;
