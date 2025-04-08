@@ -46,6 +46,8 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-items: center;
+	justify-content: center;
 	min-height: 100vh;
 	padding-top: 0;
 	margin-top: 0;
@@ -53,6 +55,56 @@ body {
 	margin: 0;
 	overflow-x: hidden;
 }
+
+
+.poster {
+	width: 100%;
+	/* height: 80vh; */
+	aspect-ratio: 2/3;
+	max-height: 90vh;
+	overflow: visible;
+	position: relative;
+
+	background-image: url('images/poster1.png');
+	background-size: cover;
+	background-position: center top;
+	background-repeat: no-repeat;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.poster img {
+	width: 100%;
+	aspect-ratio: 2/3;
+	object-fit: cover;
+	display: block;
+}
+
+.poster .content {
+	font-family: "stealth57", sans-serif;
+	font-weight: 200;
+	font-size: 1rem;
+	line-height: 1.75;
+	color: var(--text-primary);
+	text-align: center;
+
+	width: 80%;
+	aspect-ratio: 2/3;
+	object-fit: cover;
+	display: block;
+
+	padding-top: 50%;
+}
+@media (min-width: 640px) {
+	.poster .content {
+		font-size: 2rem;
+		padding-top: 30%;
+	}
+}
+
+
 
 h1 {
 	font-family: "stealth57", sans-serif;
@@ -68,21 +120,40 @@ h1 {
 	}
 }
 
-/* Layout structure */
-#header {
+.bg-wrapper {
+	background-image: url('images/poster1.png');
+	background-size: cover;
+	background-position: center top;
+	background-repeat: no-repeat;
 	width: 100%;
+	aspect-ratio: 1/1;
+}
+
+/* Layout structure */
+/* Remove underline from link */
+#header {
+	width: 100vw;
 	padding: 1rem 1rem;
-	margin: 1rem;
+	/* margin: 1rem; */
 	z-index: 5;
+	margin-bottom: -150px;
 }
 
 #header h1 {
-	padding-left: 1.5rem;
+	padding-left: 1rem;
 	font-family: "stealth57", sans-serif;
 	font-size: 2.5rem;	
 	color: var(--text-primary);
 	text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
 	font-size: 0;
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+    max-width: 48rem;
+	justify-content: center;
 }
 
 #header span {
@@ -152,6 +223,8 @@ h1 {
     0 0 2px var(--neonPink),  /* Even larger but still focused */
     0 0 5px rgba(219, 61, 111, 0.548);  /* Sharpest and brightest glow */
 }
+
+
 /* .live {
 
 	width: 100%;
@@ -168,17 +241,17 @@ h1 {
 	padding: 0;
 } */
 
-/* { */
-.main {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 1.5rem;
-	padding: 1rem;
-	padding-top: 0;
-	margin-top: 0;
-    max-width: 48rem;
+.youtube-embed {
+	width: 100%;
+	height: 500px;
+	margin-bottom: 20px;
 }
+
+/* { */
+
+
+
+
 
 	.hero-spacer {
 		width: 100%;
@@ -364,8 +437,8 @@ h1 {
 				
 .main .markdown-content {
 	max-width: none;
-	width: 100%;
-	padding: 0;
+	/* width: 80%; */
+	padding: 10%;
 	color: rgba(255, 255, 255, 0.8);
 	margin-top: 2rem;
 	margin-bottom: 2rem;

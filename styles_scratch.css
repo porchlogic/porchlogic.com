@@ -1,0 +1,645 @@
+/* Remove Tailwind imports */
+:root {
+	/* Backgrounds */
+	--bg: #0e0e10;
+	--bg-light: #1a1a1d;
+
+	/* Text */
+	--text-primary: rgba(165, 181, 175, 0.954);
+	--text-secondary: rgb(94, 103, 107);
+	--text-dark: rgb(16, 16, 16);
+
+	/* Accent Colors */
+	--neonGreen: rgb(34, 186, 52);
+	--neonGrey: rgb(95, 94, 94);
+	--neonWhite: rgb(237, 237, 237);
+	--neonYellow: rgb(162, 254, 63);
+	--neonBlue: rgb(16, 111, 244);
+	--neonPink: rgb(248, 57, 117);
+	--neonRed: rgba(218, 22, 22, 0.886);
+
+	/* Borders / Shadows */
+	--border-color: #4b5563;
+	--shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+/* div {
+	border: 1px rgb(209, 210, 255);
+	border-style: dashed;
+} */
+
+
+
+/* Font-face */
+@font-face {
+	font-family: "stealth57";
+	src: url("fonts/stealth57.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Global reset & base styles */
+body {
+	background-color: rgb(26, 26, 26); /* Replace with your bg color */
+	color: rgba(235, 235, 235, 0.8);
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: 100vh;
+	padding-top: 0;
+	margin-top: 0;
+	padding: 0;
+	margin: 0;
+	overflow-x: hidden;
+}
+
+h1 {
+	font-family: "stealth57", sans-serif;
+	font-size: 0.75rem;
+	font-weight: bold;
+	line-height: 1.25;
+	color: rgba(255, 255, 255, 0.8);
+}
+
+@media (min-width: 1024px) {
+	h1 {
+		font-size: 1rem;
+	}
+}
+
+/* Layout structure */
+#header {
+	width: 100%;
+	padding: 1rem 1rem;
+	margin: 1rem;
+	z-index: 5;
+}
+
+#header h1 {
+	padding-left: 1.5rem;
+	font-family: "stealth57", sans-serif;
+	font-size: 2.5rem;	
+	color: var(--text-primary);
+	text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
+	font-size: 0;
+}
+
+#header span {
+	/* color: var(--text-secondary);
+	text-shadow: 
+    0 0 2px var(--neonGreen),
+    0 0 4px var(--neonGrey),
+    0 0 6px var(--neonWhite),
+    0 0 18px var(--neonYellow); */
+	font-size: 1.5rem;
+	padding-left: 0;
+	padding-right: 0.3rem;
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.text-neonGreen{
+	color: var(--text-dark);
+	text-shadow: 
+    0 0 2px var(--neonGreen),  /* Subtle glow */
+    0 0 4px var(--neonGreen),  /* Slightly larger, more defined glow */
+    0 0 6px var(--neonGreen),  /* Even larger but still focused */
+    0 0 18px var(--neonGreen);  /* Sharpest and brightest glow */
+}
+
+.text-neonGrey{
+	color: var(--text-dark);
+	text-shadow: 
+    0 0 2px var(--neonGrey),  /* Subtle glow */
+    0 0 4px var(--neonGrey),  /* Slightly larger, more defined glow */
+    0 0 6px var(--neonGrey),  /* Even larger but still focused */
+    0 0 18px var(--neonGrey);  /* Sharpest and brightest glow */
+}
+
+.text-neonWhite{
+	color: var(--text-dark);
+	text-shadow: 
+    0 0 2px rgba(235,235,235,1),  /* Subtle glow */
+    0 0 4px rgba(235,235,235,0.8),  /* Slightly larger, more defined glow */
+    0 0 6px rgba(235,235,235,0.5),  /* Even larger but still focused */
+    0 0 18px rgba(235,235,235,0.2);  /* Sharpest and brightest glow */
+}
+
+.text-neonBlue{
+	color: var(--text-dark);
+	text-shadow: 
+    0 0 2px var(--neonBlue),  /* Subtle glow */
+    0 0 4px var(--neonBlue),  /* Slightly larger, more defined glow */
+    0 0 6px var(--neonBlue),  /* Even larger but still focused */
+    0 0 18px var(--neonBlue);  /* Sharpest and brightest glow */
+}
+
+.text-neonYellow{
+	color: var(--text-dark);
+	text-shadow: 
+    0 0 2px var(--neonYellow),  /* Subtle glow */
+    0 0 4px var(--neonYellow),  /* Slightly larger, more defined glow */
+    0 0 6px var(--neonYellow),  /* Even larger but still focused */
+    0 0 18px var(--neonYellow);  /* Sharpest and brightest glow */
+}
+
+.text-neonPink{
+	color: var(--text-dark);
+	text-shadow: 
+    0 0 1px var(--neonPink),  /* Subtle glow */
+    0 0 1px var(--neonPink),  /* Slightly larger, more defined glow */
+    0 0 2px var(--neonPink),  /* Even larger but still focused */
+    0 0 5px rgba(219, 61, 111, 0.548);  /* Sharpest and brightest glow */
+}
+/* .live {
+
+	width: 100%;
+	height: 100px;
+	background-image: url('/images/workbench.png');
+	background-size: cover;
+	background-position: center;
+	color: white;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	pointer-events: auto;
+	margin: 0;
+	padding: 0;
+} */
+
+.youtube-embed {
+	width: 100%;
+	height: 500px;
+	margin-bottom: 20px;
+}
+
+/* { */
+.main {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1.5rem;
+	padding: 1rem;
+	padding-top: 0;
+	margin-top: 0;
+    max-width: 48rem;
+}
+
+	.hero-spacer {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		user-select: none;
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+
+	.hero {
+
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		background-image: url('/images/smb1_clipped.png');
+		background-size: cover;
+		background-position: center;
+		color: white;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		pointer-events: auto;
+		margin: 0;
+		padding: 0;
+	}
+
+        .hero .hero-text {
+            display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width: 50%;
+        }
+    
+
+            .hero .hero-text h2 {
+                color: var(--text-primary);
+                font-family: "stealth57", sans-serif;
+                font-size: 3rem;
+                font-weight: 900;
+                filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.1));
+				margin-block-start: 0;
+				margin-block-end: 0;
+            }
+
+
+            .hero .hero-text p {
+                font-size: 1.25rem;
+				color: var(--text-secondary);
+                font-weight: 300;
+            }
+
+
+            .hero .hero-button {
+                display: flex;
+                justify-content: center;
+				flex-direction: column;
+            }
+
+            @media (max-width: 640px) {
+                .hero .hero-text h2{
+                    font-size: 2rem;
+                }
+            }
+
+                .hero .hero-button .buy-button {
+                    padding: 0.5rem 1rem;
+                    font-size: 0.75rem;
+                    font-weight: bold;
+                    border-radius: 0.5rem;
+                    border: 2px solid var(--neonBlue);
+                    transition: all 0.2s ease;
+                    background-color: rgba(6, 56, 117, 0.836);
+                    color: rgb(149, 202, 231);
+                    box-shadow: 0 2px 4px var(--neonBlue);
+                }
+
+                .hero .hero-button .buy-button:hover {
+                    background-color: var(--neonBlue);
+                    color: black;
+                    box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+					cursor: pointer;
+                }
+
+/*}*/
+
+.live-spacer {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		user-select: none;
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+    /* .live {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        background-image: url('/images/smb1_hero.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        overflow: hidden;
+    } */
+	.live {
+
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		background-image: url('/images/workbench_2.png');
+		background-size: cover;
+		background-position: center;
+		color: white;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		pointer-events: auto;
+		margin: 0;
+		padding: 0;
+	}
+
+        .live .live-text {
+            display: flex;
+			flex-direction: column;
+			justify-content: left;
+			align-items:start;
+			width: 50%;
+        }
+    
+
+            .live .live-text h2 {
+                color: var(--text-primary);
+                font-family: "stealth57", sans-serif;
+                font-size: 2rem;
+                font-weight: 600;
+                filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.1));
+				margin-block-start: 0;
+				margin-block-end: 0;
+            }
+
+
+            .live .live-text p {
+                font-size: 1.25rem;
+				color: var(--text-secondary);
+                font-weight: 300;
+                /* filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.9)); */
+            }
+
+
+            .live .live-button {
+                display: flex;
+                justify-content: center;
+            }
+
+            @media (max-width: 640px) {
+                .live .live-text h2{
+                    font-size: 2rem;
+                }
+            }
+
+                .live .live-button .buy-button {
+                    /* display: inline-block; */
+                    padding: 0.5rem 1rem;
+                    font-size: 0.75rem;
+                    font-weight: bold;
+                    border-radius: 0.5rem;
+                    border: 2px solid var(--neonBlue);
+                    transition: all 0.2s ease;
+                    background-color: rgba(6, 56, 117, 0.836);
+                    color: rgb(149, 202, 231);
+                    box-shadow: 0 2px 4px var(--neonBlue);
+                }
+
+                .live .live-button .buy-button:hover {
+                    background-color: var(--neonBlue);
+                    color: black;
+                    box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+					cursor: pointer;
+                }
+
+				
+.main .markdown-content {
+	max-width: none;
+	width: 100%;
+	padding: 0;
+	color: rgba(255, 255, 255, 0.8);
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+	/* Additional typography styles from "prose" can be added here */
+}
+
+.main .markdown-content h1,
+.main .markdown-content h2,
+.main .markdown-content h3,
+.main .markdown-content h4,
+.main .markdown-content h5,
+.main .markdown-content h6 {
+	font-family: "stealth57", sans-serif;
+	color: rgba(255, 255, 255, 0.8);
+	font-weight: bold;
+}
+
+.main .markdown-content h1 {
+	font-size: 1.2rem;
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+	color: var(--text-primary)
+
+	/* color: var(--text-primary);
+	text-shadow: 
+    0 0 2px rgb(255,34, 196),
+    0 0 4px rgba(235,34, 196,0.6),
+    0 0 6px rgba(235,34, 196,0.5),
+    0 0 18px rgba(235,34, 196,0.2); */
+}
+
+@media (min-width: 1024px) {
+	.main .markdown-content h1 {
+		font-size: 1.2rem;
+		margin-left: -1rem;
+	}
+}
+
+.main .markdown-content h2 {
+	font-size: 1.875rem;
+	margin-top: 4.5rem;
+	margin-bottom: 1.75rem;
+	color: var(--text-primary);
+
+	color: var(--text-dark);
+	text-shadow: 
+    0 0 2px var(--neonGreen),  /* Subtle glow */
+    0 0 4px var(--neonGreen),  /* Slightly larger, more defined glow */
+    0 0 6px var(--neonGreen),  /* Even larger but still focused */
+    0 0 18px var(--neonGreen);
+}
+
+@media (min-width: 1024px) {
+	.main .markdown-content h2 {
+		font-size: 2.25rem;
+	}
+}
+
+.main .markdown-content h3 {
+	font-size: 1.2rem;
+	margin-top: 3rem;
+	margin-bottom: 0.5rem;
+	color: var(--text-primary);
+	backdrop-filter: drop-shadow(4px 4px 10px --neonGreen);
+
+	color: var(--text-dark);
+	text-shadow: 
+    0 0 2px var(--neonBlue),  /* Subtle glow */
+    0 0 4px var(--neonBlue),  /* Slightly larger, more defined glow */
+    0 0 6px var(--neonBlue),  /* Even larger but still focused */
+    0 0 18px var(--neonBlue);
+}
+
+.main .markdown-content h4,
+.main .markdown-content h5,
+.main .markdown-content h6 {
+	font-size: 1.25rem;
+	margin-top: 0.75rem;
+	margin-bottom: 0.5rem;
+}
+
+.main .markdown-content p {
+	font-family: "stealth57", sans-serif;
+	font-weight: 200;
+	font-size: 1rem;
+	line-height: 1.75;
+	margin: 1rem 0;
+	color: var(--text-primary);
+}
+
+.main .markdown-content a {
+	color: var(--text-secondary);
+	text-decoration: underline;
+	transition: all 0.2s ease;
+}
+
+.main .markdown-content a:hover {
+	color: var(--neonGreen);
+}
+
+.main .markdown-content em {
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.main .markdown-content strong {
+	color: var(--text-secondary);
+}
+
+.main .markdown-content ul {
+	list-style-type: disc;
+	padding-left: 1.5rem;
+	margin: 1rem 0;
+}
+
+.main .markdown-content ol {
+	list-style-type: decimal;
+	padding-left: 1.5rem;
+	margin: 1rem 0;
+}
+
+.main .markdown-content li {
+	margin: 0.25rem 0;
+	line-height: 2.75;
+}
+
+.main .markdown-content blockquote {
+	border-left-width: 4px;
+	border-left-color: var(--neonBlue);
+	padding-left: 1rem;
+	font-style: italic;
+	color: #d1d5db;
+	margin: 1rem 0;
+}
+
+.main .markdown-content code {
+	background-color: #1f2937;
+	color: var(--neonGreen);
+	padding: 0.125rem 0.25rem;
+	border-radius: 0.25rem;
+	font-size: 0.875rem;
+	font-family: monospace;
+}
+
+.main .markdown-content pre {
+	background-color: #111827;
+	color: var(--neonGreen);
+	padding: 1rem;
+	border-radius: 0.25rem;
+	overflow-x: auto;
+	font-size: 0.875rem;
+	font-family: monospace;
+	margin: 1rem 0;
+}
+
+.main .markdown-content img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 0.25rem;
+	margin: 1rem 0;
+}
+
+.main .markdown-content hr {
+	border-top: 1px solid #374151;
+	margin: 1.5rem 0;
+}
+
+.main .markdown-content table {
+	width: 100%;
+	table-layout: auto;
+	margin: 1.5rem 0;
+}
+
+.main .markdown-content table th {
+	text-align: left;
+	border-bottom: 1px solid #4b5563;
+	padding-bottom: 0.5rem;
+	color: var(--neonBlue);
+}
+
+.main .markdown-content table td {
+	padding: 0.5rem 1rem 0.5rem 0;
+	vertical-align: top;
+}
+
+#social-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+	width: 100%;
+	max-width: 48rem;
+	margin: 0 auto;
+	gap: 1.5rem;
+	margin-top: 2.5rem;
+	margin-bottom: 2.5rem;
+}
+
+@media (max-width: 640px) {
+	#social-buttons{
+		flex-direction: column;
+		align-items: stretch;
+		width: 80%;
+	}
+}
+
+#social-buttons .social-button {
+	opacity: 0.7;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--neonWhite);
+	border-radius: 0.5rem;
+	font-size: 0.975rem;
+	text-decoration: none;
+	font-weight: 200;
+	transition: all 0.2s ease;
+	text-align: center;
+	box-shadow: 1px 0px 8px var(--neonWhite);
+	
+	color: var(--text-primary);
+}
+
+#social-buttons .social-button.discord {
+    border: 2px solid var(--neonGreen);
+	box-shadow: 1px 0px 8px var(--neonGreen);
+    color: var(--neonGreen);
+}
+#social-buttons .social-button.discord:hover {
+	background-color: var(--neonGreen);
+	color: black;
+	box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+}
+
+#social-buttons .social-button.youtube {
+    border: 1px solid var(--neonWhite);
+	box-shadow: 1px 0px 8px var(--neonWhite);
+    color: var(--text-primary);
+}
+#social-buttons .social-button.youtube:hover {
+	background-color: var(--neonRed);
+	color: black;
+	box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+}
+
+#social-buttons .social-button i {
+	font-size: 1rem;
+}
+
+#social-buttons .social-button:hover {
+	background-color: var(--neonBlue);
+	color: black;
+	box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+
+#social-buttons #footer {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	max-width: 48rem;
+	margin: 0 auto;
+	gap: 1.5rem;
+	margin-top: 2.5rem;
+}
