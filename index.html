@@ -134,27 +134,44 @@
 		</section> -->
 
 
+		
+		<div class="markdown-content">
+			
+			<p>SMB1 connects to any other SMB1 and sends synchronized MIDI data to your audio gear: 
+				phone (Android, iOS), synthesizers, samplers, DAWs, etc.</p>
+			<p><em>Your audio gear must support USB MIDI (device or host)</em></p>
+			<br>
+			<p>Create your own swarm or link up with porchLogic in PDX!</p>
+
+			
+		</div>
+
+			
+		
+	
+		
+
 	
 		<!-- Versions -->
 		<section id="versions" class="versions">
 			<h2>Pick Your Version</h2>
 			<div class="version-cards">
 				<article class="version-card">
-					<h3>Default</h3>
+					<h3 class="text-neonGreen">Default</h3>
 					<p>✔ Connects to USB MIDI <strong>hosts</strong></p>
 					<p>✔ Connects to USB MIDI <strong>devices</strong></p>
 					<p>🚫 <em>Cannot power a connected USB device</em></p>
 					<br>
-					<button id="buy-button" class="buy-button">
+					<button id="buy-smb1-default" class="buy-button">
 						$42
 					</button>
 				</article>
 				<article class="version-card">
-					<h3>Powered Host Version</h3>
+					<h3 class="text-neonGreen">Powered Host Version</h3>
 					<p>✔ Connects to USB MIDI <strong>devices</strong></p>
 					<p>⚡ Can route power connected to left USB port through to connected device</p>
 					<br>
-					<button id="buy-button" class="buy-button">
+					<button id="buy-smb1-host" class="buy-button">
 						$42
 					</button>
 				</article>
@@ -250,11 +267,11 @@
 			<p>Amplify your musical collaborations. Sync up and join the swarm.</p>
 			<a href="#" class="cta-button">Order Your SMB1</a>
 		</section>
-	</div> -->
-	
+	 -->
+	</div>
 
 	
-
+	<div id="footer"></div>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.2.12/marked.min.js"></script>
 	<script src="js/main.js"></script>
@@ -264,10 +281,24 @@
 		const stripe = Stripe("pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr");
 	
 		// Handle click event
-		document.getElementById("buy-button").addEventListener("click", async () => {
+		document.getElementById("buy-smb1-default").addEventListener("click", async () => {
 			// Redirect to Stripe Checkout
 			const { error } = await stripe.redirectToCheckout({
-				lineItems: [{ price: "price_1Qts1fABTHjSuIhXxYnrZG7j", quantity: 1 }], // Your Stripe price ID
+				lineItems: [{ price: "price_1RC2n6ABTHjSuIhXDp07ZTjj", quantity: 1 }], // Your Stripe price ID
+				mode: "payment",
+				successUrl: "https://porchlogic.com/stripe/success",
+				cancelUrl: "https://porchlogic.com/stripe/cancel",
+			});
+	
+			if (error) {
+				console.error("Stripe Checkout error:", error);
+			}
+		});
+
+		document.getElementById("buy-smb1-host").addEventListener("click", async () => {
+			// Redirect to Stripe Checkout
+			const { error } = await stripe.redirectToCheckout({
+				lineItems: [{ price: "price_1RC2nYABTHjSuIhXf1bf9nTK", quantity: 1 }], // Your Stripe price ID
 				mode: "payment",
 				successUrl: "https://porchlogic.com/stripe/success",
 				cancelUrl: "https://porchlogic.com/stripe/cancel",
