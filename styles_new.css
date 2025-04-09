@@ -28,9 +28,30 @@
 	border-style: dashed;
 } */
 
-html {
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
 	scroll-behavior: smooth;
 }
+
+html, body {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	overflow: auto;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+	display: none;
+}
+
+
 
 
 /* Font-face */
@@ -56,7 +77,8 @@ body {
 	margin-top: 0;
 	padding: 0;
 	margin: 0;
-	overflow-x: hidden;
+	/* overflow: hidden; */
+	width: 100vw;
 }
 
 
@@ -101,6 +123,8 @@ body {
 	display: block;
 
 	padding-top: 50%;
+
+	overflow: hidden;
 }
 @media (min-width: 640px) {
 	.poster .content {
@@ -725,10 +749,9 @@ h1 {
 	margin-top: 2.5rem;
 }
 
-
-
-
-
+.product {
+	width: 100%;
+}
 
 /* ---- Hero Section ---- */
 .product .hero {
@@ -846,7 +869,7 @@ h1 {
 
 /* ---- Versions ---- */
 .versions {
-	padding: 50px 50px;
+	padding: 10px 10px;
 	text-align: center;
 	display: flex;
 	flex-direction: column;
@@ -862,6 +885,7 @@ h1 {
 	justify-content: center;
 	gap: 50px;
 	width: 80%;
+	align-items: stretch;
 }
 .product .version-card {
 	flex: 1 1 300px;
@@ -870,7 +894,7 @@ h1 {
 	padding: 20px;
 	box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 	text-align: center;
-	height: 24vh;
+
 	display: flex;
 	flex-direction: column;
 	width: 80%;
@@ -966,7 +990,7 @@ h1 {
 
 /* ---- The Format ---- */
 .the-format {
-	padding: 60px 20px;
+	padding: 20px 20px;
 }
 .product .the-format h2 {
 	font-size: 2rem;
@@ -979,7 +1003,6 @@ h1 {
 table {
 	width: 100%;
 	border-collapse: collapse;
-	min-width: 600px;
 }
 thead {
 	background-color: #399b9827;
