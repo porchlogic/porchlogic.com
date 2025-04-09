@@ -12,11 +12,12 @@
 </head>
 
 <body onload="initPage();" >
+	<div id="header"></div>
 	<div class="main">
 		
 	</div>
 	<div class="main">
-		<div id="header"></div>
+		
 		<div class="poster">			
 			<div class="content">
 				<h2>mobile cyborg orchestrations</h2>
@@ -51,8 +52,7 @@
 			
 			<p><a href="https://discord.gg/PgeDHETwYq" class="social-button discord" target="_blank">Join a ride</a> → Pop into the Discord for info</p>
 			 -->
-			
-			<p>Support the band ▼</p>
+
 			<!-- <hr> -->
 			<h2></h2>
 
@@ -117,35 +117,165 @@
 	<section class="hero" id="hero">
 		<div class="hero-text">
 			<h2>SMB1</h2>
-			<p>mobile music performance</p>
+			<p>connect to the audio swarm</p>
 			<div class="hero-button">
-				<button id="buy-button" class="buy-button">
-					$42
-				</button>
+				<a class="buy-button" href="#versions">
+					order now
+				</a>
 				<p>delivery in Portland, OR</p>
 			</div>
 		</div>
 	</section>
 
-	<div class="main">
-
-		
-
-		
-		
-		
-		
-
+	<!-- <div class="main">
 		
 
 		<div class="markdown-content" data-src="smb1.md"></div>
 
 
-		<!-- Dynamic Footer -->
 		<div id="footer"></div>
 		
 		
+	</div> -->
+
+
+	<div class="product">
+
+		<!-- <section class="product-diagram">
+			<div class="diagram-container">
+				<img src="images/smb1.svg" alt="SMB1 Diagram" />
+
+			</div>
+		</section>
+		
+		<section>
+			<p>**Routes power to connected MIDI device only if you get the Powered Host version</p>
+		</section> -->
+
+
+	
+		<!-- Versions -->
+		<section id="versions" class="versions">
+			<h2>Pick Your Version</h2>
+			<div class="version-cards">
+				<article class="version-card">
+					<h3>Default</h3>
+					<p>✔ Connects to USB MIDI <strong>hosts</strong></p>
+					<p>✔ Connects to USB MIDI <strong>devices</strong></p>
+					<p><em>🚫 Cannot power a connected USB device</em></p>
+					<br>
+					<button id="buy-button" class="buy-button">
+						$42
+					</button>
+				</article>
+				<article class="version-card">
+					<h3>Powered Host Version</h3>
+					<p>✔ Connects to USB MIDI <strong>devices</strong></p>
+					<p>⚡ Can route power connected to left USB port through to connected device</p>
+					<br>
+					<button id="buy-button" class="buy-button">
+						$42
+					</button>
+				</article>
+			</div>
+		</section>
+	
+		<!-- How to Use -->
+		<section class="how-to-use">
+			<h2>How to Use</h2>
+			<div class="steps-wrapper">
+				<div class="step-block">
+					<h4>Join a Swarm</h4>
+					<ol>
+						<li>Select <strong>RX</strong> (receive mode)</li>
+						<li>Look for a nearby SMB1 emitting a blue pulse</li>
+					</ol>
+					<ul>
+						<li>Join its swarm by scanning a displayed QR code</li>
+						<li>Or join the first public transmission you find</li>
+					</ul>
+				</div>
+				<div class="step-block">
+					<h4>Lead a Swarm</h4>
+					<ol>
+						<li>Select <strong>TX</strong> (transmit mode)</li>
+					</ol>
+					<p>One unit becomes the <strong>transmitter (TX)</strong>, pulsing out tempo, position, and start/stop commands via MIDI clock. All others become <strong>receivers (RX)</strong>, syncing wirelessly in real-time.</p>
+				</div>
+			</div>
+		</section>
+	
+		<!-- Connect Devices -->
+		<section class="devices">
+			<h2>Connect Your Gear</h2>
+			<div class="device-list">
+				<article>
+					<h4>📱 Phone / Tablet</h4>
+					<p>Plug in as needed for USB MIDI or use an appropriate adapter.</p>
+				</article>
+				<article>
+					<h4>🎛 Synth / Sampler MIDI Device</h4>
+					<p>Connect via USB as a MIDI <em>host</em></p>
+				</article>
+				<article>
+					<h4>💻 DAW / MIDI Host</h4>
+					<p>Use SMB1 in <em>device</em></p>
+				</article>
+			</div>
+			<div class="speaker-note">
+				<h4>Connect Your Speaker</h4>
+				<p>(preferably via aux or low-latency Bluetooth)</p>
+			</div>
+		</section>
+	
+		<!-- The Format Table -->
+		<section class="the-format">
+			<h2>The Format</h2>
+			<p>Before the ride, participants agree on a shared structure. Simple. Modular. Syncable.</p>
+			<div class="table-wrapper">
+				<table>
+					<thead>
+						<tr>
+							<th>Section</th>
+							<th>Length</th>
+							<th>Notes</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Intro</td>
+							<td>8 bars</td>
+							<td>Fade in, ambient pads</td>
+						</tr>
+						<tr>
+							<td>Drop</td>
+							<td>16 bars</td>
+							<td>Kick in, sync bass</td>
+						</tr>
+						<tr>
+							<td>Bridge</td>
+							<td>8 bars</td>
+							<td>Modulate</td>
+						</tr>
+						<tr>
+							<td>Loop</td>
+							<td>32 bars</td>
+							<td>Repeat &amp; evolve</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p>Everyone brings their own gear—synths, smartphones, samplers, speakers—and plugs into the swarm.</p>
+		</section>
+	
+		<!-- Final Call to Action -->
+		<section class="footer-cta">
+			<h3>Get Ready to Swarm</h3>
+			<p>Amplify your musical collaborations. Sync up and join the swarm.</p>
+			<a href="#" class="cta-button">Order Your SMB1</a>
+		</section>
 	</div>
+	
 
 	
 
