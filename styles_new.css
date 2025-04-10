@@ -81,6 +81,11 @@ body {
 	width: 100vw;
 }
 
+hr {
+	width: 100%;
+	border-top: 1px solid #374151;
+	margin: 1.5rem 0;
+}
 
 .poster {
 	width: 100%;
@@ -183,6 +188,9 @@ h1 {
 	width: 100%;
     max-width: 48rem;
 	justify-content: center;
+	align-items: center;
+	align-content: center;
+	justify-items: center;
 }
 
 #header span {
@@ -243,6 +251,13 @@ h1 {
     0 0 6px var(--neonYellow),  /* Even larger but still focused */
     0 0 18px var(--neonYellow);  /* Sharpest and brightest glow */
 }
+.text-neonYellowSubtle{
+	color: var(--text-dark);
+	text-shadow: 
+    0 0 1px var(--neonYellow),  /* Subtle glow */
+    0 0 2px var(--neonYellow),  /* Slightly larger, more defined glow */
+    0 0 4px var(--neonYellow);  /* Even larger but still focused */
+}
 
 .text-neonPink{
 	color: var(--text-dark);
@@ -297,10 +312,10 @@ h1 {
 
 		width: 100%;
 		aspect-ratio: 16 / 9;
-		background-image: url('/images/smb1_clipped.png');
-		background-size: cover;
+		
+		
 		/* background-position: center; */
-		background-position-x: 35%;
+		
 		color: white;
 		display: flex;
 		justify-content: flex-end;
@@ -313,6 +328,17 @@ h1 {
 		margin-bottom: 3rem;
 	}
 
+	.hero.smb1 {
+		background-image: url('/images/smb1_clipped.png');
+		background-size: cover;
+		background-position-x: 35%;
+	}
+	.hero.cpmicro {		
+		background-image: url('/images/CPMicro_pants.png');
+		background-size: contain;
+		background-position-x: 0%;
+		background-repeat: no-repeat;
+	}
         .hero .hero-text {
             display: flex;
 			flex-direction: column;
@@ -359,7 +385,7 @@ h1 {
                     font-size: 1.1rem;
                     font-weight: bold;
                     border-radius: 0.5rem;
-                    border: 2px solid var(--neonBlue);
+                    border: 2px solid var(--neonGreen);
                     transition: all 0.2s ease;
                     background-color: rgba(6, 56, 117, 0.136);
                     color: rgb(149, 202, 231);
@@ -374,6 +400,10 @@ h1 {
                     box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
 					cursor: pointer;
                 }
+
+				.cpmicro .buy-button {
+					border: 2px solid var(--neonGreen) !important;
+				}
 
 /*}*/
 
@@ -756,6 +786,11 @@ h1 {
 	display: flex;
 	flex-direction: column;
 	gap: 5rem;
+
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	justify-items: center;
 }
 
 /* ---- Hero Section ---- */
@@ -873,6 +908,9 @@ h1 {
 
 
 /* ---- Versions ---- */
+.versions .smb1-closeup img {
+	width: 40%;
+}
 .versions {
 	padding: 10px 10px;
 	text-align: center;
@@ -882,13 +920,15 @@ h1 {
 }
 .product .versions h2 {
 	font-size: 2rem;
-	margin-bottom: 0.5rem;
+	margin-bottom: 0.0rem;
 }
-.product .versions h3 {
-	font-size: 1rem;
+.product .versions h3 {	
+	font-size: 1.3rem;
+	margin-top: 1.5rem;
 	margin-bottom: 0.5rem;
 }
 .product .version-cards {
+	margin-top: 3rem;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -898,20 +938,33 @@ h1 {
 }
 .product .version-card {
 	flex: 1 1 300px;
-	background-color: #399b9827;
+	background-color: #203c3b06;
 	border-radius: 8px;
 	padding: 20px;
+	padding-bottom: 50px;
 	box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 	text-align: center;
 
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 	width: 80%;
+
+	/* border: 1px solid var(--border-color); */
+	box-shadow: 0 0px 3px rgba(235, 235, 235, 0.2);
 }
 .product .version-card h3 {
-	margin-top: 0;
+
 	font-size: 1.2rem;
-	margin-bottom: 1rem;
+
+	margin-top: 3.5rem;
+	margin-bottom: 3.5rem;
+	padding-bottom: 1rem;
+	font-family: "stealth57";
+	display: block;
+	border-bottom: #374151 solid;
+
+	color: var(--text-secondary);
 }
 
 .product .version-card ul {
@@ -923,11 +976,17 @@ h1 {
 	font-size: 1.25rem;
 	font-weight: bold;
 	border-radius: 0.5rem;
-	border: 2px solid var(--neonBlue);
+	border: 2px solid var(--neonGreen);
 	transition: all 0.2s ease;
-	background-color: rgba(6, 56, 117, 0.436);
+	background-color: rgba(6, 56, 117, 0.136);
 	color: rgb(149, 202, 231);
 	box-shadow: 0 2px 4px var(--neonBlue);
+
+	/* width: 50%; */
+}
+
+.version .buy-button {
+	width: 50%;
 }
 
 .buy-button:hover {
@@ -1001,6 +1060,12 @@ h1 {
 /* ---- The Format ---- */
 .the-format {
 	padding: 20px 20px;
+	width: 80%;
+
+	margin-bottom: 8rem;
+
+	flex-direction: column;
+	align-items: center;
 }
 .product .the-format h2 {
 	font-size: 2rem;
@@ -1011,7 +1076,7 @@ h1 {
 	margin-top: 1.5rem;
 }
 table {
-	width: 100%;
+	width: 60%;
 	border-collapse: collapse;
 	table-layout: auto;
 }
