@@ -1,6 +1,6 @@
 // This is your test publishable API key.
 const stripe = Stripe("pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr");
-const API_BASE = 'http://143.110.159.39:4242';
+const API_BASE = 'https://api.porchlogic.com';
 let checkout;
 initialize();
 
