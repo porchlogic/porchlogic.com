@@ -1,0 +1,300 @@
+
+/* Shopping Cart Styles */
+.cart-icon {
+    position: relative;
+    color: var(--text-secondary);
+    font-size: 2.0rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.cart-icon:hover {
+    color: var(--neonBlue);
+}
+
+.cart-count {
+	visibility: hidden;
+    color: var(--neonWhite);
+	font-size: 1.0rem !important;
+    position: absolute;
+	width: 100%;
+    text-align: center;
+}
+
+.main h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+#cart-items-container {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.cart-item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-light); /* Item background */
+    border: 1px solid var(--border-color);
+    margin-bottom: 0.5rem;
+    padding: 1rem;
+    border-radius: 0.25rem;
+}
+
+.cart-item span {
+    margin-right: 1rem;
+}
+
+.cart-item span:last-child {
+    margin-right: 0;
+}
+
+.remove-item {
+    background-color: var(--neonRed);
+    color: var(--neonWhite);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.remove-item:hover {
+    background-color: darken(var(--neonRed), 10%); /* Darken on hover */
+}
+
+.cart-summary {
+    width: 100%;
+    text-align: right;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.cart-summary h3 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.payment-section {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+}
+
+.payment-section h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+#card-element {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.25rem;
+    background-color: var(--bg);
+}
+
+#payment-message {
+    color: var(--neonRed);
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* Style for the Stripe Elements input fields */
+.StripeElement {
+    box-sizing: border-box;
+    /* height: 40px; */
+    padding: 10px 12px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    -webkit-transition: box-shadow 150ms ease;
+    transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+    box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+}
+
+/* Cart Popup Styles */
+.cart-popup {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    width: 300px;
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateX(110%); /* Start off-screen */
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000; /* Ensure it's on top */
+}
+
+.cart-popup.visible {
+    transform: translateX(0); /* Slide in */
+}
+
+.popup-content p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.popup-actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px; /* Space between buttons */
+}
+
+.popup-actions .buy-button {
+    flex-grow: 1; /* Make buttons fill the space */
+    text-align: center;
+}
+
+.StripeElement--invalid {
+    border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+    background-color: #fefde5 !important;
+}
+
+/* Cart Popup Styles */
+.cart-popup {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    width: 300px;
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateX(110%); /* Start off-screen */
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000; /* Ensure it's on top */
+}
+
+.cart-popup.visible {
+    transform: translateX(0); /* Slide in */
+}
+
+.popup-content p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+	text-align: center;
+}
+
+.popup-actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px; /* Space between buttons */
+}
+
+.popup-actions .buy-button {
+    /* flex-grow: 1; */
+    text-align: center;
+}
+
+#email {
+	appearance: none;
+	background: #1a1a1d;
+	border: 1px solid #333;
+	color: #a5b5af;
+	border-radius: 4px;
+	padding: 0.75em;
+	width: 100%;
+	font-size: 1rem;
+	margin-bottom: 0.5em;
+}
+
+.StripeElement {
+	background-color: var(--bg-light) !important;
+	border: 1px solid #333 !important;
+	color: var(--text-primary) !important;
+	border-radius: 4px;
+	padding: 0.75em;
+	width: 100%;
+	font-size: 1rem;
+	transition: box-shadow 150ms ease;
+	box-shadow: none !important;
+}
+
+.StripeElement--focus {
+	border-color: var(--neonGreen) !important;
+	box-shadow: 0 0 0 1px var(--neonGreen) !important;
+}
+
+.StripeElement--invalid {
+	border-color: var(--neonRed) !important;
+}
+
+.StripeElement--webkit-autofill {
+	background-color: var(--bg-light) !important;
+}
+
+
+#submit {
+	background-color: var(--neonGreen);
+	color: black;
+	font-weight: bold;
+	padding: 0.75em 1.5em;
+	border: none;
+	border-radius: 4px;
+	font-size: 1rem;
+	cursor: pointer;
+	width: 100%;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	transition: background-color 0.2s ease;
+    margin-top: 1em;
+}
+
+#submit:hover {
+	background-color: #2ee84e;
+}
+
+#button-text {
+	display: inline-block;
+}
+
+.spinner {
+	width: 20px;
+	height: 20px;
+	border: 3px solid rgba(0, 0, 0, 0.2);
+	border-top: 3px solid black;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin-right: 0.5em;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.hidden {
+	display: none;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

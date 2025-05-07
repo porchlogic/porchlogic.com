@@ -1,0 +1,83 @@
+.btn {
+	display: inline-block;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 0.5rem;
+	padding: 0.5rem 1rem;
+	font-weight: bold;
+	transition: all 0.2s ease;
+}
+
+.btn--primary {
+	border: 2px solid var(--neonGreen);
+	background-color: rgba(6, 56, 117, 0.136);
+	color: rgb(149, 202, 231);
+	box-shadow: 0 2px 4px var(--neonBlue);
+}
+
+.btn--secondary {
+	border: 1px solid var(--neonGreen);
+	background-color: rgba(6, 56, 117, 0.136);
+	color: rgb(149, 202, 231);
+	/* box-shadow: 0 1px 3px var(--neonBlue); */
+}
+
+.btn--primary:hover {
+	background-color: var(--neonBlue);
+	color: black;
+	box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+}
+
+.social-button {
+	opacity: 0.7;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--neonWhite);
+	border-radius: 0.5rem;
+	font-size: 0.975rem;
+	text-decoration: none;
+	font-weight: 200;
+	transition: all 0.2s ease;
+	text-align: center;
+	box-shadow: 1px 0px 8px var(--neonWhite);
+	
+	color: var(--text-primary);
+	scroll-behavior: smooth;
+}
+
+.social-button.discord {
+    scroll-behavior: smooth;
+    border: 2px solid var(--neonGreen);
+	box-shadow: 1px 0px 8px var(--neonGreen);
+    color: var(--neonGreen);
+}
+.social-button.discord:hover {
+	background-color: var(--neonGreen);
+	color: black;
+	box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+}
+
+.social-button.youtube {
+    border: 1px solid var(--neonWhite);
+	box-shadow: 1px 0px 8px var(--neonWhite);
+    color: var(--text-primary);
+}
+.social-button.youtube:hover {
+	background-color: var(--neonRed);
+	color: black;
+	box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+}
+
+.social-button i {
+	font-size: 1rem;
+}
+
+.social-button:hover {
+	background-color: var(--neonBlue);
+	color: black;
+	box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+}

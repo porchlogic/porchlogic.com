@@ -1,0 +1,36 @@
+.blurb {
+	width: 100%;
+	max-width: 48rem;
+	padding: 2rem;
+	margin: 8rem auto 8rem auto;	
+}
+
+.blurb p {
+    font-weight: 400;
+	font-size: 1.5rem;
+	margin: 1rem 0;
+	color: var(--text-primary);
+	text-align: justify;
+}
+
+.blurb strong {
+    color: var(--text-strong);
+	text-shadow: 
+    0 0 5px var(--neonBlue);
+}
+
+.blurb__title {
+	font-family: "stealth57", sans-serif;
+    font-size: 1.75rem;
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+	color: var(--text-primary)
+}
+
+.text-glow--pink {
+	color: var(--text-dark);
+	text-shadow:
+		0 0 1px var(--neonPink),
+		0 0 2px var(--neonPink),
+		0 0 5px rgba(219, 61, 111, 0.548);
+}

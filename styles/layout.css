@@ -1,0 +1,21 @@
+.button-group {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+	width: 100%;
+	max-width: 48rem;
+	margin: 0 auto;
+	gap: 1.5rem;
+	margin-top: 2.5rem;
+	margin-bottom: 2.5rem;
+	scroll-behavior: smooth;
+}
+
+@media (max-width: 640px) {
+	.button-group{
+		flex-direction: column;
+		align-items: stretch;
+		width: 80%;
+	}
+}

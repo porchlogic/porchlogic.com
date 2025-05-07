@@ -1,0 +1,70 @@
+:root {
+	/* Backgrounds */
+	--bg: #0e0e10;
+	--bg-light: #1a1a1d;
+
+	/* Text */
+	--text-primary: rgba(165, 181, 175, 0.954);
+	--text-strong: rgba(123, 220, 183, 0.954);
+	--text-secondary: rgb(94, 103, 107);
+	--text-dark: rgb(16, 16, 16);
+
+	/* Accent Colors */
+	--neonGreen: rgb(34, 186, 52);
+	--neonGrey: rgb(95, 94, 94);
+	--neonWhite: rgb(237, 237, 237);
+	--neonYellow: rgb(162, 254, 63);
+	--neonBlue: rgb(16, 111, 244);
+	--neonPink: rgb(248, 57, 117);
+	--neonRed: rgba(218, 22, 22, 0.886);
+
+	/* Borders / Shadows */
+	--border-color: #4b5563;
+	--shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+	scroll-behavior: smooth;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	overflow: auto;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+	display: none;
+}
+
+@font-face {
+	font-family: "stealth57";
+	src: url("fonts/stealth57.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	background-color: rgb(26, 26, 26);
+	color: rgba(235, 235, 235, 0.8);
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-items: center;
+	min-height: 100vh;
+	padding: 0;
+	margin: 0;
+	width: 100vw;
+}
+
+hr {
+	width: 100%;
+	border-top: 1px solid #374151;
+	margin: 1.5rem 0;
+}

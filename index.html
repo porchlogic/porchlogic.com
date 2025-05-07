@@ -5,10 +5,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Porch Logic</title>
 	<link rel="stylesheet" href="styles_new.css" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	<link rel="stylesheet" href="styles/hero.css" />
+	<link rel="stylesheet" href="styles/button.css" />
+	<link rel="stylesheet" href="styles/blurb.css" />
+	<link rel="stylesheet" href="styles/layout.css" />
+	<link rel="stylesheet" href="styles/versions.css" />
+	<link rel="stylesheet" href="styles/cart.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
 	<script src="https://js.stripe.com/v3/"></script>
-
-
 </head>
 
 <body onload="initPage();" >
@@ -25,7 +29,17 @@
 		</div>
 		
 		
-		<div id="social-buttons"></div>
+		<div class="button-group">
+			<a href="https://discord.gg/PgeDHETwYq" class="social-button discord" target="_blank">
+				<i class="fa-brands fa-discord"></i> <span>join the band</span>
+			</a>
+			<a href="#hero" class="social-button shop">
+				<i class="fa fa-shopping-bag"></i> <span>Products</span>
+			</a>
+			<a href="https://www.youtube.com/@porchlogic" class="social-button youtube" target="_blank">
+				<i class="fa-brands fa-youtube"></i> <span>Watch Live</span>
+			</a>
+		</div>
 	</div>
 
 
@@ -38,64 +52,29 @@
 
 	<div class="main">
 		
-		<div class="markdown-content">
+		<!-- <div class="markdown-content">
 	
 			<h1 class="text-neonPink">This summer,</h1>
 	
 			<p>We're cruising the PDX grid on electric wheels, 
 				swarming with a 3d synchronized sound field as we glide through the sprawl. 
 				Riders link up using SMB1:
-			
-			
-			
-			<!-- <p><a href="https://www.youtube.com/@porchlogic" class="social-button youtube" target="_blank">Watch Live</a> → on YouTube</p>
-			
-			<p><a href="https://discord.gg/PgeDHETwYq" class="social-button discord" target="_blank">Join a ride</a> → Pop into the Discord for info</p>
-			 -->
-
-			<!-- <hr> -->
 			<h2></h2>
-
-
 			
-		</div>
-
-		<!-- Dynamic -->
-		
-	
-
+		</div> -->
+		<section class="blurb">
+			<h1 class="blurb__title text-neonPink">This summer,</h1>
+			<p>
+				We're cruising the PDX grid on electric wheels, 
+				swarming with a 3d synchronized sound field as we glide through the sprawl. 
+				Riders link up using SMB1.
+			</p>
+		</section>
 	
 	</div>
 
-	
 
-	<!-- <div class="youtube-embed" id="youtube-container">
-		<iframe
-			id="youtube-iframe"
-			src="https://www.youtube.com/embed/MW2TUWE-rEE?si=oPPUH3aN-3PR7rs1&autoplay=1"
-			title="YouTube video player"
-			frameborder="0"
-			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-			referrerpolicy="strict-origin-when-cross-origin"
-			allowfullscreen
-		></iframe>
-	</div> -->
-
-	<!-- <section class="live"> -->
-		<!-- <div class="live-text">
-			<h2>SMB1</h2>
-			<p>mobile music sync</p>
-			<div class="live-button">
-				<button id="buy-button" class="buy-button">
-					Buy
-				</button>
-			</div>
-		</div> -->
-	<!-- </section> -->
-
-
-
-	<section class="hero smb1" id="hero">
+	<!-- <section class="hero smb1" id="hero">
 		<div class="hero-text">
 			<h2>SMB1</h2>
 			<p>connect to the audio swarm</p>
@@ -106,62 +85,40 @@
 				<p>delivery in Portland, OR</p>
 			</div>
 		</div>
+	</section> -->
+	<section class="hero hero--smb1" id="hero">
+		<div class="hero__text">
+			<h2 class="hero__title">SMB1</h2>
+			<p class="hero__subtitle">connect to the audio swarm</p>
+			<div class="hero__button-group">
+				<a class="btn btn--primary" href="#versions">order now</a>
+				<!-- <p class="hero__note">delivery in Portland, OR</p> -->
+			</div>
+		</div>
 	</section>
-
 	
 
-	<!-- <div class="main">
-		
-
-		<div class="markdown-content" data-src="smb1.md"></div>
-
-
-		<div id="footer"></div>
-		
-		
-	</div> -->
 
 
 	<div class="product">
 
-		<!-- <section class="product-diagram">
-			<div class="diagram-container">
-				<img src="images/smb1.svg" alt="SMB1 Diagram" />
 
-			</div>
+
+
+		
+		<section class="blurb">
+			<p>
+				The PorchLogic SMB1 lets you join / start <strong>wireless 3d audio swarms</strong>,
+				by connecting to your music gear (<strong>phones, synths, samplers, DAWs</strong>...
+				anything with USB MIDI) and linking your speaker output with every other SMB1 in the swarm.
+			</p>
 		</section>
-		
-		<section>
-			<p>**Routes power to connected MIDI device only if you get the Powered Host version</p>
-		</section> -->
-
-
-		
-		<div class="markdown-content">
-			
-			<!-- <ul>
-				<li>join/start wireless 3d audio swarms</li>
-				<li>connect your music gear (phones, synths, samplers, DAWs...anything with USB MIDI)</li>
-				<li>link your speaker output with every other SMB1 in the swarm</li>
-			</ul> -->
-			<p>The PorchLogic SMB1 lets you join/start wireless 3d audio swarms.</p>
-			<p>by connecting to your music gear (phones, synths, samplers, DAWs...anything with USB MIDI)</p>
-			<p>and linking your speaker output with every other SMB1 in the swarm.</p>
-
-
-			
-		</div>
-
-			
-		
-	
-		
 
 	
 		<!-- Versions -->
-		<section id="versions" class="versions">
+		<!-- <section id="versions" class="versions">
 			<h2>Pick Your Version</h2>
-			<h3 class="text-neonYellowSubtle"><em>⚠ delivery availble ONLY in Portland, OR</em></h3>
+			<h3 class="text-neonYellowSubtle"><em>⚠ delivery available ONLY in Portland, OR</em></h3>
 			<p>shipping coming soon!</p>
 			<div class="version-cards">
 				<article class="version-card">
@@ -173,7 +130,7 @@
 					<p>⚡ Powered by left OR right USB port</p>
 					<br>
 					<button id="buy-smb1-default" class="buy-button">
-						$42
+						Add to Cart
 					</button>
 				</article>
 				<article class="version-card">
@@ -185,109 +142,55 @@
 					<p>⚡ Powered through left USB port, shares power out right USB port</p>
 					<br>
 					<button id="buy-smb1-host" class="buy-button">
-						$42
+						Add to Cart
 					</button>
 				</article>
 			</div>
-		</section>
-	
-		<!-- How to Use -->
-		<!-- <section class="how-to-use">
-			<h2>How to Use</h2>
-			<div class="steps-wrapper">
-				<div class="step-block">
-					<h4>Join a Swarm</h4>
-					<ol>
-						<li>Select <strong>RX</strong> (receive mode)</li>
-						<li>Look for a nearby SMB1 emitting a blue pulse</li>
-					</ol>
-					<ul>
-						<li>Join its swarm by scanning a displayed QR code</li>
-						<li>Or join the first public transmission you find</li>
-					</ul>
-				</div>
-				<div class="step-block">
-					<h4>Lead a Swarm</h4>
-					<ol>
-						<li>Select <strong>TX</strong> (transmit mode)</li>
-					</ol>
-					<p>One unit becomes the <strong>transmitter (TX)</strong>, pulsing out tempo, position, and start/stop commands via MIDI clock. All others become <strong>receivers (RX)</strong>, syncing wirelessly in real-time.</p>
-				</div>
-			</div>
 		</section> -->
-	
-		<!-- Connect Devices -->
-		<!-- <section class="devices">
-			<h2>Connect Your Gear</h2>
-			<div class="device-list">
-				<article>
-					<h4>📱 Phone / Tablet</h4>
-					<p>Plug in as needed for USB MIDI or use an appropriate adapter.</p>
+		<section id="versions" class="versions">
+			<h2 class="versions__title">Pick Your Version</h2>
+			<h3 class="versions__warning text-glow--yellow-subtle">
+				<!-- <em>⚠ delivery available ONLY in Portland, OR</em> -->
+			</h3>
+			<!-- <p class="versions__subnote">shipping coming soon!</p> -->
+		
+			<div class="versions__cards">
+				<article class="version-card">
+					<h3 class="version-card__name">_Device</h3>
+					<div class="version-card__image">
+						<img src="images/smb1_1024x1024.png" alt="SMB1 Device Version">
+					</div>
+					
+					<button id="buy-smb1-default" class="btn btn--primary">Add to Cart</button>
+					<p>✔ Connects to USB MIDI <strong>hosts</strong></p>
+					<p>⚡ Powered by left OR right USB port</p>
+					<br>
+					
 				</article>
-				<article>
-					<h4>🎛 Synth / Sampler MIDI Device</h4>
-					<p>Connect via USB as a MIDI <em>host</em></p>
-				</article>
-				<article>
-					<h4>💻 DAW / MIDI Host</h4>
-					<p>Use SMB1 in <em>device</em></p>
+		
+				<article class="version-card">
+					<h3 class="version-card__name">_Host</h3>
+					<div class="version-card__image">
+						<img src="images/smb1_1024x1024.png" alt="SMB1 Host Version">
+					</div>
+					
+					<button id="buy-smb1-host" class="btn btn--primary">Add to Cart</button>
+					<p>✔ Connects to USB MIDI <strong>devices</strong></p>
+					<p>⚡ Powered through left USB port, shares power out right USB port</p>
+					<br>
+					
 				</article>
 			</div>
-			<div class="speaker-note">
-				<h4>Connect Your Speaker</h4>
-				<p>(preferably via aux or low-latency Bluetooth)</p>
-			</div>
-		</section> -->
-	
-		<!-- The Format Table -->
-
-		<section class="the-format">
-			<h2>Song Format</h2>
-			<p>-</p>
-			<div class="table-wrapper">
-				<table>
-					<thead>
-						<tr>
-							<th>bar number</th>
-							<th>description</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>click</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>4 on the floor</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>hats</td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>snare</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<p>-</p>
 		</section>
+		
+	
 
-		<!-- Final Call to Action -->
-		<!-- <section class="footer-cta">
-			<h3>Get Ready to Swarm</h3>
-			<p>Amplify your musical collaborations. Sync up and join the swarm.</p>
-			<a href="#" class="cta-button">Order Your SMB1</a>
-		</section>
-	 -->
 	</div>
 
-		<hr>
 
 
-	<section class="hero cpmicro">
+
+	<!-- <section class="hero cpmicro">
 		<div class="hero-text">
 			<h2>cpmicro</h2>
 			<p>support porchLogic</p>
@@ -299,7 +202,7 @@
 				<p>delivery in Portland, OR</p>
 			</div>
 		</div>
-	</section>
+	</section> -->
 
 	
 	<div id="footer"></div>
@@ -307,39 +210,17 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.2.12/marked.min.js"></script>
 	<script src="js/main.js"></script>
 
-	<script>
-		// Initialize Stripe with your public key
-		const stripe = Stripe("pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr");
+	<script src="js/cart.js"></script>
 	
-		// Handle click event
-		document.getElementById("buy-smb1-default").addEventListener("click", async () => {
-			// Redirect to Stripe Checkout
-			const { error } = await stripe.redirectToCheckout({
-				lineItems: [{ price: "price_1RC2n6ABTHjSuIhXDp07ZTjj", quantity: 1 }], // Your Stripe price ID
-				mode: "payment",
-				successUrl: "https://porchlogic.com/stripe/success",
-				cancelUrl: "https://porchlogic.com/stripe/cancel",
-			});
-	
-			if (error) {
-				console.error("Stripe Checkout error:", error);
-			}
-		});
+<div id="cart-popup" class="cart-popup">
+    <div class="popup-content">
+        <p id="popup-message"></p>
+        <div class="popup-actions">
+            <a href="/cart.html" class="btn btn--secondary">Checkout</a>
+            <button class="btn btn--secondary" onclick="hideCartPopup()">Continue</button>
+        </div>
+    </div>
+</div>
 
-		document.getElementById("buy-smb1-host").addEventListener("click", async () => {
-			// Redirect to Stripe Checkout
-			const { error } = await stripe.redirectToCheckout({
-				lineItems: [{ price: "price_1RC2nYABTHjSuIhXf1bf9nTK", quantity: 1 }], // Your Stripe price ID
-				mode: "payment",
-				successUrl: "https://porchlogic.com/stripe/success",
-				cancelUrl: "https://porchlogic.com/stripe/cancel",
-			});
-	
-			if (error) {
-				console.error("Stripe Checkout error:", error);
-			}
-		});
-	</script>
-	
 </body>
 </html>
