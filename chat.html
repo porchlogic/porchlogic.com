@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Chat Overlay</title>
+	<style>
+		body {
+			margin: 0;
+			background: transparent;
+			font-family: sans-serif;
+			color: white;
+		}
+		#chat {
+			position: absolute;
+			bottom: 1em;
+			left: 1em;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5em;
+		}
+		.bubble {
+			background: rgba(0, 0, 0, 0.7);
+			padding: 0.6em 1em;
+			border-radius: 1em;
+			max-width: 60vw;
+			word-wrap: break-word;
+			font-size: 1.2em;
+			animation: fadeOut 10s forwards;
+		}
+		@keyframes fadeOut {
+			0% { opacity: 1; }
+			80% { opacity: 1; }
+			100% { opacity: 0; transform: translateY(-10px); }
+		}
+		#inputContainer {
+			position: fixed;
+			top: 1em;
+			right: 1em;
+		}
+	</style>
+</head>
+<body>
+	<div id="chat"></div>
+	<div id="inputContainer">
+		<input type="text" id="chatInput" placeholder="Type and hit Enter" autofocus />
+	</div>
+
+	<script>
+		const input = document.getElementById('chatInput');
+		const chat = document.getElementById('chat');
+
+		input.addEventListener('keydown', e => {
+			if (e.key === 'Enter' && input.value.trim()) {
+				const bubble = document.createElement('div');
+				bubble.className = 'bubble';
+				bubble.textContent = input.value;
+				chat.appendChild(bubble);
+				input.value = '';
+				setTimeout(() => bubble.remove(), 10000); // auto-remove after 10s
+			}
+		});
+	</script>
+</body>
+</html>

@@ -113,6 +113,18 @@
     text-align: center;
 }
 
+.warning {
+	font-size: 1.25rem;
+	font-weight: 300;
+	margin-bottom: 0.5rem;
+    text-align: center;
+}
+.text-glow--yellow-subtle {
+	color: var(--neonYellow);
+	text-shadow:
+		0 0 2px var(--neonYellow)
+}
+
 /* Style for the Stripe Elements input fields */
 .StripeElement {
     box-sizing: border-box;
