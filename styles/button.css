@@ -61,6 +61,17 @@
 	box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
 }
 
+.social-button.twitch {
+    border: 1px solid var(--neonWhite);
+	box-shadow: 1px 0px 8px var(--neonWhite);
+    color: var(--text-primary);
+}
+.social-button.twitch:hover {
+	background-color: var(--neonPurple);
+	color: black;
+	box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+}
+
 .social-button.youtube {
     border: 1px solid var(--neonWhite);
 	box-shadow: 1px 0px 8px var(--neonWhite);

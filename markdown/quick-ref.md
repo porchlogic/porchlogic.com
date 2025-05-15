@@ -1,30 +1,32 @@
 # SMB1 Button Guide
 
+<br>
 
+>***example:***
+>
+>`🟢` = 1 quick press
+>
+>`🟢+hold` = press once and hold
+>
+>`🟢🔵🟡 .... 🟢` = 3 quick presses, *LED flashes*, then 1 quick press
 
+---
 
-| Number of presses| Result |
+<br>
+
+| Number of presses | Result |
 |-----------|--------|
-| 🟢+hold     | Decrease latency             |
-| 🟢🔵+hold     | Increase latency             |
-| 🟢🔵🟡 .... 🟢     | RX Clock Mode            |
-| 🟢🔵🟡 .... 🟢🔵     | *reserved*    |
-| 🟢🔵🟡 .... 🟢🔵🟡     | RX Clock + Melody    |
-| 🟢🔵🟡 .... 🟢🔵🟡🔴     | TX Mode                  |
-| 🟢🔵🟡 .... 🟢🔵🟡🔴🟠     | Check for Updates    |
+| 🟢+hold    | ramp-down latency while held             |
+| 🟢🔵+hold    | ramp-up latency while held          |
 | 🟢🔵🟡🔴     | Enter Pairing Mode    |
-
-
-
----
-***example:***
-
-`🟢` = 1 press
-
-`🟢🔵🟡 .... 🟢` = 3 quick presses, *LED flashes*, then 1 quick press
+| | |
+| 🟢🔵🟡 .... 🟢     | switch to RX Mode            |
+| 🟢🔵🟡 .... 🟢🔵     | *reserved*    |
+| 🟢🔵🟡 .... 🟢🔵🟡     | *reserved*    |
+| 🟢🔵🟡 .... 🟢🔵🟡🔴     | switch to TX Mode                  |
+| 🟢🔵🟡 .... 🟢🔵🟡🔴🟠     | Check for Updates    |
 
 ---
+<br>
 
-Need help or want to chat? Join the [Discord](https://discord.gg/PgeDHETwYq).
-
----
+Need help or want to chat? Sync up on Discord or the live workbench:
