@@ -1,54 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Porch Logic</title>
-	<link rel="stylesheet" href="styles_new.css" />
-	<link rel="stylesheet" href="styles/hero.css" />
-	<link rel="stylesheet" href="styles/button.css" />
-	<link rel="stylesheet" href="styles/blurb.css" />
-	<link rel="stylesheet" href="styles/layout.css" />
-	<link rel="stylesheet" href="styles/versions.css" />
-	<link rel="stylesheet" href="styles/cart.css" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
-	<script src="https://js.stripe.com/v3/"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>porchLogic</title>
+	<link href="https://fonts.googleapis.com/css?family=Orbitron:700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #0a0a1a;
+			--accent-blue: #36aaff;
+			--accent-purple: #9f40ff;
+			--glow: 0 0 8px #36aaff, 0 0 18px #9f40ff;
+			--font-glitch: 'Orbitron', 'Share Tech Mono', monospace;
+		}
+		html, body {
+			background: var(--bg);
+			color: #e0e0f0;
+			font-family: 'Share Tech Mono', monospace;
+			margin: 0;
+			padding: 0;
+			scroll-behavior: smooth;
+		}
+		h1, .glitch {
+			font-family: var(--font-glitch);
+			font-size: 2.5em;
+			letter-spacing: 0.03em;
+			color: var(--accent-blue);
+			text-shadow: 0 0 6px var(--accent-blue), 0 0 12px var(--accent-purple);
+			position: relative;
+		}
+		h2 {
+			font-family: var(--font-glitch);
+			color: var(--accent-purple);
+			margin-top: 2em;
+		}
+		section {
+			max-width: 960px;
+			margin: 2em auto;
+			padding: 2em 1em;
+			background: rgba(20,20,40,0.7);
+			border-radius: 1em;
+			box-shadow: 0 0 16px 2px rgba(80,40,120,0.12);
+		}
+		.band-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+			gap: 2em;
+			margin: 2em 0;
+		}
+		.band-card {
+			background: rgba(16,18,44, 0.97);
+			border-radius: 1em;
+			padding: 1.5em 1em;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			position: relative;
+			box-shadow: 0 0 14px 2px var(--accent-purple), 0 0 6px 1px var(--accent-blue) inset;
+			overflow: hidden;
+			animation: neonBorder 2s linear infinite alternate;
+		}
+		@keyframes neonBorder {
+			0%   { box-shadow: 0 0 12px 2px var(--accent-blue), 0 0 6px 1px var(--accent-purple) inset; }
+			100% { box-shadow: 0 0 16px 4px var(--accent-purple), 0 0 8px 2px var(--accent-blue) inset; }
+		}
+		.band-avatar {
+			width: 64px; height: 64px;
+			background: linear-gradient(135deg, var(--accent-blue) 20%, var(--accent-purple) 80%);
+			border-radius: 50%;
+			margin-bottom: 1em;
+			border: 2px solid #fff3;
+			box-shadow: 0 0 16px 2px var(--accent-blue);
+			display: flex; align-items: center; justify-content: center;
+			font-size: 2em;
+		}
+		.band-name {
+			font-family: var(--font-glitch);
+			font-size: 1.3em;
+			color: var(--accent-blue);
+			margin-bottom: 0.4em;
+			text-align: center;
+		}
+		.band-gear {
+			color: #b1afff;
+			font-size: 1em;
+			text-align: center;
+		}
+		@media (max-width: 700px) {
+			section {
+				padding: 1em 0.5em;
+			}
+			.band-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+		.two-col {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			gap: 2em;
+			margin-top: 2em;
+		}
+		.schematic {
+			flex: 1 1 280px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		@media (max-width: 900px) {
+			.two-col {
+				flex-direction: column;
+			}
+			.schematic {
+				margin-top: 2em;
+			}
+		}
+		.btn-group {
+			display: flex;
+			gap: 1.5em;
+			margin: 2em 0;
+			flex-wrap: wrap;
+		}
+		.neon-btn {
+			background: none;
+			border: 2px solid var(--accent-blue);
+			border-radius: 2em;
+			color: #fff;
+			padding: 1em 2em;
+			font-size: 1.2em;
+			font-family: var(--font-glitch);
+			cursor: pointer;
+			margin-bottom: 1em;
+			transition: box-shadow 0.3s, border 0.2s;
+			box-shadow: 0 0 12px 2px var(--accent-blue);
+			position: relative;
+			overflow: hidden;
+		}
+		.neon-btn:hover {
+			box-shadow: 0 0 20px 8px var(--accent-blue), 0 0 12px 4px var(--accent-purple);
+			border-color: var(--accent-purple);
+			animation: btnPulse 1.3s infinite alternate;
+		}
+		@keyframes btnPulse {
+			0% { box-shadow: 0 0 12px 2px var(--accent-blue);}
+			100% { box-shadow: 0 0 22px 8px var(--accent-purple);}
+		}
+		footer {
+			background: #12121e;
+			color: #999ad1;
+			text-align: center;
+			padding: 2em 1em 1.5em 1em;
+			margin-top: 3em;
+			font-size: 1em;
+			letter-spacing: 0.01em;
+			position: relative;
+		}
+		.footer-logo {
+			font-family: var(--font-glitch);
+			color: var(--accent-blue);
+			font-size: 1.5em;
+			display: inline-block;
+			margin-bottom: 0.5em;
+			animation: glitch 1.8s infinite alternate;
+		}
+		@keyframes glitch {
+			0%,100% { text-shadow: 0 0 8px var(--accent-blue), 0 0 18px var(--accent-purple); }
+			20% { text-shadow: 2px 0 4px #9f40ff, -2px 1px 2px #36aaff; }
+			40% { text-shadow: -1px 2px 2px #9f40ff, 1px -1px 4px #36aaff;}
+			60% { text-shadow: 3px -2px 8px #9f40ff;}
+			80% { text-shadow: -2px 2px 8px #36aaff;}
+		}
+		.footer-links a {
+			color: var(--accent-purple);
+			margin: 0 0.5em;
+			text-decoration: none;
+			transition: color 0.2s;
+		}
+		.footer-links a:hover {
+			color: var(--accent-blue);
+			text-shadow: 0 0 8px var(--accent-blue);
+		}
+		.social-icons {
+			margin-top: 0.6em;
+			font-size: 1.5em;
+		}
+		.social-icons a {
+			display: inline-block;
+			margin: 0 0.3em;
+			color: var(--accent-purple);
+			transition: color 0.2s, filter 0.2s;
+			filter: drop-shadow(0 0 8px #9f40ff);
+		}
+		.social-icons a:hover {
+			color: var(--accent-blue);
+			filter: drop-shadow(0 0 14px #36aaff);
+		}
+	</style>
 </head>
-
-<body onload="initPage();" >
-	<div id="header"></div>
-	<div class="main">
-		
-	</div>
-	<div class="main">
-		
-		<div class="poster">			
-			<div class="content">
-				<h2>mobile cyborg orchestrations</h2>
+<body>
+	<section>
+		<p>
+			I'm working on a wireless music syncing system<br>
+			So that a DJ can pipe in and play our speakers live as we ride,<br>
+			with different parts of the song on different speakers, all synchronized.
+		</p>
+	</section>
+	
+	<section>
+		<p>
+			To make this appealing to music artists, I'm putting together a lineup of cyborg band members:
+		</p>
+		<div class="band-grid">
+			<!-- Repeat these .band-card blocks for each member -->
+			<div class="band-card">
+				<div class="band-avatar">🤖</div>
+				<div class="band-name">Echo Flux</div>
+				<div class="band-gear">Synth: M8 Tracker</div>
+			</div>
+			<div class="band-card">
+				<div class="band-avatar">🎛️</div>
+				<div class="band-name">Glitch Beat</div>
+				<div class="band-gear">Drum Machine: Model:Cycles</div>
+			</div>
+			<div class="band-card">
+				<div class="band-avatar">🔊</div>
+				<div class="band-name">Bassline</div>
+				<div class="band-gear">Bass Synth: Elektron Analog Four</div>
+			</div>
+			<div class="band-card">
+				<div class="band-avatar">🦾</div>
+				<div class="band-name">Pulse Rider</div>
+				<div class="band-gear">Guitar: MIDI Controller</div>
+			</div>
+			<div class="band-card">
+				<div class="band-avatar">👁️‍🗨️</div>
+				<div class="band-name">Neon Seer</div>
+				<div class="band-gear">Visuals: TouchDesigner</div>
+			</div>
+			<div class="band-card">
+				<div class="band-avatar">🛰️</div>
+				<div class="band-name">Sync Sentinel</div>
+				<div class="band-gear">SMB1 Wireless Sync</div>
 			</div>
 		</div>
-		
-		
-		<div class="button-group">
-			<a href="https://discord.gg/PgeDHETwYq" class="social-button discord" target="_blank">
-				<i class="fa-brands fa-discord"></i> <span>join the band</span>
-			</a>
-			<a href="#hero" class="social-button shop">
-				<i class="fa fa-shopping-bag"></i> <span>Products</span>
-			</a>
-			<a href="https://www.youtube.com/@porchlogic" class="social-button youtube" target="_blank">
-				<i class="fa-brands fa-youtube"></i> <span>Watch Live</span>
-			</a>
+	</section>
+	
+	<section>
+		<div class="two-col">
+			<div style="flex:2;">
+				<h2>How It Works</h2>
+				<p>
+					Our system lets you orchestrate swarms of speakers wirelessly, perfectly synced<br>
+					across devices using proprietary latency compensation.
+				</p>
+			</div>
+			<div class="schematic">
+				<!-- Replace this with your schematic image or SVG -->
+				<img src="https://placehold.co/300x180/202050/36aaff?text=Schematic+Diagram" alt="System Schematic" style="border-radius:1em;box-shadow:0 0 20px #36aaff44;">
+			</div>
 		</div>
-	</div>
-
-
-
-	<div class="main">			
-		<div id="poster">			
+	</section>
+	
+	<section style="text-align:center;">
+		<h2>Join the Movement</h2>
+		<p>Ready to jam?</p>
+		<div class="btn-group">
+			<a href="https://example.com/shop" class="neon-btn" style="text-decoration:none;">Get your SMB1 device now</a>
+			<a href="https://youtube.com/link" class="neon-btn" style="text-decoration:none;">Watch a demo video</a>
 		</div>
-	</div>
-
-
+	</section>
+	
+	<footer>
+		<div class="footer-logo">porchLogic</div>
+		<div class="footer-links">
+			© 2025 porchLogic • Follow us on 
+			<a href="https://twitter.com/porchlogic" target="_blank" aria-label="Twitter">Twitter</a>, 
+			<a href="https://instagram.com/porchlogic" target="_blank" aria-label="Instagram">Instagram</a>
+		</div>
+		<div class="social-icons">
+			<!-- You can swap these for SVG icons for real neon effect -->
+			<a href="https://twitter.com/porchlogic" target="_blank" title="Twitter">🐦</a>
+			<a href="https://instagram.com/porchlogic" target="_blank" title="Instagram">📸</a>
+		</div>
+	</footer>
 </body>
 </html>
