@@ -1,12 +1,38 @@
 // Load HTML fragment into an element by ID
+// function loadHTML(elementId, file) {
+// 	fetch(file)
+// 		.then((response) => response.text())
+// 		.then((data) => {
+// 			document.getElementById(elementId).innerHTML = data;
+// 		})
+// 		.catch((err) => console.error(`Error loading ${file}:`, err));
+// }
+
+
+const API_BASE = 'https://api.porchlogic.com';
+
+
 function loadHTML(elementId, file) {
-	fetch(file)
-		.then((response) => response.text())
-		.then((data) => {
-			document.getElementById(elementId).innerHTML = data;
-		})
-		.catch((err) => console.error(`Error loading ${file}:`, err));
+	return new Promise((resolve, reject) => {
+		const el = document.getElementById(elementId);
+		if (!el) {
+			console.warn(`Skipping module ${file}: #${elementId} not found`);
+			return resolve(); // Not an error — just skip
+		}
+
+		fetch(file)
+			.then((response) => response.text())
+			.then((data) => {
+				el.innerHTML = data;
+				resolve();
+			})
+			.catch((err) => {
+				console.error(`Error loading ${file}:`, err);
+				reject(err);
+			});
+	});
 }
+
 
 // Toggle product card expansion
 function toggleCard(card) {
@@ -105,17 +131,68 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // Initialize the page by loading dynamic content and attaching events
-function initPage() {
-	loadHTML("header", "/header.html");
-	loadHTML("footer", "/footer.html");
-	loadHTML("social-buttons", "/social-buttons.html");
-	// loadLogUpdates();
-	// loadSVGData();
+// function initPage() {
+// 	loadHTML("header", "/header.html");
+// 	loadHTML("footer", "/footer.html");
+// 	loadHTML("social-buttons", "/social-buttons.html");
 
-	// Scroll to shop section when shop button is clicked
-	// const shopLink = document.getElementById("shop-link");
-	// const shopSection = document.getElementById("shop");
-	// shopLink.addEventListener("click", () => {
-	// 	shopSection.scrollIntoView({ behavior: "smooth", block: "end" });
-	// });
+// 	// Attach newsletter logic once loaded
+// 	setTimeout(() => {
+// 		const form = document.getElementById("newsletter-form");
+// 		if (form) {
+// 			form.addEventListener("submit", async function (e) {
+// 				e.preventDefault();
+
+// 				const email = document.getElementById("newsletter-email").value;
+// 				const status = document.getElementById("newsletter-status");
+
+// 				try {
+// 					const res = await fetch('/newsletter-signup', {
+// 						method: 'POST',
+// 						headers: { 'Content-Type': 'application/json' },
+// 						body: JSON.stringify({ email })
+// 					});
+
+// 					const result = await res.json();
+// 					status.textContent = result.message || "Success!";
+// 				} catch (err) {
+// 					status.textContent = "Something went wrong.";
+// 					console.error(err);
+// 				}
+// 			});
+// 		}
+// 	}, 300); // Wait a little for loadHTML to finish
+// }
+
+async function initPage() {
+	await loadHTML("header", "/header.html");
+	await loadHTML("footer", "/footer.html");
+	await loadHTML("social-buttons", "/social-buttons.html");
+
+	await loadHTML("newsletter-container", "/newsletter-signup.html")
+		.then(() => {
+			const form = document.getElementById("newsletter-form");
+			if (!form) return;
+
+			form.addEventListener("submit", async function (e) {
+				e.preventDefault();
+
+				const email = document.getElementById("newsletter-email").value;
+				const status = document.getElementById("newsletter-status");
+
+				try {
+					const res = await fetch(`${API_BASE}/newsletter-signup`, {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ email })
+					});
+
+					const result = await res.json();
+					status.textContent = result.message || "Success!";
+				} catch (err) {
+					status.textContent = "Something went wrong.";
+					console.error(err);
+				}
+			});
+		});
 }
