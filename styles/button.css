@@ -47,6 +47,15 @@
 	
 	color: var(--text-primary);
 	scroll-behavior: smooth;
+
+	position: relative;
+}
+
+.social-button p {
+	font-size: 30px;
+	position: absolute;
+	left: 10%;
+	top: -180%;
 }
 
 .social-button.discord {
@@ -79,7 +88,18 @@
 }
 .social-button.youtube:hover {
 	background-color: var(--neonRed);
-	color: black;
+	color: rgb(237, 237, 237);
+	box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+}
+
+.social-button.shop {
+    border: 1px solid var(--neonWhite);
+	box-shadow: 1px 0px 8px var(--neonWhite);
+    color: var(--text-primary);
+}
+.social-button.shop:hover {
+	background-color: var(--neonBlue);
+	color: rgb(237, 237, 237);
 	box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
 }
 

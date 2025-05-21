@@ -1,0 +1,10 @@
+.youtube-embed{
+    width: 100%;
+
+}
+
+.youtube-embed iframe {
+    width: 100vw;
+    aspect-ratio: 16 / 9;
+    max-height: 80vh;
+}
