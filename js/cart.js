@@ -151,6 +151,20 @@ document.addEventListener('DOMContentLoaded', () => {
             showCartPopup(`${smb1HostItem.name} added to cart!`);
         });
     }
+
+    const buySmb1ActivationButton = document.getElementById('buy-smb1-activation');
+    if (buySmb1ActivationButton) {
+        buySmb1ActivationButton.addEventListener('click', () => {
+            // Define the item details for SMB1 Host
+            const smb1ActivationItem = {
+                id: 'smb1_activation', // Unique ID for the item
+                name: 'SMB1 _Activate',
+                price: 15.00 // Price as a number
+            };
+            addItemToCart(smb1ActivationItem);
+            showCartPopup(`${smb1ActivationItem.name} added to cart!`);
+        });
+    }
 });
 
 // Placeholder for Stripe Elements initialization and payment handling on cart.html

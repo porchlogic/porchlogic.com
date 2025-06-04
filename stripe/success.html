@@ -9,8 +9,43 @@
 <body class="bg-bg text-white flex flex-col items-center justify-center h-screen">
 	<h1 class="font-stealth text-4xl text-neonGreen">Thank You!</h1>
 	<p class="text-lg mt-4">Your purchase was successful.</p>
+
+
+	<p>Status: <span id="status"></span></p>
+	<p>Email: <span id="email"></span></p>
+
+	<div id="activation-section" style="display:none;">
+		<h3>Your Activation Code:</h3>
+		<pre id="activation-code" style="font-size:1.5em; background:#eee; padding:10px;"></pre>
+		<p>Please copy this code and paste it into your device config page.</p>
+	</div>
+
+
+
 	<a href="/" class="mt-6 px-6 py-3 text-lg border border-neonGreen text-neonGreen rounded-lg hover:bg-neonGreen hover:text-black transition">
 		Back to Home
 	</a>
+
+
+	<script>
+		const urlParams = new URLSearchParams(window.location.search);
+		const sessionId = urlParams.get('session_id');
+
+		fetch(`/session-status?session_id=${sessionId}`)
+			.then(r => r.json())
+			.then(data => {
+				document.getElementById('status').textContent = data.status;
+				document.getElementById('email').textContent = data.customer_email;
+
+				if (data.activation_code) {
+					document.getElementById('activation-code').textContent = data.activation_code;
+					document.getElementById('activation-section').style.display = 'block';
+				}
+			});
+
+	</script>
+
+
+
 </body>
 </html>
