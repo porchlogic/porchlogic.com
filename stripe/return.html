@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Payment Successful</title>
 	<link rel="stylesheet" href="../styles/base.css">
+	<link rel="stylesheet" href="../styles/text.css">
 </head>
 <body class="bg-bg text-white flex flex-col items-center justify-center h-screen">
 	<h1 class="font-stealth text-4xl text-neonGreen">Thank You!</h1>
@@ -15,47 +16,56 @@
 	<p>Email: <span id="email"></span></p>
 
 	<div id="activation-section" style="display:none;">
-		<h3>Your Activation Code:</h3>
-		<pre id="activation-code" style="font-size:1.5em; background:#eee; padding:10px;"></pre>
-		<p>Please copy this code and paste it into your device config page.</p>
+	<h3>Your Activation Code:</h3>
+	<pre id="activation-code" class="copy-code" style="font-size:1.5em; background:#eee; color:black; padding:10px; cursor:pointer;"></pre>
+	<p>Click the code to copy it. Then paste it into your device config page.</p>
+	<p id="copy-msg" style="display:none; color:lime;">Copied!</p>
 	</div>
 
-
-
-	<a href="/" class="mt-6 px-6 py-3 text-lg border border-neonGreen text-neonGreen rounded-lg hover:bg-neonGreen hover:text-black transition">
-		Back to Home
-	</a>
-
-
 	<script>
-	const urlParams = new URLSearchParams(window.location.search);
-	const sessionId = urlParams.get('session_id');
+		const urlParams = new URLSearchParams(window.location.search);
+		const sessionId = urlParams.get('session_id');
 
-	if (!sessionId) {
-		document.getElementById('status').textContent = 'No session ID found.';
-	} else {
-		fetch(`https://api.porchlogic.com/session-status?session_id=${sessionId}`)
-			.then(r => {
-				if (!r.ok) {
-					throw new Error(`HTTP error! Status: ${r.status}`);
-				}
-				return r.json();
-			})
-			.then(data => {
-				document.getElementById('status').textContent = data.status;
-				document.getElementById('email').textContent = data.customer_email;
+		if (!sessionId) {
+			document.getElementById('status').textContent = 'No session ID found.';
+		} else {
+			fetch(`https://api.porchlogic.com/session-status?session_id=${sessionId}`)
+				.then(r => {
+					if (!r.ok) {
+						throw new Error(`HTTP error! Status: ${r.status}`);
+					}
+					return r.json();
+				})
+				.then(data => {
+					document.getElementById('status').textContent = data.status;
+					document.getElementById('email').textContent = data.customer_email;
 
-				if (data.activation_code) {
-					document.getElementById('activation-code').textContent = data.activation_code;
-					document.getElementById('activation-section').style.display = 'block';
-				}
-			})
-			.catch(err => {
-				console.error('Error fetching session status:', err);
-				document.getElementById('status').textContent = 'Error fetching session status.';
-			});
-	}
-</script>
+					if (data.activation_code) {
+						document.getElementById('activation-code').textContent = data.activation_code;
+						document.getElementById('activation-section').style.display = 'block';
+					}
+				})
+				.catch(err => {
+					console.error('Error fetching session status:', err);
+					document.getElementById('status').textContent = 'Error fetching session status.';
+				});
+		}
+
+		document.getElementById('activation-code').addEventListener('click', function() {
+			const text = this.textContent;
+			navigator.clipboard.writeText(text)
+				.then(() => {
+					document.getElementById('copy-msg').style.display = 'block';
+					setTimeout(() => {
+						document.getElementById('copy-msg').style.display = 'none';
+					}, 2000);
+				})
+				.catch(err => {
+					console.error('Failed to copy:', err);
+				});
+		});
+	</script>
+
 
 
 
