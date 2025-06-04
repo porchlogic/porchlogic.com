@@ -1,6 +1,6 @@
 // This is your test publishable API key.
 const stripe = Stripe("pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr");
-const API_BASE = 'https://api.porchlogic.com';
+const STRIPE_API_BASE = 'https://api.porchlogic.com';
 let checkout;
 initialize();
 
@@ -19,7 +19,7 @@ document
 
 async function initialize() {
 	const cartItems = getCartItems(); // from sessionStorage
-	const promise = fetch(`${API_BASE}/create-checkout-session`, {
+	const promise = fetch(`${STRIPE_API_BASE}/create-checkout-session`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({ cartItems })

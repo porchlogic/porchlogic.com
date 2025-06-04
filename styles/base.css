@@ -45,7 +45,7 @@ body::-webkit-scrollbar {
 
 @font-face {
 	font-family: "stealth57";
-	src: url("fonts/stealth57.ttf") format("truetype");
+	src: url("../fonts/stealth57.ttf") format("truetype");
 	font-weight: normal;
 	font-style: normal;
 }
