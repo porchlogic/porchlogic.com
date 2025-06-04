@@ -12,53 +12,26 @@ const validateEmail = async (email) => {
 	return { isValid, message: !isValid ? updateResult.error.message : null };
 };
 
-document
-.querySelector("#payment-form")
-.addEventListener("submit", handleSubmit);
+document.querySelector("#payment-form").addEventListener("submit", handleSubmit);
 
 // Fetches a Checkout Session and captures the client secret
 
 async function initialize() {
 	const cartItems = getCartItems(); // from sessionStorage
+	const publicKey = document.getElementById("public-key")?.value || "";
+
 	const promise = fetch(`${THIS_API_BASE}/create-checkout-session`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ cartItems })
+		body: JSON.stringify({ cartItems, publicKey })
 	})
 	.then((r) => r.json())
 	.then((r) => r.clientSecret);
+
 	
 	const appearance = {
 		theme: 'night',
 	};
-	// const appearance = {
-	// 	theme: 'none',
-	// 	variables: {
-	// 		colorBackground: '#1a1a1d',
-	// 		colorPrimaryText: 'var(--text-primary)',
-	// 		colorSecondaryText: 'var(--text-secondary)',
-	// 		colorText: 'var(--text-primary)',
-	// 		colorBorder: '#333',
-	// 		colorDanger: 'var(--neonRed)',
-	// 		borderRadius: '4px',
-	// 		spacingUnit: '6px',
-	// 		fontSizeBase: '16px',
-	// 	},
-	// 	rules: {
-	// 		'.Input, .Input:focus': {
-	// 			backgroundColor: '#1a1a1d',
-	// 			borderColor: '#333',
-	// 			color: 'var(--text-primary)',
-	// 		},
-	// 		'.Label': {
-	// 			color: 'var(--text-secondary)',
-	// 			fontSize: '14px',
-	// 		},
-	// 		'.Error': {
-	// 			color: 'var(--neonRed)',
-	// 		}
-	// 	}
-	// };
 	
 	checkout = await stripe.initCheckout({
 		fetchClientSecret: () => promise,
@@ -100,7 +73,7 @@ async function initialize() {
 async function handleSubmit(e) {
 	e.preventDefault();
 	setLoading(true);
-	
+
 	const email = document.getElementById("email").value;
 	const { isValid, message } = await validateEmail(email);
 	if (!isValid) {
@@ -108,18 +81,52 @@ async function handleSubmit(e) {
 		setLoading(false);
 		return;
 	}
-	
+
+	// Collect public keys
+	const activationPublicKeys = [];
+	document.querySelectorAll('textarea[id^="public-key-"]').forEach(textarea => {
+		const key = textarea.value.trim();
+		if (key.length > 0) {
+			activationPublicKeys.push(key);
+		}
+	});
+
+	// Optional: validate number of keys matches quantity of activations
+	const cartItems = getCartItems();
+	const activationItem = cartItems.find(item => item.id === 'smb1_activation');
+	const expectedKeys = activationItem ? activationItem.quantity : 0;
+	if (activationPublicKeys.length !== expectedKeys) {
+		showMessage(`Please provide ${expectedKeys} public key(s) for your activations.`);
+		setLoading(false);
+		return;
+	}
+
+	// Get sessionId from Stripe checkout object:
+	const sessionId = checkout.session().id; // Assuming your stripe.initCheckout() exposes session() object
+	// If not available — alternatively you can have `/create-checkout-session` also return `session_id` along with clientSecret.
+
+	// Save public keys to backend as pending
+	await fetch(`${THIS_API_BASE}/save-pending-public-keys`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({
+			sessionId,
+			activationPublicKeys
+		})
+	});
+
+	// Proceed to confirm payment
 	const { error } = await checkout.confirm();
-	
-	// This point will only be reached if there is an immediate error when
-	// confirming the payment. Otherwise, your customer will be redirected to
-	// your `return_url`. For some payment methods like iDEAL, your customer will
-	// be redirected to an intermediate site first to authorize the payment, then
-	// redirected to the `return_url`.
-	showMessage(error.message);
-	
-	setLoading(false);
+
+	if (error) {
+		showMessage(error.message);
+		setLoading(false);
+		return;
+	}
+
+	// (normal flow will redirect to return_url)
 }
+
 
 // ------- UI helpers -------
 
