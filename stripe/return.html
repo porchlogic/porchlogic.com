@@ -43,6 +43,9 @@
 					document.getElementById('status').textContent = data.status;
 					document.getElementById('email').textContent = data.customer_email;
 
+					console.log("✅ Clearing cart from sessionStorage after successful purchase.");
+					sessionStorage.removeItem("cart");
+
 					if (data.activation_codes && data.activation_codes.length > 0) {
 						const activationSection = document.getElementById('activation-section');
 						activationSection.innerHTML = '<h3>Your Activation Codes:</h3>';
@@ -90,6 +93,8 @@
 					console.error('Error fetching session status:', err);
 					document.getElementById('status').textContent = 'Error fetching session status.';
 				});
+
+				
 		}
 	</script>
 
