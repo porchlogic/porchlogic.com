@@ -11,19 +11,15 @@
 
 	<div id="header"></div>
 
-
 	<h1 class="font-stealth text-4xl text-neonGreen">Thank You!</h1>
 	<p class="text-lg mt-4">Your purchase was successful.</p>
-
 
 	<p>Status: <span id="status"></span></p>
 	<p>Email: <span id="email"></span></p>
 
 	<div id="activation-section" style="display:none;">
-	<h3>Your Activation Code:</h3>
-	<pre id="activation-code" class="copy-code" style="font-size:1.5em; background:#eee; color:black; padding:10px; cursor:pointer;"></pre>
-	<p>Click the code to copy it. Then paste it into your device config page.</p>
-	<p id="copy-msg" style="display:none; color:lime;">Copied!</p>
+		<h3>Your Activation Code:</h3>
+		<!-- Codes will be inserted here -->
 	</div>
 
 	<script>
@@ -47,23 +43,40 @@
 						activationSection.innerHTML = '<h3>Your Activation Codes:</h3>';
 
 						data.activation_codes.forEach(code => {
+							const codeWrapper = document.createElement('div');
+							codeWrapper.style = 'margin-bottom: 10px; display: flex; align-items: center;';
+
 							const pre = document.createElement('pre');
 							pre.className = 'copy-code';
-							pre.style = 'font-size:1.5em; background:#eee; color:black; padding:10px; cursor:pointer; margin-bottom: 10px;';
+							pre.style = 'font-size:1.5em; background:#eee; color:black; padding:10px; cursor:pointer; margin:0;';
 							pre.textContent = code;
+
+							const status = document.createElement('span');
+							status.style = 'margin-left:10px; color:limegreen; font-weight:bold; display:none;';
+							status.textContent = 'Copied!';
 
 							pre.addEventListener('click', function() {
 								navigator.clipboard.writeText(code)
 									.then(() => {
-										alert('Copied: ' + code);
+										// Show subtle copied message
+										status.style.display = 'inline';
+										setTimeout(() => {
+											status.style.display = 'none';
+										}, 2000);
 									})
 									.catch(err => {
 										console.error('Failed to copy:', err);
 									});
 							});
 
-							activationSection.appendChild(pre);
+							codeWrapper.appendChild(pre);
+							codeWrapper.appendChild(status);
+							activationSection.appendChild(codeWrapper);
 						});
+
+						const helpText = document.createElement('p');
+						helpText.textContent = 'Click a code to copy it. Then paste it into your device config page.';
+						activationSection.appendChild(helpText);
 
 						activationSection.style.display = 'block';
 					}
@@ -74,11 +87,6 @@
 				});
 		}
 	</script>
-
-
-
-
-
 
 </body>
 </html>
