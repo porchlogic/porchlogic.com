@@ -18,12 +18,12 @@ document.querySelector("#payment-form").addEventListener("submit", handleSubmit)
 
 async function initialize() {
 	const cartItems = getCartItems(); // from sessionStorage
-	const publicKey = document.getElementById("public-key")?.value || "";
+	// const publicKey = document.getElementById("public-key")?.value || "";
 
 	const promise = fetch(`${THIS_API_BASE}/create-checkout-session`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ cartItems, publicKey })
+		body: JSON.stringify({ cartItems })
 	})
 	.then((r) => r.json())
 	.then((r) => r.clientSecret);
@@ -82,38 +82,38 @@ async function handleSubmit(e) {
 		return;
 	}
 
-	// Collect public keys
-	const activationPublicKeys = [];
-	document.querySelectorAll('textarea[id^="public-key-"]').forEach(textarea => {
-		const key = textarea.value.trim();
-		if (key.length > 0) {
-			activationPublicKeys.push(key);
-		}
-	});
+	// // Collect public keys
+	// const activationPublicKeys = [];
+	// document.querySelectorAll('textarea[id^="public-key-"]').forEach(textarea => {
+	// 	const key = textarea.value.trim();
+	// 	if (key.length > 0) {
+	// 		activationPublicKeys.push(key);
+	// 	}
+	// });
 
-	// Optional: validate number of keys matches quantity of activations
-	const cartItems = getCartItems();
-	const activationItem = cartItems.find(item => item.id === 'smb1_activation');
-	const expectedKeys = activationItem ? activationItem.quantity : 0;
-	if (activationPublicKeys.length !== expectedKeys) {
-		showMessage(`Please provide ${expectedKeys} public key(s) for your activations.`);
-		setLoading(false);
-		return;
-	}
+	// // Optional: validate number of keys matches quantity of activations
+	// const cartItems = getCartItems();
+	// const activationItem = cartItems.find(item => item.id === 'smb1_activation');
+	// const expectedKeys = activationItem ? activationItem.quantity : 0;
+	// if (activationPublicKeys.length !== expectedKeys) {
+	// 	showMessage(`Please provide ${expectedKeys} public key(s) for your activations.`);
+	// 	setLoading(false);
+	// 	return;
+	// }
 
-	// Get sessionId from Stripe checkout object:
-	const sessionId = checkout.session().id; // Assuming your stripe.initCheckout() exposes session() object
-	// If not available — alternatively you can have `/create-checkout-session` also return `session_id` along with clientSecret.
+	// // Get sessionId from Stripe checkout object:
+	// const sessionId = checkout.session().id; // Assuming your stripe.initCheckout() exposes session() object
+	// // If not available — alternatively you can have `/create-checkout-session` also return `session_id` along with clientSecret.
 
-	// Save public keys to backend as pending
-	await fetch(`${THIS_API_BASE}/save-pending-public-keys`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({
-			sessionId,
-			activationPublicKeys
-		})
-	});
+	// // Save public keys to backend as pending
+	// await fetch(`${THIS_API_BASE}/save-pending-public-keys`, {
+	// 	method: "POST",
+	// 	headers: { "Content-Type": "application/json" },
+	// 	body: JSON.stringify({
+	// 		sessionId,
+	// 		activationPublicKeys
+	// 	})
+	// });
 
 	// Proceed to confirm payment
 	const { error } = await checkout.confirm();

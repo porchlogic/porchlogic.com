@@ -7,7 +7,11 @@
 	<link rel="stylesheet" href="../styles/base.css">
 	<link rel="stylesheet" href="../styles/text.css">
 </head>
-<body class="bg-bg text-white flex flex-col items-center justify-center h-screen">
+<body onload="initPage();" class="bg-bg text-white flex flex-col items-center justify-center h-screen">
+
+	<div id="header"></div>
+
+
 	<h1 class="font-stealth text-4xl text-neonGreen">Thank You!</h1>
 	<p class="text-lg mt-4">Your purchase was successful.</p>
 
@@ -31,18 +35,37 @@
 		} else {
 			fetch(`https://api.porchlogic.com/session-status?session_id=${sessionId}`)
 				.then(r => {
-					if (!r.ok) {
-						throw new Error(`HTTP error! Status: ${r.status}`);
-					}
+					if (!r.ok) throw new Error(`HTTP error! Status: ${r.status}`);
 					return r.json();
 				})
 				.then(data => {
 					document.getElementById('status').textContent = data.status;
 					document.getElementById('email').textContent = data.customer_email;
 
-					if (data.activation_code) {
-						document.getElementById('activation-code').textContent = data.activation_code;
-						document.getElementById('activation-section').style.display = 'block';
+					if (data.activation_codes && data.activation_codes.length > 0) {
+						const activationSection = document.getElementById('activation-section');
+						activationSection.innerHTML = '<h3>Your Activation Codes:</h3>';
+
+						data.activation_codes.forEach(code => {
+							const pre = document.createElement('pre');
+							pre.className = 'copy-code';
+							pre.style = 'font-size:1.5em; background:#eee; color:black; padding:10px; cursor:pointer; margin-bottom: 10px;';
+							pre.textContent = code;
+
+							pre.addEventListener('click', function() {
+								navigator.clipboard.writeText(code)
+									.then(() => {
+										alert('Copied: ' + code);
+									})
+									.catch(err => {
+										console.error('Failed to copy:', err);
+									});
+							});
+
+							activationSection.appendChild(pre);
+						});
+
+						activationSection.style.display = 'block';
 					}
 				})
 				.catch(err => {
@@ -50,21 +73,8 @@
 					document.getElementById('status').textContent = 'Error fetching session status.';
 				});
 		}
-
-		document.getElementById('activation-code').addEventListener('click', function() {
-			const text = this.textContent;
-			navigator.clipboard.writeText(text)
-				.then(() => {
-					document.getElementById('copy-msg').style.display = 'block';
-					setTimeout(() => {
-						document.getElementById('copy-msg').style.display = 'none';
-					}, 2000);
-				})
-				.catch(err => {
-					console.error('Failed to copy:', err);
-				});
-		});
 	</script>
+
 
 
 

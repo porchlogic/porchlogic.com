@@ -50,127 +50,127 @@ function updateCartIconCount() {
 }
 
 // Render cart items on the cart page
-// function renderCartItems() {
-//     const cartItemsContainer = document.getElementById('cart-items-container');
-//     if (!cartItemsContainer) return;
-
-//     const cartItems = getCartItems();
-//     cartItemsContainer.innerHTML = ''; // Clear current items
-
-//     if (cartItems.length === 0) {
-//         cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
-//         document.getElementById('cart-total').textContent = '$0.00';
-//         // Disable payment form if cart is empty
-//         const paymentForm = document.getElementById('payment-form');
-//         if (paymentForm) {
-//             paymentForm.style.display = 'none';
-//         }
-//         return;
-//     }
-
-//     const itemList = document.createElement('ul');
-//     itemList.className = 'cart-item-list';
-
-//     cartItems.forEach(item => {
-//         const listItem = document.createElement('li');
-//         listItem.className = 'cart-item';
-//         listItem.innerHTML = `
-//             <span>${item.name}</span>
-//             <span>Quantity: ${item.quantity}</span>
-//             <span>Price: $${(item.price * item.quantity).toFixed(2)}</span>
-//             <button class="remove-item" data-item-id="${item.id}">Remove</button>
-//         `;
-//         itemList.appendChild(listItem);
-//     });
-
-//     cartItemsContainer.appendChild(itemList);
-//     updateCartTotal();
-
-//     // Add event listeners to remove buttons
-//     cartItemsContainer.querySelectorAll('.remove-item').forEach(button => {
-//         button.addEventListener('click', (event) => {
-//             const itemId = event.target.dataset.itemId;
-//             removeItemFromCart(itemId);
-//         });
-//     });
-
-//     // Show payment form if hidden
-//     const paymentForm = document.getElementById('payment-form');
-//     if (paymentForm) {
-//         paymentForm.style.display = 'block';
-//     }
-// }
 function renderCartItems() {
-	const cartItemsContainer = document.getElementById('cart-items-container');
-	if (!cartItemsContainer) return;
+    const cartItemsContainer = document.getElementById('cart-items-container');
+    if (!cartItemsContainer) return;
 
-	const cartItems = getCartItems();
-	cartItemsContainer.innerHTML = ''; // Clear current items
+    const cartItems = getCartItems();
+    cartItemsContainer.innerHTML = ''; // Clear current items
 
-	if (cartItems.length === 0) {
-		cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
-		document.getElementById('cart-total').textContent = '$0.00';
-		// Disable payment form if cart is empty
-		const paymentForm = document.getElementById('payment-form');
-		if (paymentForm) {
-			paymentForm.style.display = 'none';
-		}
-		return;
-	}
+    if (cartItems.length === 0) {
+        cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+        document.getElementById('cart-total').textContent = '$0.00';
+        // Disable payment form if cart is empty
+        const paymentForm = document.getElementById('payment-form');
+        if (paymentForm) {
+            paymentForm.style.display = 'none';
+        }
+        return;
+    }
 
-	const itemList = document.createElement('ul');
-	itemList.className = 'cart-item-list';
+    const itemList = document.createElement('ul');
+    itemList.className = 'cart-item-list';
 
-	cartItems.forEach(item => {
-		if (item.id === 'smb1_activation') {
-			// Render each activation on a separate line
-			for (let i = 0; i < item.quantity; i++) {
-				const listItem = document.createElement('li');
-				listItem.className = 'cart-item';
-				listItem.innerHTML = `
-                    <div>
-                        <span>${item.name} #${i + 1}</span>
-                        <span>$${item.price.toFixed(2)}</span>
-                        <button class="remove-item" data-item-id="${item.id}">Remove</button>
-                    </div>
-                    <div class="activation-public-key" style="margin-top: 10px;">
-                        <label for="public-key-${i}">Public Key for Activation #${i + 1}:</label>
-                        <textarea id="public-key-${i}" rows="6" placeholder="Paste public key here" style="width: 100%;"></textarea>
-                    </div>
-                `;
-				itemList.appendChild(listItem);
-			}
-		} else {
-			// Normal item
-			const listItem = document.createElement('li');
-			listItem.className = 'cart-item';
-			listItem.innerHTML = `
-				<span>${item.name}</span>
-				<span>Qty: ${item.quantity}</span>
-				<span>$${(item.price * item.quantity).toFixed(2)}</span>
-				<button class="remove-item" data-item-id="${item.id}">Remove</button>
-			`;
-			itemList.appendChild(listItem);
-		}
-	});
+    cartItems.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.className = 'cart-item';
+        listItem.innerHTML = `
+            <span>${item.name}</span>
+            <span>Qty: ${item.quantity}</span>
+            <span>$${(item.price * item.quantity).toFixed(2)}</span>
+            <button class="remove-item" data-item-id="${item.id}">Remove</button>
+        `;
+        itemList.appendChild(listItem);
+    });
 
-	cartItemsContainer.appendChild(itemList);
-	updateCartTotal();
+    cartItemsContainer.appendChild(itemList);
+    updateCartTotal();
 
-	// Add event listeners to remove buttons
-	cartItemsContainer.querySelectorAll('.remove-item').forEach(button => {
-		button.addEventListener('click', (event) => {
-			const itemId = event.target.dataset.itemId;
-			removeItemFromCart(itemId);
-		});
-	});
+    // Add event listeners to remove buttons
+    cartItemsContainer.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const itemId = event.target.dataset.itemId;
+            removeItemFromCart(itemId);
+        });
+    });
 
-	// Show payment form if hidden
-	const paymentForm = document.getElementById('payment-form');
-	if (paymentForm) {
-		paymentForm.style.display = 'block';
-	}
+    // Show payment form if hidden
+    const paymentForm = document.getElementById('payment-form');
+    if (paymentForm) {
+        paymentForm.style.display = 'block';
+    }
 }
+// function renderCartItems() {
+// 	const cartItemsContainer = document.getElementById('cart-items-container');
+// 	if (!cartItemsContainer) return;
+
+// 	const cartItems = getCartItems();
+// 	cartItemsContainer.innerHTML = ''; // Clear current items
+
+// 	if (cartItems.length === 0) {
+// 		cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+// 		document.getElementById('cart-total').textContent = '$0.00';
+// 		// Disable payment form if cart is empty
+// 		const paymentForm = document.getElementById('payment-form');
+// 		if (paymentForm) {
+// 			paymentForm.style.display = 'none';
+// 		}
+// 		return;
+// 	}
+
+// 	const itemList = document.createElement('ul');
+// 	itemList.className = 'cart-item-list';
+
+// 	cartItems.forEach(item => {
+// 		if (item.id === 'smb1_activation') {
+// 			// Render each activation on a separate line
+// 			for (let i = 0; i < item.quantity; i++) {
+// 				const listItem = document.createElement('li');
+// 				listItem.className = 'cart-item';
+// 				listItem.innerHTML = `
+//                     <div>
+//                         <span>${item.name} #${i + 1}</span>
+//                         <span>$${item.price.toFixed(2)}</span>
+//                         <button class="remove-item" data-item-id="${item.id}">Remove</button>
+//                     </div>
+//                     <div class="activation-public-key" style="margin-top: 10px;">
+//                         <label for="public-key-${i}">Public Key for Activation #${i + 1}:</label>
+//                         <textarea id="public-key-${i}" rows="6" placeholder="Paste public key here" style="width: 100%;"></textarea>
+//                     </div>
+//                 `;
+// 				itemList.appendChild(listItem);
+// 			}
+// 		} else {
+// 			// Normal item
+// 			const listItem = document.createElement('li');
+// 			listItem.className = 'cart-item';
+// 			listItem.innerHTML = `
+// 				<span>${item.name}</span>
+// 				<span>Qty: ${item.quantity}</span>
+// 				<span>$${(item.price * item.quantity).toFixed(2)}</span>
+// 				<button class="remove-item" data-item-id="${item.id}">Remove</button>
+// 			`;
+// 			itemList.appendChild(listItem);
+// 		}
+// 	});
+
+// 	cartItemsContainer.appendChild(itemList);
+// 	updateCartTotal();
+
+// 	// Add event listeners to remove buttons
+// 	cartItemsContainer.querySelectorAll('.remove-item').forEach(button => {
+// 		button.addEventListener('click', (event) => {
+// 			const itemId = event.target.dataset.itemId;
+// 			removeItemFromCart(itemId);
+// 		});
+// 	});
+
+// 	// Show payment form if hidden
+// 	const paymentForm = document.getElementById('payment-form');
+// 	if (paymentForm) {
+// 		paymentForm.style.display = 'block';
+// 	}
+// }
 
 
 // Calculate and display the cart total
