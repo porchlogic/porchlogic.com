@@ -1,6 +1,6 @@
 // This is your test publishable API key.
-// const stripe = Stripe("pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr");
-const stripe = Stripe("pk_test_51J3mlbABTHjSuIhXEk8OMPk7CGOzeecUuo0Kr5B5vUa9vnHddxWrB4UqO3fGLM1WyXkexXJALAxNYXvRdwxiGYbN00BbssH1nY");
+const stripe = Stripe("pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr");
+// const stripe = Stripe("pk_test_51J3mlbABTHjSuIhXEk8OMPk7CGOzeecUuo0Kr5B5vUa9vnHddxWrB4UqO3fGLM1WyXkexXJALAxNYXvRdwxiGYbN00BbssH1nY");
 const THIS_API_BASE = 'https://api.porchlogic.com';
 let checkout;
 initialize();
@@ -82,6 +82,21 @@ async function handleSubmit(e) {
 		return;
 	}
 
+	const subscribe = document.getElementById("subscribe-checkbox").checked;
+	if (subscribe) {
+		try {
+			await fetch(`${THIS_API_BASE}/newsletter-signup`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ email })
+			});
+		} catch (err) {
+			console.warn("Newsletter signup failed:", err);
+		}
+	}
+
+
+
 	// // Collect public keys
 	// const activationPublicKeys = [];
 	// document.querySelectorAll('textarea[id^="public-key-"]').forEach(textarea => {
@@ -117,6 +132,8 @@ async function handleSubmit(e) {
 
 	// Proceed to confirm payment
 	const { error } = await checkout.confirm();
+
+	
 
 	if (error) {
 		showMessage(error.message);
