@@ -30,7 +30,7 @@ async function initialize() {
 		console.log("Checkout session response:", r);
 		return r.clientSecret;
 	});
-	.then((r) => r.clientSecret);
+
 	
 	const appearance = {
 		theme: 'night',
