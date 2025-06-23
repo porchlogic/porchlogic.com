@@ -237,6 +237,20 @@ document.addEventListener('DOMContentLoaded', () => {
             showCartPopup(`${smb1ActivationItem.name} added to cart!`);
         });
     }
+
+    const buyTestProductButton = document.getElementById('buy-test-product');
+    if (buyTestProductButton) {
+        buyTestProductButton.addEventListener('click', () => {
+            // Define the item details for SMB1 Host
+            const TestProductItem = {
+                id: 'Test Product', // Unique ID for the item
+                name: 'Test Product',
+                price: 0.50 // Price as a number
+            };
+            addItemToCart(TestProductItem);
+            showCartPopup(`${TestProductItem.name} added to cart!`);
+        });
+    }
 });
 
 
