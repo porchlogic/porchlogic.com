@@ -15,6 +15,7 @@ const validateEmail = async (email) => {
 document.querySelector("#payment-form").addEventListener("submit", handleSubmit);
 
 // Fetches a Checkout Session and captures the client secret
+//test
 
 async function initialize() {
 	const cartItems = getCartItems(); // from sessionStorage
