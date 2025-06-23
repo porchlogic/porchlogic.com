@@ -17,7 +17,7 @@ document.querySelector("#payment-form").addEventListener("submit", handleSubmit)
 
 // Fetches a Checkout Session and captures the client secret
 //test
-async function initialize() {
+async function initialize_old() {
 	const cartItems = getCartItems(); // from sessionStorage
 	// const publicKey = document.getElementById("public-key")?.value || "";
 
@@ -71,7 +71,7 @@ async function initialize() {
 	shippingAddressElement.mount("#shipping-address-element");
 }
 
-async function initialize_new() {
+async function initialize() {
 	const cartItems = getCartItems(); // from sessionStorage
 	// const publicKey = document.getElementById("public-key")?.value || "";
 
