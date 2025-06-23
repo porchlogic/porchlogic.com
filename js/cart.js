@@ -241,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const buyTestProductButton = document.getElementById('buy-test-product');
     if (buyTestProductButton) {
         buyTestProductButton.addEventListener('click', () => {
-            // Define the item details for SMB1 Host
             const TestProductItem = {
                 id: 'Test Product', // Unique ID for the item
                 name: 'Test Product',

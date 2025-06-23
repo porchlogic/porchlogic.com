@@ -26,17 +26,32 @@ async function initialize() {
 		body: JSON.stringify({ cartItems })
 	})
 	.then((r) => r.json())
+	.then((r) => {
+		console.log("Checkout session response:", r);
+		return r.clientSecret;
+	});
 	.then((r) => r.clientSecret);
-
 	
 	const appearance = {
 		theme: 'night',
 	};
 	
+	// checkout = await stripe.initCheckout({
+	// 	fetchClientSecret: () => promise,
+	// 	elementsOptions: { appearance },
+	// });
 	checkout = await stripe.initCheckout({
-		fetchClientSecret: () => promise,
-		elementsOptions: { appearance },
+		fetchClientSecret: async () => {
+			const res = await promise;
+			if (typeof res !== "string") {
+				console.error("🚫 Missing or invalid clientSecret:", res);
+				throw new Error("Checkout session creation failed");
+			}
+			return res;
+		},
+		elementsOptions: { appearance }
 	});
+
 	
 	document.querySelector("#button-text").textContent = `Pay ${
 		checkout.session().total.total.amount
