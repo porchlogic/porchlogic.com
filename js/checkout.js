@@ -134,8 +134,8 @@ async function initialize() {
 	
 	const paymentElement = checkout.createPaymentElement();
 	paymentElement.mount("#payment-element");
-	  const billingAddressElement = checkout.createBillingAddressElement();
-	  billingAddressElement.mount("#billing-address-element");
+	//   const billingAddressElement = checkout.createBillingAddressElement();
+	//   billingAddressElement.mount("#billing-address-element");
 	const shippingAddressElement = checkout.createShippingAddressElement();
 	shippingAddressElement.mount("#shipping-address-element");
 }
