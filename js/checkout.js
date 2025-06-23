@@ -17,8 +17,61 @@ document.querySelector("#payment-form").addEventListener("submit", handleSubmit)
 
 // Fetches a Checkout Session and captures the client secret
 //test
-
 async function initialize() {
+	const cartItems = getCartItems(); // from sessionStorage
+	// const publicKey = document.getElementById("public-key")?.value || "";
+
+	const promise = fetch(`${THIS_API_BASE}/create-checkout-session`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ cartItems })
+	})
+	.then((r) => r.json())
+	.then((r) => r.clientSecret);
+
+	
+	const appearance = {
+		theme: 'night',
+	};
+	
+	checkout = await stripe.initCheckout({
+		fetchClientSecret: () => promise,
+		elementsOptions: { appearance },
+	});
+	
+	document.querySelector("#button-text").textContent = `Pay ${
+		checkout.session().total.total.amount
+	} now`;
+	
+	const emailInput = document.getElementById("email");
+	const emailErrors = document.getElementById("email-errors");
+	
+	emailInput.addEventListener("input", () => {
+		// Clear any validation errors
+		emailErrors.textContent = "";
+	});
+	
+	emailInput.addEventListener("blur", async () => {
+		const newEmail = emailInput.value;
+		if (!newEmail) {
+			return;
+		}
+		
+		const { isValid, message } = await validateEmail(newEmail);
+		if (!isValid) {
+			emailErrors.textContent = message;
+		}
+	});
+	
+	const paymentElement = checkout.createPaymentElement();
+	paymentElement.mount("#payment-element");
+	//   const billingAddressElement = checkout.createBillingAddressElement();
+	//   billingAddressElement.mount("#billing-address-element");
+	const shippingAddressElement = checkout.createShippingAddressElement();
+	shippingAddressElement.mount("#shipping-address-element");
+}
+
+async function initialize_new() {
 	const cartItems = getCartItems(); // from sessionStorage
 	// const publicKey = document.getElementById("public-key")?.value || "";
 
