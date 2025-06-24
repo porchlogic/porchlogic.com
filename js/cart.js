@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const smb1DefaultItem = {
                 id: 'smb1_default', // Unique ID for the item
                 name: 'SMB1 _Device',
-                price: 42.00 // Price as a number
+                price: 32.00 // Price as a number
             };
             addItemToCart(smb1DefaultItem);
             showCartPopup(`${smb1DefaultItem.name} added to cart!`);
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const smb1HostItem = {
                 id: 'smb1_host', // Unique ID for the item
                 name: 'SMB1 _Host',
-                price: 42.00 // Price as a number
+                price: 32.00 // Price as a number
             };
             addItemToCart(smb1HostItem);
             showCartPopup(`${smb1HostItem.name} added to cart!`);
