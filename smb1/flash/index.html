@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>SMB1 Flasher</title>
+	<script type="module" src="https://unpkg.com/esp-web-tools@10.0.1/dist/web/install-button.js?module"></script>
+	<style>
+		:root {
+			--bg: #111;
+			--fg: #eee;
+			--accent: #0af;
+			--accent-hover: #09c;
+			--border: #333;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Roboto, sans-serif;
+			background: var(--bg);
+			color: var(--fg);
+			margin: 0;
+			padding: 2em 1em;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: 100vh;
+			}
+
+		.container {
+			background: #1a1a1a;
+			padding: 2em;
+			border-radius: 12px;
+			width: 100%;
+			max-width: 400px;
+			box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+			}
+
+		h1 {
+			font-size: 1.5em;
+			margin-bottom: 1em;
+			text-align: center;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 1em;
+		}
+
+		select,
+		button {
+			width: 100%;
+			font-size: 1em;
+			padding: 0.75em;
+			border-radius: 8px;
+			border: 1px solid var(--border);
+			background: #222;
+			color: var(--fg);
+			transition: background 0.2s;
+		}
+
+		select:focus,
+		button:focus {
+			outline: none;
+			border-color: var(--accent);
+		}
+
+		button {
+			background: var(--accent);
+			color: #000;
+			cursor: pointer;
+			margin-top: 0.5em;
+			transition: background 0.2s;
+		}
+
+		button:hover {
+			background: var(--accent-hover);
+		}
+
+		esp-web-install-button {
+			display: block;
+			margin-top: 1.5em;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1>SMB1 Flasher</h1>
+
+		<label>
+			Select Variant:
+			<select id="variant">
+				<option value="">-- Choose one --</option>
+				<option value="N16R8">N16R8</option>
+				<option value="N8R2">N8R2</option>
+			</select>
+		</label>
+
+		<button id="prepare">Connect Device + Prepare Flashing</button>
+
+		<esp-web-install-button id="install" disabled></esp-web-install-button>
+	</div>
+
+	<script type="module">
+		document.getElementById('prepare').addEventListener('click', async () => {
+			const variant = document.getElementById('variant').value;
+			const installBtn = document.getElementById('install');
+
+			if (!variant) return alert("Please select a variant.");
+
+			try {
+				// Request serial port access
+				const port = await navigator.serial.requestPort();
+				await port.open({ baudRate: 115200 });
+				await port.close();
+
+				// Get a temporary token
+				const res = await fetch(`https://smb1-firmware.porchlogic.com/download/generate-token`, {
+					method: 'POST'
+				});
+				const { token } = await res.json();
+
+				// Get the manifest
+				const manifestRes = await fetch(`https://smb1-firmware.porchlogic.com/download/${variant}/manifest.json`);
+				const manifest = await manifestRes.json();
+
+				// Add token to .bin URLs
+				for (const build of manifest.builds || []) {
+					for (const part of build.parts || []) {
+						const url = new URL(part.path);
+						url.searchParams.set("token", token);
+						part.path = url.toString();
+					}
+				}
+
+				const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+				const manifestUrl = URL.createObjectURL(blob);
+
+				installBtn.manifest = manifestUrl;
+				installBtn.disabled = false;
+
+			} catch (err) {
+				alert("Failed to connect or prepare firmware.");
+				console.error(err);
+			}
+		});
+	</script>
+</body>
+
+</html>

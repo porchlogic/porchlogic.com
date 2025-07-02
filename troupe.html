@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cyborg Street Troupe – Practice Sessions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* CSS Reset */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html,
+    body {
+      height: 100%;
+    }
+
+    @font-face {
+        font-family: "stealth57";
+        src: url("fonts/stealth57.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #040404;
+      color: #ffffff;
+      font-family: "stealth57", sans-serif;
+      overflow: hidden;
+    }
+
+    /* Animated background gradient */
+    @keyframes gradientShift {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+      100% {
+        filter: hue-rotate(360deg);
+      }
+    }
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: conic-gradient(
+        from 45deg at 50% 50%,
+        #0ff,
+        #f0f,
+        #00f,
+        #0ff
+      );
+      animation: gradientShift 20s linear infinite;
+      opacity: 0.1;
+    }
+
+    /* Scanlines */
+    body::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        180deg,
+        transparent 0 2px,
+        rgba(0, 0, 0, 0.2) 2px 4px
+      );
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+
+    /* Poster card */
+    .poster {
+      position: relative;
+      padding: 4rem 5rem;
+      border: 2px solid #0ff;
+      border-radius: 16px;
+      backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 15px #00e0ff, 0 0 25px #4f00ff;
+      text-align: center;
+      max-width: min(90vw, 600px);
+    }
+
+    /* Flicker heading */
+    @keyframes flicker {
+      0%,
+      19%,
+      21%,
+      23%,
+      25%,
+      54%,
+      56%,
+      100% {
+        opacity: 1;
+        text-shadow: 0 0 3px #0ff, 0 0 7px #0ff, 0 0 20px #4f00ff,
+          0 0 30px #4f00ff, 0 0 40px #4f00ff;
+      }
+      20%,
+      24%,
+      55% {
+        opacity: 0.6;
+        text-shadow: none;
+      }
+    }
+    h1 {
+      font-size: 3rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      animation: flicker 3.5s infinite;
+      line-height: 3.5rem;
+    }
+
+    .details {
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      line-height: 1.6;
+    }
+
+    .cta {
+      margin-top: 2.5rem;
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #000;
+      background: linear-gradient(45deg, #00e0ff, #4f00ff);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .cta:hover {
+      transform: scale(1.05);
+    }
+    .cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: translateX(-100%);
+      mix-blend-mode: overlay;
+    }
+    .cta:hover::before {
+      animation: shine 1s forwards;
+    }
+    @keyframes shine {
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    /* Glitch line overlay */
+    .glitch {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .glitch-bar {
+      position: absolute;
+      width: 120%;
+      height: 3px;
+      background: rgba(79, 0, 255, 0.4);
+      animation: barShift 4s linear infinite;
+    }
+    .glitch-bar:nth-child(2) {
+      top: 30%;
+      background: rgba(0, 224, 255, 0.4);
+      animation-delay: -1.3s;
+    }
+    .glitch-bar:nth-child(3) {
+      top: 60%;
+      background: rgba(255, 0, 255, 0.4);
+      animation-delay: -2.7s;
+    }
+    @keyframes barShift {
+      from {
+        transform: translateX(-20%);
+      }
+      to {
+        transform: translateX(20%);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+      .poster {
+        padding: 2rem;
+      }
+      h1 {
+        font-size: 2.2rem;
+      }
+      .details {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="poster">
+    <h1>porchLogic Street Troupe</h1>
+    <div class="details">
+      <p>Open Practice Sessions</p>
+      <p><strong>Thursdays · 6:00&nbsp;PM</strong></p>
+      <p>Waterfront Park, Albuquerque</p>
+    </div>
+    <button class="cta">Join the Signal</button>
+
+    <!-- <div class="glitch">
+      <div class="glitch-bar" style="top: 15%"></div>
+      <div class="glitch-bar"></div>
+      <div class="glitch-bar"></div>
+    </div> -->
+  </section>
+</body>
+</html>

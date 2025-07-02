@@ -16,6 +16,10 @@
 	<link rel="stylesheet" href="styles/newsletter.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
 	<script src="https://js.stripe.com/v3/"></script>
+	<script
+	type="module"
+	src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"
+	></script>
 </head>
 
 <body onload="initPage();" >
@@ -23,6 +27,9 @@
 	<div class="main">
 		
 	</div>
+
+
+
 	<!-- YouTube Embed -->
 		<div class="youtube-embed" id="youtube-container">
 			<!-- <iframe
@@ -203,6 +210,9 @@
 					
 					<button id="buy-test-product" class="btn btn--primary">Add to Cart</button>
 					<p></p>
+					<esp-web-install-button
+					manifest="firmware/manifest.json"
+					></esp-web-install-button>
 					<br>
 					
 				</article>		
