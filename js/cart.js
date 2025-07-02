@@ -50,7 +50,7 @@ function updateCartIconCount() {
 }
 
 // Render cart items on the cart page
-function renderCartItems() {
+function renderCartItems(errorItemId = null, errorMessage = '') {
     const cartItemsContainer = document.getElementById('cart-items-container');
     if (!cartItemsContainer) return;
 
@@ -74,6 +74,7 @@ function renderCartItems() {
     cartItems.forEach(item => {
         const listItem = document.createElement('li');
         listItem.className = 'cart-item';
+        listItem.setAttribute('data-cart-item-id', item.id);
         listItem.innerHTML = `
             <span>${item.name}</span>
             <span>Qty: ${item.quantity}</span>
@@ -189,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // If on the cart page, render the items
     if (document.getElementById('cart-items-container')) {
         renderCartItems();
-        // Stripe Elements initialization will go here later
     }
 });
 

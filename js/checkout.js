@@ -81,10 +81,19 @@ async function initialize() {
 		body: JSON.stringify({ cartItems })
 	})
 	.then((r) => r.json())
+	// .then((r) => {
+	// 	console.log("Checkout session response:", r);
+	// 	return r.clientSecret;
+	// });
 	.then((r) => {
-		console.log("Checkout session response:", r);
+		if (r.error === "InventoryError") {
+			showInventoryError(r.itemId, r.message);
+			throw new Error("Inventory error");
+		}
 		return r.clientSecret;
 	});
+	
+	
 
 	
 	const appearance = {
@@ -181,6 +190,29 @@ async function handleSubmit(e) {
 	}
 
 	// (normal flow will redirect to return_url)
+}
+
+function showInventoryError(itemId, message) {
+	const itemRow = document.querySelector(`[data-cart-item-id="${itemId}"]`);
+	if (itemRow) {
+		const msg = document.createElement("div");
+		msg.className = "item-error-message";
+		msg.textContent = message;
+		itemRow.appendChild(msg);
+	}
+
+	// Disable the checkout form
+	const submitBtn = document.querySelector("#submit");
+	if (submitBtn) submitBtn.disabled = true;
+
+	const spinner = document.querySelector("#spinner");
+	if (spinner) spinner.classList.add("hidden");
+
+	const btnText = document.querySelector("#button-text");
+	if (btnText) {
+		btnText.classList.remove("hidden");
+		btnText.textContent = "Fix issues above";
+	}
 }
 
 
