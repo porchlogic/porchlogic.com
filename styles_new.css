@@ -39,19 +39,20 @@ html, body {
 	margin: 0;
 	padding: 0;
 	overflow-x: hidden;
+	overflow-y: scroll;
 	scroll-behavior: smooth;
 }
 
 html, body {
-	scrollbar-width: none;
+	/* scrollbar-width: none; */
 	-ms-overflow-style: none;
 	overflow: auto;
 }
 
-html::-webkit-scrollbar,
+/* html::-webkit-scrollbar,
 body::-webkit-scrollbar {
 	display: none;
-}
+} */
 
 
 
@@ -80,7 +81,7 @@ body {
 	padding: 0;
 	margin: 0;
 	/* overflow: hidden; */
-	width: 100vw;
+	/* width: 100vw; */
 }
 
 hr {
