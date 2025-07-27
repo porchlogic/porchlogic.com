@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MIDI Clock Neon Pulse</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        h1 {
+            color: #0ff;
+            font-size: 4rem;
+            letter-spacing: 0.1em;
+            text-shadow:
+                0 0 5px #0ff,
+                0 0 10px #0ff,
+                0 0 20px #0ff,
+                0 0 40px #0ff;
+            transition: text-shadow 0.1s linear;
+        }
+
+        .pulse {
+            animation: neonPulse 0.2s forwards;
+        }
+
+        @keyframes neonPulse {
+            0% {
+                text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0ff;
+            }
+
+            50% {
+                text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0ff, 0 0 60px #0ff;
+            }
+
+            100% {
+                text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0ff;
+            }
+        }
+
+        #status {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #0ff;
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+
+        #deviceSelect {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="title">MIDI PULSE</h1>
+    <select id="deviceSelect"></select>
+    <div id="status">Waiting for MIDI…</div>
+
+    <script>
+        "use strict";
+        const title = document.getElementById("title");
+        const statusEl = document.getElementById("status");
+        const deviceSelect = document.getElementById("deviceSelect");
+        let clockCount = 0;
+        let currentInput = null;
+
+        function pulse() {
+            title.classList.add("pulse");
+            title.addEventListener("animationend", () => {
+                title.classList.remove("pulse");
+            }, { once: true });
+        }
+
+        function onMIDIMessage(e) {
+            const [status] = e.data;
+            if (status === 0xF8) {
+                clockCount++;
+                if (clockCount >= 24) {
+                    clockCount = 0;
+                    pulse();
+                }
+            }
+        }
+
+        function initMIDI() {
+            if (!navigator.requestMIDIAccess) {
+                statusEl.textContent = "Web MIDI API not supported in this browser.";
+                return;
+            }
+
+            navigator.requestMIDIAccess({ sysex: false })
+                .then(midi => {
+                    const inputs = Array.from(midi.inputs.values());
+                    if (inputs.length === 0) {
+                        statusEl.textContent = "No MIDI inputs detected.";
+                        return;
+                    }
+
+                    deviceSelect.innerHTML = "";
+                    inputs.forEach((input, i) => {
+                        const option = document.createElement("option");
+                        option.value = input.id;
+                        option.textContent = input.name;
+                        deviceSelect.appendChild(option);
+                    });
+
+                    deviceSelect.addEventListener("change", () => {
+                        if (currentInput) {
+                            currentInput.removeEventListener("midimessage", onMIDIMessage);
+                        }
+                        const selectedId = deviceSelect.value;
+                        currentInput = inputs.find(i => i.id === selectedId);
+                        if (currentInput) {
+                            currentInput.addEventListener("midimessage", onMIDIMessage);
+                            statusEl.textContent = `Listening on: ${currentInput.name}`;
+                        }
+                    });
+
+                    // Auto-select the first input
+                    deviceSelect.dispatchEvent(new Event("change"));
+
+                    midi.onstatechange = () => {
+                        statusEl.textContent = "MIDI devices changed – refresh the page.";
+                    };
+                })
+                .catch(err => {
+                    statusEl.textContent = `MIDI access denied: ${err.message}`;
+                });
+        }
+
+        window.addEventListener("load", initMIDI);
+    </script>
+</body>
+
+</html>
