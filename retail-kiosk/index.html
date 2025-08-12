@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Porch Logic Retail Kiosk</title>
+    <link rel="stylesheet" href="test.css" />
+    <style>
+        header h1 {
+            display: inline-block;
+            padding: 0.5em 1em;
+            border-radius: 10px;
+            transition: box-shadow 0.05s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="#">
+            <h1 class="font-stealth text-neonBlue text-4xl" id="glowHeading">
+                <span class="text-neonGreen">p</span>
+                <span class="text-neonGreen">o</span>
+                <span class="text-neonGreen">r</span>
+                <span class="text-neonGrey">c</span>
+                <span class="text-neonGrey">h</span>
+
+                <span class="text-neonWhite">L</span>
+                <span class="text-neonBlue">o</span>
+                <span class="text-neonYellow">g</span>
+                <span class="text-neonBlue">i</span>
+                <span class="text-neonWhite">c</span>
+            </h1>
+        </a>
+
+        <h2>Advanced Cybernetic Orchestrations</h2>
+    </header>
+
+    <div class="product">
+        <h3>Access Cards:</h3>
+        <ul>
+            <li>access recording of tonight's performance</li>
+            <li>membership access to future events</li>
+            <li>live MIDI signal, if you mess with that</li>
+        </ul>
+    </div>
+
+    <div class="edge-label left" aria-hidden="true">founders edition</div>
+    <div class="edge-label right" aria-hidden="true">standard edition</div>
+
+    <script>
+        // Utility: simple smoothing to avoid flicker
+        function smooth(prev, next, alpha = 0.2) {
+            return prev + alpha * (next - prev);
+        }
+
+        let smoothed = 0;
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const analyser = audioContext.createAnalyser();
+                analyser.fftSize = 512;
+
+                const source = audioContext.createMediaStreamSource(stream);
+                source.connect(analyser);
+
+                const bins = new Uint8Array(analyser.frequencyBinCount);
+
+                function tick() {
+                    analyser.getByteFrequencyData(bins);
+
+                    // Focus on lows+low-mids for a stronger "beat" feel
+                    const start = 0;              // ~0 Hz
+                    const end = Math.min(32, bins.length); // ~< 1kHz region depending on sampleRate/fftSize
+
+                    let sum = 0;
+                    for (let i = start; i < end; i++) sum += bins[i];
+                    const avg = sum / (end - start);   // 0..255
+
+                    // Normalize & clamp (tune these if you want it punchier)
+                    const normalized = Math.min(1, avg / 140); // adjust 140 for sensitivity
+                    smoothed = smooth(smoothed, normalized, 0.15);
+
+                    // Map to a multiplier for shadow blur (min glow to strong glow)
+                    const pulse = 0.8 + smoothed * 2.2; // range ≈ 0.8..3.0
+
+                    document.documentElement.style.setProperty('--pulse', pulse.toFixed(3));
+
+                    requestAnimationFrame(tick);
+                }
+                tick();
+            })
+            .catch(err => {
+                console.error('Mic access error:', err);
+                // fallback: gentle idle pulse
+                let t = 0;
+                (function idle() {
+                    t += 0.03;
+                    const pulse = 1.2 + Math.sin(t) * 0.2;
+                    document.documentElement.style.setProperty('--pulse', pulse.toFixed(3));
+                    requestAnimationFrame(idle);
+                })();
+            });
+    </script>
+
+
+</body>
+
+</html>

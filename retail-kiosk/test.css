@@ -1,0 +1,223 @@
+:root {
+    /* Backgrounds */
+    --bg: #0e0e10;
+    --bg-light: #1a1a1d;
+
+    /* Text */
+    --text-primary: rgba(165, 181, 175, 0.954);
+    --text-strong: rgba(123, 220, 183, 0.954);
+    --text-secondary: rgb(94, 103, 107);
+    --text-dark: rgb(16, 16, 16);
+
+    /* Accent Colors */
+    --neonGreen: rgb(34, 186, 52);
+    --neonGrey: rgb(95, 94, 94);
+    --neonWhite: rgb(237, 237, 237);
+    --neonYellow: rgb(162, 254, 63);
+    --neonBlue: rgb(16, 111, 244);
+    --neonPurple: rgb(130, 80, 250);
+    --neonPink: rgb(248, 57, 117);
+    --neonRed: rgba(218, 22, 22, 0.886);
+
+    /* Borders / Shadows */
+    --border-color: #4b5563;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+
+    --pulse: 1;
+}
+
+body {
+    background-color: var(--bg);
+    background-image: url(/images/retail_kiosk_bg.svg);
+    background-size: cover;
+    transition: background-color 0.2s ease;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+@font-face {
+    font-family: "stealth57";
+
+    src: url("/fonts/stealth57.ttf") format("truetype");
+
+    font-weight: normal;
+
+    font-style: normal;
+}
+
+.font-stealth {
+    font-family: stealth57, sans-serif;
+}
+
+.text-4xl {
+    font-size: 3rem;
+    line-height: 2.5rem;
+}
+
+a {
+    text-decoration: none;
+}
+
+header {
+    text-align: center;
+    margin-top:100px;
+}
+
+h1 {
+    font-family: "stealth57", sans-serif;
+    font-size: 3.5rem;
+    color: var(--text-primary);
+    text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
+    font-size: 0;
+}
+
+h2 {
+    font-family: "stealth57", sans-serif;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
+}
+
+h3 {
+    font-family: "stealth57", sans-serif;
+    font-size: 2.5rem;
+    
+    color: var(--text-secondary);
+    text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
+}
+
+.text-neonGreen {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonGreen),
+        0 0 calc(4px * var(--pulse)) var(--neonGreen),
+        0 0 calc(6px * var(--pulse)) var(--neonGreen),
+        0 0 calc(18px * var(--pulse)) var(--neonGreen);
+}
+
+.text-neonGrey {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonGrey),
+        0 0 calc(4px * var(--pulse)) var(--neonGrey),
+        0 0 calc(6px * var(--pulse)) var(--neonGrey),
+        0 0 calc(18px * var(--pulse)) var(--neonGrey);
+}
+
+.text-neonWhite {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) rgba(235, 235, 235, 1),
+        0 0 calc(4px * var(--pulse)) rgba(235, 235, 235, 0.8),
+        0 0 calc(6px * var(--pulse)) rgba(235, 235, 235, 0.5),
+        0 0 calc(18px * var(--pulse)) rgba(235, 235, 235, 0.2);
+}
+
+.text-neonBlue {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonBlue),
+        0 0 calc(4px * var(--pulse)) var(--neonBlue),
+        0 0 calc(6px * var(--pulse)) var(--neonBlue),
+        0 0 calc(18px * var(--pulse)) var(--neonBlue);
+}
+
+.text-neonYellow {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonYellow),
+        0 0 calc(4px * var(--pulse)) var(--neonYellow),
+        0 0 calc(6px * var(--pulse)) var(--neonYellow),
+        0 0 calc(18px * var(--pulse)) var(--neonYellow);
+}
+
+.text-neonYellowSubtle {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(1px * var(--pulse)) var(--neonYellow),
+        0 0 calc(2px * var(--pulse)) var(--neonYellow),
+        0 0 calc(4px * var(--pulse)) var(--neonYellow);
+}
+
+.text-neonPink {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(1px * var(--pulse)) var(--neonPink),
+        0 0 calc(1px * var(--pulse)) var(--neonPink),
+        0 0 calc(2px * var(--pulse)) var(--neonPink),
+        0 0 calc(5px * var(--pulse)) rgba(219, 61, 111, 0.548);
+}
+
+
+
+
+/* Centered product card */
+.product {
+    width: 50%;
+    margin: 20vh auto 0;
+    padding: 1.25rem 1.5rem;
+    /* background: linear-gradient(180deg, rgba(26, 26, 29, 0.65), rgba(15, 15, 17, 0.55)); */
+    /* border: 1px solid var(--border-color); */
+    border-radius: 18px;
+    text-align: center;
+}
+
+.product h3 {
+    font-family: "stealth57", sans-serif;
+    font-size: 2rem;
+    line-height: 150%;
+    color: var(--text-primary);
+}
+
+.product ul {
+    list-style: none;
+    margin: 0.5rem 0 0 0;
+    padding: 0;
+}
+
+.product ul li {
+    line-height: 200%;
+    color: var(--text-primary);
+}
+
+
+
+/* Edge labels hugging sides */
+.edge-label {
+    position: fixed;
+    top: 65%;
+    transform: translateY(-50%);
+    z-index: 50;
+    padding: 0.45rem 0.6rem;
+    border-radius: 999px;
+    font-family: "stealth57", sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(3px);
+    pointer-events: none;
+    /* don't steal taps on kiosk */
+    /* Vertical style that truly hugs the edge */
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.edge-label.left {
+    /* left: max(8px, env(safe-area-inset-left)); */
+    left: 20%;
+    color: var(--neonYellow);
+    box-shadow:
+        0 0 calc(6px * var(--pulse)) rgba(162, 254, 63, 0.35),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.edge-label.right {
+    /* right: max(8px, env(safe-area-inset-right)); */
+    right: 20%;
+    color: var(--neonBlue);
+    box-shadow:
+        0 0 calc(6px * var(--pulse)) rgba(16, 111, 244, 0.35),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
