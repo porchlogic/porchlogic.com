@@ -49,7 +49,7 @@ body {
 }
 
 .text-4xl {
-    font-size: 3rem;
+    font-size: 2.75rem;
     line-height: 2.5rem;
 }
 
@@ -64,7 +64,7 @@ header {
 
 h1 {
     font-family: "stealth57", sans-serif;
-    font-size: 3.5rem;
+    font-size: 3rem;
     color: var(--text-primary);
     text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
     font-size: 0;
@@ -72,18 +72,11 @@ h1 {
 
 h2 {
     font-family: "stealth57", sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: var(--text-secondary);
     text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
 }
 
-h3 {
-    font-family: "stealth57", sans-serif;
-    font-size: 2.5rem;
-    
-    color: var(--text-secondary);
-    text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
-}
 
 .text-neonGreen {
     color: var(--text-dark);
@@ -148,7 +141,14 @@ h3 {
 }
 
 
-
+.text-neonSubtle {
+    color: var(--text-primary);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonGrey),
+        0 0 calc(4px * var(--pulse)) var(--neonGrey),
+        0 0 calc(6px * var(--pulse)) var(--neonGrey),
+        0 0 calc(18px * var(--pulse)) var(--neonGrey);
+}
 
 /* Centered product card */
 .product {
@@ -164,8 +164,9 @@ h3 {
 .product h3 {
     font-family: "stealth57", sans-serif;
     font-size: 2rem;
-    line-height: 150%;
-    color: var(--text-primary);
+    color: var(--text-dark);
+    font-family: "stealth57", sans-serif;
+    text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
 }
 
 .product ul {
@@ -177,6 +178,7 @@ h3 {
 .product ul li {
     line-height: 200%;
     color: var(--text-primary);
+    
 }
 
 
@@ -184,40 +186,58 @@ h3 {
 /* Edge labels hugging sides */
 .edge-label {
     position: fixed;
-    top: 65%;
-    transform: translateY(-50%);
+    top: 78%;
+    font-size: 1.5em;
+    font-family: "stealth57", sans-serif;
+    /* transform: translateY(-50%);
     z-index: 50;
     padding: 0.45rem 0.6rem;
     border-radius: 999px;
     font-family: "stealth57", sans-serif;
-    font-size: 0.95rem;
+    font-size: 2rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     background: rgba(0, 0, 0, 0.35);
     border: 1px solid var(--border-color);
     backdrop-filter: blur(3px);
     pointer-events: none;
-    /* don't steal taps on kiosk */
-    /* Vertical style that truly hugs the edge */
+
     writing-mode: vertical-rl;
-    text-orientation: mixed;
+    text-orientation: mixed; */
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    line-height: 150%;
+
+    width: 19vw;
+    height: 19vw;
+
+    border-radius: 50%;
+        /* makes it round */
+        background: black;
+        /* border: 2px solid rgba(255, 255, 255, 0.1); */
+
 }
 
 .edge-label.left {
     /* left: max(8px, env(safe-area-inset-left)); */
-    left: 20%;
+    left: 5%;
     color: var(--neonYellow);
-    box-shadow:
-        0 0 calc(6px * var(--pulse)) rgba(162, 254, 63, 0.35),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    
+    
+    
+}
+
+.edge-label .price {
+    font-size: 2em;
+    margin-bottom: 20px;
+    margin-top: 25px;
 }
 
 .edge-label.right {
     /* right: max(8px, env(safe-area-inset-right)); */
-    right: 20%;
+    right: 5%;
     color: var(--neonBlue);
-    box-shadow:
-        0 0 calc(6px * var(--pulse)) rgba(16, 111, 244, 0.35),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+
 }
 
