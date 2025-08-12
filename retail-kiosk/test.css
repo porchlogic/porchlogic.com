@@ -73,8 +73,7 @@ h1 {
 h2 {
     font-family: "stealth57", sans-serif;
     font-size: 1.25rem;
-    color: var(--text-secondary);
-    text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
+    color: black;
 }
 
 
@@ -94,6 +93,13 @@ h2 {
         0 0 calc(4px * var(--pulse)) var(--neonGrey),
         0 0 calc(6px * var(--pulse)) var(--neonGrey),
         0 0 calc(18px * var(--pulse)) var(--neonGrey);
+}
+
+.text-neonGrey-subtle {
+    color: var(--text-dark);
+        text-shadow:
+            0 0 calc(6px * 0.1) var(--neonGrey),
+            0 0 calc(9px * 0.5) var(--neonGrey);
 }
 
 .text-neonWhite {
@@ -203,7 +209,7 @@ h2 {
 
 .edge-label.left {
     left: 5%;
-    color: var(--neonYellow);
+    color: var(--neonGreen);
     
     
     
