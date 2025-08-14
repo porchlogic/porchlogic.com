@@ -1,7 +1,7 @@
 {
     "name": "Kiosk",
     "short_name": "Kiosk",
-    "start_url": "/index.html",
+    "start_url": "/retail-kiosk",
     "display": "fullscreen",
     "background_color": "#000000",
     "theme_color": "#000000",
