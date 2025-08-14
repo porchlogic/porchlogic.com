@@ -159,7 +159,7 @@ h2 {
 /* Centered product card */
 .product {
     width: 50%;
-    margin: 10vh auto 0;
+    margin: 15vh auto 0;
     padding: 1.25rem 1.5rem;
     border-radius: 18px;
     text-align: center;
@@ -167,7 +167,8 @@ h2 {
 
 .product h3 {
     font-family: "stealth57", sans-serif;
-    font-size: 2rem;
+    font-size: 2.5rem;
+    line-height: 150%;
     color: var(--text-dark);
     font-family: "stealth57", sans-serif;
     text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
