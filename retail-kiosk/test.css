@@ -186,6 +186,12 @@ h2 {
     font-size: 2rem;
 }
 
+.product p {
+    line-height: 150%;
+    color: var(--text-secondary);
+    font-size: 2rem;
+}
+
 
 
 /* Edge labels hugging sides */
