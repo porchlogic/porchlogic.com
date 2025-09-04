@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
+    <title>porchLogic</title>
+
+    <!-- Global layout -->
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="brand.css" />
+    <!-- Per-section styles -->
+    <link rel="stylesheet" href="sections/welcome.css" />
+    <link rel="stylesheet" href="sections/lineup.css" />
+    <link rel="stylesheet" href="sections/pulse.css" />
+    <link rel="stylesheet" href="sections/swarm.css" />
+    <link rel="stylesheet" href="sections/shop.css" />
+    <link rel="stylesheet" href="sections/venue.css" />
+</head>
+
+<body>
+    <header>
+        <!-- <h1 class="brand">porchLogic</h1> -->
+        <a href="/">
+            <h1 class="font-stealth text-neonBlue text-4xl">
+                <span class="text-neonGreen">p</span>
+                <span class="text-neonGreen">o</span>
+                <span class="text-neonGreen">r</span>
+                <span class="text-neonGrey">c</span>
+                <span class="text-neonGrey">h</span>
+        
+                <span class="text-neonWhite">L</span>
+                <span class="text-neonBlue">o</span>
+                <span class="text-neonYellow">g</span>
+                <span class="text-neonBlue">i</span>
+                <span class="text-neonWhite">c</span>
+            </h1>
+        </a>
+    </header>
+
+    <div class="main-sections" id="stack">
+
+        <section data-id="welcome" class="color-white">
+            <div class="section-header">
+                <h2 class="text-neon">Welcome</h2>
+            </div>
+            <div class="section-content">
+                <p>Advanced Cybernetic Orchestrations</p>
+            </div>
+        </section>
+
+        <section data-id="lineup" class="color-blue">
+            <div class="section-header">
+                <h2 class="text-neon">LineUp</h2>
+            </div>
+            <div class="section-content">
+                <p>now playing / upcoming performances</p>
+            </div>
+        </section>
+
+        <section data-id="pulse" class="color-red">
+            <div class="section-header">
+                <h2 class="text-neon">Pulse</h2>
+            </div>
+            <div class="section-content">
+                <p>the shared structure for making music</p>
+            </div>
+        </section>
+
+        <section data-id="swarm" class="color-yellow">
+            <div class="section-header">
+                <h2 class="text-neon">Swarm</h2>
+            </div>
+            <div class="section-content">
+                <p>synchronized group audio tool</p>
+            </div>
+        </section>
+
+        <section data-id="shop" class="color-green">
+            <div class="section-header">
+                <h2 class="text-neon">Shop</h2>
+            </div>
+            <div class="section-content">
+                <div class="product-card">
+                    <h3>SMB1</h3>
+                </div>
+                <div class="product-card">
+                    <h3>SMB1 founders edition</h3>
+                </div>
+            </div>
+        </section>
+
+        <section data-id="venue" class="color-grey">
+            <div class="section-header">
+                <h2 class="text-neon">Venue</h2>
+            </div>
+            <div class="section-content">
+                <p>asdf</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Core behavior first -->
+    <script type="module" src="base.js"></script>
+
+    <!-- Per-section modules (self-contained, light) -->
+    <script type="module" src="sections/welcome.js" defer></script>
+    <script type="module" src="sections/lineup.js" defer></script>
+    <script type="module" src="sections/pulse.js" defer></script>
+    <script type="module" src="sections/swarm.js" defer></script>
+    <script type="module" src="sections/shop.js" defer></script>
+    <script type="module" src="sections/venue.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,195 @@
+:root {
+    /* Backgrounds */
+    --bg: #0e0e10;
+    --bg-light: #1a1a1d;
+
+    /* Text */
+    --text-primary: rgba(165, 181, 175, 0.954);
+    --text-strong: rgba(123, 220, 183, 0.954);
+    --text-secondary: rgb(94, 103, 107);
+    --text-dark: rgb(16, 16, 16);
+
+    /* Accent Colors */
+    --neonGreen: rgb(34, 186, 52);
+    --neonGrey: rgb(95, 94, 94);
+    --neonWhite: rgb(237, 237, 237);
+    --neonYellow: rgb(162, 254, 63);
+    --neonBlue: rgb(16, 111, 244);
+    --neonPurple: rgb(130, 80, 250);
+    --neonPink: rgb(248, 57, 117);
+    --neonRed: rgba(218, 22, 22, 0.886);
+
+    /* Borders / Shadows */
+    --border-color: #4b5563;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+
+    --pulse: 0.5;
+
+    --neon-color: #0ff;
+}
+.color-green {
+    --neon-color: rgb(34, 186, 52);
+}
+.color-yellow {
+    --neon-color: rgb(162, 254, 63);
+}
+.color-white {
+    --neon-color: rgb(237, 237, 237);
+}
+.color-blue {
+    --neon-color: rgb(16, 111, 244);
+}
+.color-grey {
+    --neon-color: rgb(95, 94, 94);
+}
+.color-pink {
+    --neon-color: rgb(248, 57, 117);
+}
+
+.color-red {
+    --neon-color: rgba(218, 22, 22, 0.886);
+}
+.text-neon {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(16px * 0.1) var(--neon-color);
+}
+.text-neon-bright {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neon-color),
+        0 0 calc(4px * var(--pulse)) var(--neon-color),
+        0 0 calc(6px * var(--pulse)) var(--neon-color),
+        0 0 calc(18px * var(--pulse)) var(--neon-color);
+}
+@font-face {
+    font-family: "stealth57";
+
+    src: url("/fonts/stealth57.ttf") format("truetype");
+
+    font-weight: normal;
+
+    font-style: normal;
+}
+
+.font-stealth {
+    font-family: stealth57, sans-serif;
+}
+
+.text-4xl {
+    font-size: 2.75rem;
+    line-height: 2.5rem;
+}
+
+html,
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: system-ui, sans-serif;
+    background: #111;
+    color: #e7e7e7;
+}
+
+header {
+    background: #111;
+    text-align: center;
+    padding: 2px 6px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    flex: 0 0 auto;
+}
+
+.brand {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.main-sections {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+
+
+.section-header {
+    position: relative;
+    flex-shrink: 0;
+    padding: 4px 16px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Neon underline tube */
+.section-header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 4px;
+    /* sits just below the text */
+    height: 3px;
+    width: 0;
+    /* collapsed by default */
+    background: var(--text-dark);
+    /* neon cyan color */
+    box-shadow:
+        0 0 2px var(--neon-color),
+        0 0 6px var(--neon-color),
+        0 0 9px var(--neon-color);
+    transition: width 0.4s ease;
+}
+
+/* Grow to text width by default */
+.section-header h2 {
+    display: inline-block;
+    position: relative;
+}
+
+.section-header h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    height: 1px;
+    width: 100%;
+    /* match text width */
+    background: var(--text-dark);
+    box-shadow:
+        0 0 2px var(--neon-color),
+        0 0 6px var(--neon-color),
+        0 0 9px var(--neon-color);
+    transition: width 0.4s ease;
+}
+
+/* When active, stretch full width of the header area */
+section.active .section-header h2::after {
+    width: 100vw;
+    /* effectively full viewport width; adjust if you want container width */
+}
+
+section.active {
+    flex-grow: 1;
+    /* background: #141414; */
+}
+
+
+
+.section-content {
+    flex: 1;
+    display: none;
+    padding: 0 16px 16px;
+    overflow: hidden;
+}
+
+section.active .section-content {
+    display: block;
+}
+
+/* Optional generic scoping helpers (use sparingly) */
+/* section[data-id] .section-content :where(h1, h2, h3, p, ul, ol) {
+    margin-block: 0.5rem;
+} */

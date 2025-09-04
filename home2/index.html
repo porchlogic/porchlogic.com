@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>porchLogic — neon underline accordion</title>
+    <style>
+        :root {
+            --bg: #0b0f14;
+            --ink: #cfe1ff;
+            --muted: #8896bf;
+            --accent: #00ffd5;
+            --accent-2: #7b5cff;
+
+            --collapsed-h: 56px;
+            --gap: 12px;
+            --vh: 100svh;
+            --avail: 100svh;
+
+            /* animation tuning */
+            --t-height: 420ms;
+            --t-content: 340ms;
+            --ease-main: cubic-bezier(.22, .7, .18, 1);
+            --ease-content: cubic-bezier(.22, .55, .12, 1);
+
+            /* underline look */
+            --uln-h: 2px;
+            /* base underline thickness */
+            --uln-glow: 18px;
+            /* glow size */
+            --uln-dim: .28;
+            /* non-active opacity */
+            --uln-bright: .75;
+            /* active opacity */
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background:
+                radial-gradient(1200px 800px at 80% 0%, rgba(123, 92, 255, .06), transparent 60%),
+                radial-gradient(1000px 700px at 10% 100%, rgba(0, 255, 213, .06), transparent 60%),
+                var(--bg);
+            font: 400 16px/1.4 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: linear-gradient(180deg, rgba(10, 14, 20, .9), rgba(10, 14, 20, .5));
+            backdrop-filter: saturate(140%) blur(6px);
+            border-bottom: 1px solid rgba(124, 137, 178, .12);
+        }
+
+        header .wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+        }
+
+        h1 {
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: .03em;
+            font-size: 18px;
+            text-transform: lowercase;
+        }
+
+        .accordion {
+            height: var(--avail);
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+            padding: var(--gap);
+            --count: 5;
+            /* set by JS too */
+        }
+
+        /* PANELS: no borders or box backgrounds; all definition is via underline */
+        .panel {
+            min-height: var(--collapsed-h);
+            height: var(--collapsed-h);
+            display: flex;
+            flex-direction: column;
+            transition: height var(--t-height) var(--ease-main), transform var(--t-height) var(--ease-main);
+            will-change: height, transform;
+            transform: translateY(calc(var(--dist, 0) * 3px));
+            /* tiny parallax */
+        }
+
+        .panel.active {
+            height: calc(var(--avail) - (var(--collapsed-h) * (var(--count) - 1)) - (var(--gap) * (var(--count) - 1)));
+        }
+
+        .ph {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            height: var(--collapsed-h);
+            padding: 0 14px 6px 14px;
+            /* extra bottom space for underline glow */
+            cursor: pointer;
+            position: relative;
+        }
+
+        .ph h2 {
+            margin: 0;
+            font-size: 15px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .ph .badge {
+            margin-left: auto;
+            font-size: 12px;
+            color: var(--muted);
+            opacity: .9;
+        }
+
+        /* Underline: a single neon line with glow */
+        .ph::after {
+            content: "";
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            bottom: 4px;
+            height: var(--uln-h);
+            background: linear-gradient(90deg, rgba(123, 92, 255, 1), rgba(0, 255, 213, 1));
+            opacity: var(--uln-dim);
+            filter: drop-shadow(0 0 var(--uln-glow) rgba(0, 255, 213, .45)) drop-shadow(0 0 calc(var(--uln-glow)*.6) rgba(123, 92, 255, .45));
+            transform-origin: left center;
+            transition: opacity var(--t-height) var(--ease-main), transform var(--t-height) var(--ease-main);
+        }
+
+        /* Grow/brighten underline while panel expands; compress/dim while collapsing */
+        .panel.active .ph::after {
+            opacity: var(--uln-bright);
+            transform: scaleX(1.02);
+        }
+
+        .panel:not(.active) .ph::after {
+            transform: scaleX(.98);
+        }
+
+        /* Pulse: a traveling light that runs along the underline on activation */
+        .panel.activating .ph::before {
+            content: "";
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            bottom: 4px;
+            height: var(--uln-h);
+            pointer-events: none;
+            background:
+                linear-gradient(90deg,
+                    rgba(0, 0, 0, 0) 0%,
+                    rgba(255, 255, 255, .0) 40%,
+                    rgba(255, 255, 255, .9) 50%,
+                    rgba(255, 255, 255, .0) 60%,
+                    rgba(0, 0, 0, 0) 100%);
+            mix-blend-mode: screen;
+            filter: blur(1px);
+            animation: pulse 560ms var(--ease-main);
+        }
+
+        @keyframes pulse {
+            from {
+                transform: translateX(-95%)
+            }
+
+            to {
+                transform: translateX(95%)
+            }
+        }
+
+        /* Content (no inner scrolling) with subtle enter/leave movement */
+        .content {
+            padding: 16px;
+            overflow: hidden;
+            display: grid;
+            align-content: start;
+            gap: 14px;
+        }
+
+        .panel.entering .content {
+            animation: contentIn var(--t-content) var(--ease-content) both;
+        }
+
+        .panel.leaving .content {
+            animation: contentOut var(--t-content) var(--ease-content) both;
+        }
+
+        @keyframes contentIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes contentOut {
+            from {
+                opacity: 1;
+                transform: translateY(0)
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-6px)
+            }
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: 13px;
+            opacity: .95;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .card {
+            border: 1px solid rgba(124, 137, 178, .18);
+            border-radius: 12px;
+            padding: 14px;
+            background: rgba(12, 16, 22, .55);
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+
+            .panel,
+            .content,
+            .card {
+                transition: none;
+                animation: none
+            }
+
+            .ph::before {
+                display: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="wrap">
+            <h1>porchLogic</h1>
+            <div class="hint" aria-hidden="true">swipe ↑↓ / click</div>
+        </div>
+    </header>
+
+    <main class="accordion" id="accordion" aria-label="Site sections (accordion)">
+        <!-- WELCOME -->
+        <section class="panel active" data-id="welcome" aria-expanded="true">
+            <div class="ph" role="button" tabindex="0" aria-controls="welcome-content">
+                <h2>Welcome</h2><span class="badge">intro</span>
+            </div>
+            <div class="content" id="welcome-content">
+                <p>Tap, click, scroll, or <strong>swipe</strong> to explore. One section open; others folded to titles.
+                </p>
+                <p class="hint">Auto-opening <em>LineUp</em> in a moment to teach the interaction.</p>
+            </div>
+        </section>
+
+        <!-- LINEUP -->
+        <section class="panel" data-id="lineup" aria-expanded="false">
+            <div class="ph" role="button" tabindex="0" aria-controls="lineup-content">
+                <h2>LineUp</h2><span class="badge">now / next</span>
+            </div>
+            <div class="content" id="lineup-content">
+                <p>now playing / upcoming performances</p>
+                <div class="cards">
+                    <div class="card">
+                        <h3>DJ signal/ash</h3>
+                        <div class="hint">Tonight — 9:30pm</div>
+                    </div>
+                    <div class="card">
+                        <h3>Pulse Collective</h3>
+                        <div class="hint">Fri — 8:00pm</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PULSE -->
+        <section class="panel" data-id="pulse" aria-expanded="false">
+            <div class="ph" role="button" tabindex="0" aria-controls="pulse-content">
+                <h2>Pulse</h2><span class="badge">structure</span>
+            </div>
+            <div class="content" id="pulse-content">
+                <p>the shared structure for making music</p>
+                <p class="hint">Tempo, key, sections—shared live to keep everyone in sync.</p>
+            </div>
+        </section>
+
+        <!-- SWARM -->
+        <section class="panel" data-id="swarm" aria-expanded="false">
+            <div class="ph" role="button" tabindex="0" aria-controls="swarm-content">
+                <h2>Swarm</h2><span class="badge">tool</span>
+            </div>
+            <div class="content" id="swarm-content">
+                <p>synchronized group audio tool</p>
+                <div class="hint">Bring your own device. Join the pocket sound-system.</div>
+            </div>
+        </section>
+
+        <!-- SHOP -->
+        <section class="panel" data-id="shop" aria-expanded="false">
+            <div class="ph" role="button" tabindex="0" aria-controls="shop-content">
+                <h2>Shop</h2><span class="badge">merch</span>
+            </div>
+            <div class="content" id="shop-content">
+                <div class="cards">
+                    <div class="card">
+                        <h3>SMB1</h3>
+                        <div class="hint">Distributed MIDI / sync node</div>
+                    </div>
+                    <div class="card">
+                        <h3>SMB1 — founders edition</h3>
+                        <div class="hint">Early backer series</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VENUE -->
+        <section class="panel" data-id="venue" aria-expanded="false">
+            <div class="ph" role="button" tabindex="0" aria-controls="venue-content">
+                <h2>Venue</h2><span class="badge">host</span>
+            </div>
+            <div class="content" id="venue-content">
+                <p>Specs, layout, and A/V patch map.</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // ---- sizing for mobile viewport quirks
+        const root = document.documentElement;
+        const header = document.querySelector('header');
+        function setVH() {
+            const vh = window.innerHeight;
+            root.style.setProperty('--vh', vh + 'px');
+            const avail = vh - (header?.offsetHeight || 0);
+            root.style.setProperty('--avail', avail + 'px');
+        }
+        setVH(); addEventListener('resize', setVH);
+
+        // ---- accordion logic (pixel-height animation)
+        const acc = document.getElementById('accordion');
+        const panels = Array.from(acc.querySelectorAll('.panel'));
+        root.style.setProperty('--count', panels.length);
+
+        function cssNum(varName) {
+            return parseFloat(getComputedStyle(root).getPropertyValue(varName)) || 0;
+        }
+        function openHeightPx() {
+            const avail = cssNum('--avail');
+            const collapsed = cssNum('--collapsed-h');
+            const gap = cssNum('--gap');
+            const count = panels.length;
+            return Math.max(0, avail - (collapsed * (count - 1)) - (gap * (count - 1)));
+        }
+        function collapsedHeightPx() {
+            return cssNum('--collapsed-h');
+        }
+
+        function updateParallax(activeIdx) {
+            panels.forEach((p, i) => p.style.setProperty('--dist', i - activeIdx));
+        }
+
+        let active = Math.max(0, panels.findIndex(p => p.classList.contains('active')));
+        if (active < 0) active = 0, panels[0]?.classList.add('active');
+        updateParallax(active);
+
+        // Ensure initial heights are set to match current state (prevents snap on first change)
+        function syncHeights() {
+            const oh = openHeightPx() + 'px';
+            const ch = collapsedHeightPx() + 'px';
+            panels.forEach((p, i) => {
+                p.style.height = (i === active) ? oh : ch;
+            });
+        }
+        syncHeights();
+        addEventListener('resize', () => {
+            // When viewport changes, retarget heights smoothly
+            const oh = openHeightPx() + 'px';
+            const ch = collapsedHeightPx() + 'px';
+            panels.forEach((p, i) => p.style.height = (i === active) ? oh : ch);
+        });
+
+        let animating = false;
+
+        function setActive(idx, { fromInput = false } = {}) {
+            if (idx < 0 || idx >= panels.length || idx === active || animating) return;
+            animating = true;
+
+            const prev = panels[active];
+            const next = panels[idx];
+
+            // State classes (content fade + underline pulse)
+            prev && prev.classList.add('leaving');
+            next.classList.add('entering', 'activating');
+
+            // Compute target heights
+            const openPx = openHeightPx();
+            const collapsedPx = collapsedHeightPx();
+
+            // Lock both panels to current pixel heights to start the transition
+            // (force layout so the browser acknowledges current heights)
+            prev.style.height = prev.getBoundingClientRect().height + 'px';
+            next.style.height = next.getBoundingClientRect().height + 'px';
+            // Switch "active" class now (for ARIA + underline brightness), but keep pixel heights pinned
+            prev?.classList.remove('active');
+            prev?.setAttribute('aria-expanded', 'false');
+            active = idx;
+            next.classList.add('active');
+            next.setAttribute('aria-expanded', 'true');
+            updateParallax(active);
+
+            // In the next frame, set target pixel heights to animate
+            requestAnimationFrame(() => {
+                prev.style.height = collapsedPx + 'px';
+                next.style.height = openPx + 'px';
+            });
+
+            // Wait for either transitionend (from the 'next' panel) or a timeout fallback
+            const durationMs = 1 * (parseFloat(getComputedStyle(root).getPropertyValue('--t-height')) || 420);
+            let finished = false;
+            function cleanup() {
+                if (finished) return; finished = true;
+                // Remove helper classes after content fade
+                const contentT = 1 * (parseFloat(getComputedStyle(root).getPropertyValue('--t-content')) || 340);
+                setTimeout(() => {
+                    prev && prev.classList.remove('leaving');
+                    next.classList.remove('entering', 'activating');
+                }, contentT + 40);
+
+                // Clear inline heights so CSS still governs future layout, then resync exact pixels
+                next.style.removeProperty('height');
+                prev.style.removeProperty('height');
+                syncHeights();
+
+                animating = false;
+            }
+            const onEnd = (e) => {
+                if (e.target !== next) return;
+                if (e.propertyName !== 'height') return;
+                next.removeEventListener('transitionend', onEnd);
+                cleanup();
+            };
+            next.addEventListener('transitionend', onEnd);
+            // Fallback in case transitionend is missed
+            setTimeout(() => { next.removeEventListener('transitionend', onEnd); cleanup(); }, durationMs + 120);
+        }
+
+        // interactions
+        acc.addEventListener('click', (e) => {
+            const ph = e.target.closest('.ph');
+            if (!ph) return;
+            setActive(panels.indexOf(ph.closest('.panel')), { fromInput: true });
+        });
+        acc.addEventListener('keydown', (e) => {
+            const key = e.key;
+            if (['ArrowDown', 'PageDown'].includes(key)) { e.preventDefault(); setActive(Math.min(active + 1, panels.length - 1), { fromInput: true }); }
+            if (['ArrowUp', 'PageUp'].includes(key)) { e.preventDefault(); setActive(Math.max(active - 1, 0), { fromInput: true }); }
+            if (key === 'Home') { e.preventDefault(); setActive(0, { fromInput: true }); }
+            if (key === 'End') { e.preventDefault(); setActive(panels.length - 1, { fromInput: true }); }
+        });
+
+        // wheel -> one notch == one section
+        let wheelLock = false;
+        acc.addEventListener('wheel', (e) => {
+            if (wheelLock || animating) return;
+            wheelLock = true;
+            const dir = Math.sign(e.deltaY);
+            if (dir > 0) setActive(Math.min(active + 1, panels.length - 1), { fromInput: true });
+            if (dir < 0) setActive(Math.max(active - 1, 0), { fromInput: true });
+            setTimeout(() => wheelLock = false, 220);
+        }, { passive: true });
+
+        // swipe (pointer)
+        let touchY = null;
+        const SWIPE_MIN = 30;
+        acc.addEventListener('pointerdown', (e) => { touchY = e.clientY; }, { passive: true });
+        acc.addEventListener('pointerup', (e) => {
+            if (touchY == null || animating) return;
+            const dy = e.clientY - touchY;
+            if (Math.abs(dy) > SWIPE_MIN) {
+                if (dy < 0) setActive(Math.min(active + 1, panels.length - 1), { fromInput: true });
+                else setActive(Math.max(active - 1, 0), { fromInput: true });
+            }
+            touchY = null;
+        }, { passive: true });
+
+        // teach the pattern: Welcome -> LineUp
+        const welcomeIdx = panels.findIndex(p => p.dataset.id === 'welcome');
+        const lineupIdx = panels.findIndex(p => p.dataset.id === 'lineup');
+        if (welcomeIdx !== -1 && lineupIdx !== -1) {
+            setTimeout(() => setActive(lineupIdx, { fromInput: true }), 2500);
+        }
+    </script>
+
+</body>
+
+</html>

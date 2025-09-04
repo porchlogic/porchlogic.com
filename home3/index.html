@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
+    <style>
+        html,
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            font-family: system-ui, sans-serif;
+        }
+
+        header {
+            background: #111;
+            color: #fff;
+            text-align: center;
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .main-sections {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 56px);
+            /* adjust if header height changes */
+            background: #0b0b0b;
+            color: #e7e7e7;
+        }
+
+        /* Sections stack; only the active one grows to fill leftover space */
+        section {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid #222;
+            transition: flex-grow 0.35s ease;
+            flex-grow: 0;
+            /* collapsed by default */
+        }
+
+        section.active {
+            flex-grow: 1;
+            background: #141414;
+        }
+
+        .section-header {
+            padding: 14px 16px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .section-content {
+            display: none;
+            padding: 0 16px 16px;
+            overflow: hidden;
+            /* no inner scrollbars */
+        }
+
+        section.active .section-content {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 style="margin:0;font-size:1.2rem;">porchLogic</h1>
+    </header>
+
+    <div class="main-sections" id="stack">
+        <section>
+            <div class="section-header">
+                <h2>Welcome</h2>
+            </div>
+            <div class="section-content">
+                <p>Advanced Cybernetic Orchestrations</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2>LineUp</h2>
+            </div>
+            <div class="section-content">
+                <p>now playing / upcoming performances</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2>Pulse</h2>
+            </div>
+            <div class="section-content">
+                <p>the shared structure for making music</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2>Swarm</h2>
+            </div>
+            <div class="section-content">
+                <p>synchronized group audio tool</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2>Shop</h2>
+            </div>
+            <div class="section-content">
+                <div class="product-card">
+                    <h3>SMB1</h3>
+                </div>
+                <div class="product-card">
+                    <h3>SMB1 founders edition</h3>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2>Venue</h2>
+            </div>
+            <div class="section-content"></div>
+        </section>
+    </div>
+
+    <script>
+        const sections = [...document.querySelectorAll(".main-sections section")];
+        const headers = sections.map(s => s.querySelector(".section-header"));
+        let index = 0, busy = false;
+
+        function setActive(i) {
+            index = Math.max(0, Math.min(sections.length - 1, i));
+            sections.forEach((s, j) => s.classList.toggle("active", j === index));
+        }
+
+        // Click header to activate that section
+        headers.forEach((h, i) => h.addEventListener("click", () => setActive(i)));
+        setActive(0);
+
+        // Wheel / Touch navigation with small cooldown
+        const COOLDOWN_MS = 350, SWIPE_THRESHOLD = 30;
+        function step(dir) {
+            if (busy) return;
+            busy = true;
+            setActive(index + dir);
+            setTimeout(() => (busy = false), COOLDOWN_MS);
+        }
+
+        // Wheel
+        window.addEventListener("wheel", (e) => {
+            if (Math.abs(e.deltaY) < 10) return;
+            e.preventDefault();
+            step(e.deltaY > 0 ? 1 : -1);
+        }, { passive: false });
+
+        // Touch
+        let startY = null;
+        window.addEventListener("touchstart", (e) => { startY = e.touches[0].clientY; }, { passive: true });
+        window.addEventListener("touchmove", (e) => { e.preventDefault(); }, { passive: false });
+        window.addEventListener("touchend", (e) => {
+            if (startY == null) return;
+            const endY = (e.changedTouches[0] || e.touches[0]).clientY;
+            const dy = endY - startY;
+            if (Math.abs(dy) > SWIPE_THRESHOLD) step(dy < 0 ? 1 : -1);
+            startY = null;
+        });
+
+        // Keyboard (handy on desktop)
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowDown" || e.key === "PageDown") step(1);
+            else if (e.key === "ArrowUp" || e.key === "PageUp") step(-1);
+            else if (e.key === "Home") setActive(0);
+            else if (e.key === "End") setActive(sections.length - 1);
+        });
+    </script>
+</body>
+
+</html>
