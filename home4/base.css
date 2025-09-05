@@ -4,7 +4,7 @@
     --bg-light: #1a1a1d;
 
     /* Text */
-    --text-primary: rgba(165, 181, 175, 0.954);
+    --text-primary: rgba(127, 146, 139, 0.954);
     --text-strong: rgba(123, 220, 183, 0.954);
     --text-secondary: rgb(94, 103, 107);
     --text-dark: rgb(16, 16, 16);
@@ -52,7 +52,8 @@
 .text-neon {
     color: var(--text-dark);
     text-shadow:
-        0 0 calc(16px * 0.1) var(--neon-color);
+        0 0 2px var(--neon-color);
+        0 0 5px var(--neon-color);
 }
 .text-neon-bright {
     color: var(--text-dark);
@@ -62,7 +63,13 @@
         0 0 calc(6px * var(--pulse)) var(--neon-color),
         0 0 calc(18px * var(--pulse)) var(--neon-color);
 }
-@font-face {
+
+.share-tech-mono-regular {
+    font-family: "Share Tech Mono", monospace;
+    font-weight: 400;
+    font-style: normal;
+}
+/* @font-face {
     font-family: "stealth57";
 
     src: url("/fonts/stealth57.ttf") format("truetype");
@@ -70,7 +77,7 @@
     font-weight: normal;
 
     font-style: normal;
-}
+} */
 
 .font-stealth {
     font-family: stealth57, sans-serif;
@@ -88,9 +95,25 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    font-family: system-ui, sans-serif;
+    /* font-family: system-ui, sans-serif; */
+    font-family: "Share Tech Mono", monospace;
     background: #111;
-    color: #e7e7e7;
+    color: var(--text-primary);
+}
+
+h2 {
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+}
+
+
+
+p {
+    line-height: 150%;
+}
+
+a {
+    color: var(--neonBlue);
 }
 
 header {
@@ -101,6 +124,10 @@ header {
     top: 0;
     z-index: 1;
     flex: 0 0 auto;
+}
+
+header h1 {
+    letter-spacing: -0.1em;
 }
 
 .brand {
@@ -114,7 +141,11 @@ header {
     flex: 1 1 auto;
 }
 
-
+section {
+    transition: flex-grow 0.35s ease;
+    display: flex;
+    flex-direction: column;
+}
 
 .section-header {
     position: relative;
@@ -124,56 +155,55 @@ header {
     user-select: none;
 }
 
-/* Neon underline tube */
+
 .section-header::after {
     content: "";
     position: absolute;
     left: 0;
     bottom: 4px;
-    /* sits just below the text */
-    height: 3px;
-    width: 0;
-    /* collapsed by default */
+
+    height: 1px;
+    width: 100%;
+
     background: var(--text-dark);
-    /* neon cyan color */
+    visibility: hidden;
+
     box-shadow:
-        0 0 2px var(--neon-color),
-        0 0 6px var(--neon-color),
-        0 0 9px var(--neon-color);
-    transition: width 0.4s ease;
+        0 0 0px var(--neon-color),
+        0 0 0px var(--neon-color),
+        0 0 0px var(--neon-color);
+    transition: box-shadow 1.4s ease;
 }
 
-/* Grow to text width by default */
+
 .section-header h2 {
     display: inline-block;
     position: relative;
+    margin-block-start: 0.1em;
+    margin-block-end: 0.1em;
 }
 
-.section-header h2::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    height: 1px;
-    width: 100%;
-    /* match text width */
-    background: var(--text-dark);
-    box-shadow:
+section.active .section-header h2 {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 1px var(--neon-color),
         0 0 2px var(--neon-color),
-        0 0 6px var(--neon-color),
-        0 0 9px var(--neon-color);
-    transition: width 0.4s ease;
+        0 0 15px var(--neon-color)
 }
 
-/* When active, stretch full width of the header area */
-section.active .section-header h2::after {
-    width: 100vw;
-    /* effectively full viewport width; adjust if you want container width */
+
+
+section.active .section-header::after {
+    visibility: visible;
+    box-shadow:
+        0 2px 3px var(--neon-color)
 }
+
 
 section.active {
     flex-grow: 1;
     /* background: #141414; */
+    /* text-align: center; */
 }
 
 
@@ -181,15 +211,177 @@ section.active {
 .section-content {
     flex: 1;
     display: none;
-    padding: 0 16px 16px;
     overflow: hidden;
+    flex-direction: column;
+    flex-grow: 1;
+
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    /* position: relative; */
+    
+    /* justify-content: center; */
+
+    align-items: center;
+
+    /* width: 100%; */
+    /* height: 100%; */
+    text-align: center;
+
+    min-width: 0;
+    /* avoid flex overflow */
+    min-height: 0;
+    container-type: size;
 }
+
+section .subheading-top {
+    flex-shrink: 1;
+    display: none;
+}
+
+section.active .subheading-top {
+    display: flex;
+    width: 100%;
+    margin-top: 1.5em;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
 
 section.active .section-content {
-    display: block;
+    display: flex;
+    flex-grow: 1;
 }
 
-/* Optional generic scoping helpers (use sparingly) */
-/* section[data-id] .section-content :where(h1, h2, h3, p, ul, ol) {
-    margin-block: 0.5rem;
-} */
+
+
+/* Disable accordion/underline transitions during initial boot only */
+.no-anim section {
+    transition: none !important;
+}
+
+.no-anim .section-header::after,
+.no-anim .section-header h2::after {
+    transition: none !important;
+}
+
+
+/* Hidden by default so first paint never shows full text */
+.fx-typeOut p {
+    visibility: hidden;
+}
+
+/* JS will add .typing to the .fx-typeOut container right before drawing */
+.fx-typeOut.typing p {
+    visibility: visible;
+}
+
+
+section.active .section-content.fx-typeOut {
+    display: flex;
+    flex-direction: column;
+}
+
+section.active .section-content.fx-typeOut p {
+    /* visibility: visible; */
+    display: block;
+    /* ensure each line stays its own row */
+    white-space: pre;
+    /* preserves spaces while typing */
+    margin: 0 0 0.5em 0;
+}
+
+
+section[data-id="welcome"] p {
+    font-size: 2.5em;
+}
+
+
+.poster {
+    --w: 2;
+    /* poster width ratio  */
+    --h: 3;
+    /* poster height ratio */
+    aspect-ratio: var(--w) / var(--h);
+
+    /* Choose the limiting side of the parent */
+    /* width: min(100cqw, calc(100cqh * (var(--w) / var(--h)))); */
+    width: min(100vw, calc(65vh * (var(--w) / var(--h))));
+    height: auto;
+
+    /* Optional cosmetics */
+    border-radius: 12px;
+    overflow: hidden;
+    /* demo visuals; remove if you have your own */
+    box-shadow: 0 0 0 1px hsl(0 0% 100% / .08) inset;
+    background: #0b0b0b;
+
+    margin-top: 1.0em;
+}
+
+.poster h3 {
+    font-size: 5cqw;
+}
+
+.poster img {
+    width: 100%;
+    margin-top:2em;
+}
+
+section[data-id="pulse"] p {
+    font-size: 1.5em;
+}
+
+.pulse-div {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* align-items: flex-center; */
+}
+
+section[data-id="swarm"] p {
+    font-size: 1.5em;
+}
+
+.venue {
+    padding: 1rem;
+    margin: 1rem auto;
+    color: #fff;
+    text-align: left;
+}
+
+.venue-title {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    color: var(--color-neon, #0ff);
+    text-shadow: 0 0 10px var(--color-neon, #0ff);
+}
+
+.venue-tagline {
+    text-align: center;
+    font-style: italic;
+    margin-bottom: 2rem;
+}
+
+.venue h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-neon, #0ff);
+}
+
+.venue ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.venue li {
+    margin: 0.25rem 0;
+}
+
+
+footer {
+    color: var(--text-secondary);
+}

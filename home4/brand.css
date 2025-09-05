@@ -10,17 +10,15 @@ a {
 
 
 header h1 {
-    font-family: "stealth57", sans-serif;
+    /* font-family: "stealth57", sans-serif; */
+    font-family: "Share Tech Mono", monospace;
     font-size: 3rem;
     color: var(--text-primary);
     text-shadow: 1 1 8px var(--neonGreen), 1 1 8px var(--neonGreen), 0 0 8px var(--neonGreen), 0 0 8px var(--neonGreen);
-    font-size: 0;
+    font-size: 0;    
 }
 
-h2 {
-    font-family: "stealth57", sans-serif;
-    font-size: 1.25rem;
-}
+
 
 
 .text-neonGreen {

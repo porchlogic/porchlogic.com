@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>System Rehearsal — Poster</title>
+
+    <!-- Handwritten + clean UI fonts (optional but nice) -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@300;400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #10171b;
+            --chalk: #aeb7bb;
+            --ink: #cfd6d9;
+            --frame1: #bfc7c9;
+            --frame2: #79868b;
+
+            --wifi-yellow: #ffd84d;
+            --wifi-blue: #68b7ff;
+            --wifi-green: #61ffa6;
+            --wifi-purple: #b39ddb;
+            --wifi-pink: #ff77c8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            display: grid;
+            place-items: center;
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .poster {
+            width: min(820px, 92vw);
+            height: min(1160px, 94vh);
+            position: relative;
+            background: linear-gradient(180deg, #0e1417 0%, #111a1f 100%);
+            border-radius: 6px;
+            overflow: hidden;
+            /* subtle paper sheen */
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .45), inset 0 0 60px rgba(255, 255, 255, .02);
+        }
+
+        /* thin double frame */
+        .poster::before,
+        .poster::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            inset: 10px;
+            border: 1.5px solid var(--frame1);
+            opacity: .5;
+            border-radius: 4px;
+        }
+
+        .poster::after {
+            inset: 22px;
+            border-color: var(--frame2);
+            opacity: .25;
+        }
+
+        .inner {
+            position: absolute;
+            inset: 0;
+            padding: 5.5rem 3.2rem 4.5rem;
+        }
+
+        .title {
+            font-family: "Caveat", cursive;
+            color: var(--chalk);
+            font-size: clamp(54px, 9vw, 120px);
+            line-height: .85;
+            letter-spacing: .02em;
+            opacity: .42;
+            /* chalky / faded */
+            user-select: none;
+        }
+
+        .title .second {
+            display: block;
+            margin-top: .15em;
+            transform: translateX(-.15em) rotate(-2deg);
+        }
+
+        .details {
+            position: absolute;
+            top: 38%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #a8b1b5;
+            font-family: "Caveat", cursive;
+            font-size: clamp(18px, 2.7vw, 28px);
+            opacity: .9;
+        }
+
+        .details strong {
+            font-weight: 700;
+            letter-spacing: .01em;
+        }
+
+        .callout {
+            margin-top: .75rem;
+            display: inline-block;
+            color: #78b8ff;
+            text-decoration: underline;
+            text-underline-offset: .18em;
+            text-decoration-thickness: 2px;
+            filter: drop-shadow(0 0 6px rgba(80, 160, 255, .45));
+        }
+
+        .bottom {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 3.2rem;
+            height: 38%;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .lineart {
+            stroke: var(--ink);
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .wifi {
+            fill: none;
+            stroke-width: 6;
+            opacity: .95;
+            filter: drop-shadow(0 0 6px currentColor);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="poster">
+        <div class="inner">
+            <h1 class="title">
+                <span>System</span>
+                <span class="second">Rehearsal</span>
+            </h1>
+
+            <div class="details">
+                <div>Friday, November 16</div>
+                <div>240 SE Clay St.</div>
+                <div>roll out: <strong>6:15 pm</strong></div>
+                <a class="callout" href="#">come prepared</a>
+            </div>
+
+            <!-- minimal line-art scene -->
+            <div class="bottom">
+                <svg viewBox="0 0 900 350" aria-hidden="true">
+                    <!-- riders + gear -->
+                    <g class="lineart">
+                        <!-- cargo bike (left) -->
+                        <g transform="translate(70,235)">
+                            <circle cx="30" cy="65" r="28" />
+                            <circle cx="135" cy="65" r="28" />
+                            <path d="M30 65 l35 -40 30 40 m-35 -40 h40 l20 20 m-55 20 h55" />
+                            <rect x="-10" y="35" width="50" height="20" rx="4" />
+                            <circle cx="0" cy="55" r="2" />
+                            <circle cx="13" cy="55" r="2" />
+                        </g>
+
+                        <!-- boombox skateboard (mid-left) -->
+                        <g transform="translate(260,250)">
+                            <circle cx="30" cy="65" r="26" />
+                            <circle cx="110" cy="65" r="26" />
+                            <rect x="30" y="35" width="80" height="30" rx="6" />
+                            <circle cx="50" cy="50" r="7" />
+                            <circle cx="90" cy="50" r="7" />
+                            <rect x="45" y="12" width="15" height="20" rx="3" />
+                            <rect x="80" y="12" width="15" height="20" rx="3" />
+                            <rect x="45" y="5" width="50" height="8" rx="4" />
+                        </g>
+
+                        <!-- EUC (center-left) -->
+                        <g transform="translate(205,260)">
+                            <circle cx="60" cy="-5" r="10" />
+                            <path d="M60 5 v25" />
+                            <circle cx="60" cy="60" r="22" />
+                            <path d="M60 15 l-15 15 m15 -15 l15 15" />
+                        </g>
+
+                        <!-- foot rider (center) -->
+                        <g transform="translate(320,250)">
+                            <circle cx="40" cy="10" r="10" />
+                            <path d="M40 20 v30 m-10 10 h30 m-25 0 l-10 15 m40 -15 l-10 15" />
+                            <rect x="15" y="68" width="50" height="8" rx="3" />
+                        </g>
+
+                        <!-- bike w/ trailer (mid-right) -->
+                        <g transform="translate(470,235)">
+                            <circle cx="30" cy="65" r="28" />
+                            <circle cx="140" cy="65" r="28" />
+                            <path d="M30 65 l45 -40 30 40 m-30 -40 h40 m-20 20 l20 20" />
+
+                            <!-- trailer + speakers -->
+                            <rect x="165" y="40" width="80" height="45" rx="6" />
+                            <circle cx="180" cy="77" r="18" />
+                            <circle cx="225" cy="77" r="18" />
+                            <circle cx="185" cy="62" r="6" />
+                            <circle cx="215" cy="62" r="6" />
+                            <path d="M168 45 l-18 -20" />
+                        </g>
+
+                        <!-- unicycle (center-right) -->
+                        <g transform="translate(600,230)">
+                            <circle cx="60" cy="80" r="30" />
+                            <path d="M60 50 v30" />
+                            <circle cx="60" cy="30" r="10" />
+                            <path d="M60 40 v10 m-15 20 h30" />
+                        </g>
+
+                        <!-- scooter (right) -->
+                        <g transform="translate(730,250)">
+                            <circle cx="25" cy="65" r="26" />
+                            <circle cx="115" cy="65" r="26" />
+                            <path d="M40 65 h55 m10 0 l10 -40 m-20 0 h20" />
+                            <path d="M65 25 v25" />
+                            <circle cx="70" cy="10" r="10" />
+                            <path d="M70 20 v25 m0 -10 l25 -15" />
+                        </g>
+                    </g>
+
+                    <!-- neon wifi arcs -->
+                    <g stroke-linecap="round" stroke-linejoin="round">
+                        <g class="wifi" stroke="var(--wifi-yellow)" transform="translate(240,220)">
+                            <path d="M0 0 a30 30 0 0 1 30 30" />
+                            <path d="M8 8 a22 22 0 0 1 22 22" />
+                            <path d="M16 16 a14 14 0 0 1 14 14" />
+                        </g>
+                        <g class="wifi" stroke="var(--wifi-purple)" transform="translate(120,255)">
+                            <path d="M0 0 a28 28 0 0 1 28 28" />
+                            <path d="M8 8 a20 20 0 0 1 20 20" />
+                            <path d="M16 16 a12 12 0 0 1 12 12" />
+                        </g>
+                        <g class="wifi" stroke="var(--wifi-blue)" transform="translate(345,300)">
+                            <path d="M0 0 a24 24 0 0 1 24 24" />
+                            <path d="M7 7 a17 17 0 0 1 17 17" />
+                            <path d="M14 14 a10 10 0 0 1 10 10" />
+                        </g>
+                        <g class="wifi" stroke="var(--wifi-green)" transform="translate(430,250)">
+                            <path d="M0 0 a26 26 0 0 1 26 26" />
+                            <path d="M7 7 a19 19 0 0 1 19 19" />
+                            <path d="M14 14 a12 12 0 0 1 12 12" />
+                        </g>
+                        <g class="wifi" stroke="var(--wifi-pink)" transform="translate(610,300)">
+                            <path d="M0 0 a24 24 0 0 1 24 24" />
+                            <path d="M7 7 a17 17 0 0 1 17 17" />
+                            <path d="M14 14 a10 10 0 0 1 10 10" />
+                        </g>
+                        <g class="wifi" stroke="var(--wifi-yellow)" transform="translate(845,260)">
+                            <path d="M0 0 a26 26 0 0 1 26 26" />
+                            <path d="M7 7 a19 19 0 0 1 19 19" />
+                            <path d="M14 14 a12 12 0 0 1 12 12" />
+                        </g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
