@@ -366,7 +366,7 @@ section[data-id="swarm"] p {
 .venue {
     padding: 1rem;
     margin: 1rem auto;
-    color: #fff;
+
     text-align: left;
 }
 
@@ -382,12 +382,13 @@ section[data-id="swarm"] p {
     text-align: center;
     font-style: italic;
     margin-bottom: 2rem;
+    color: var(--text-strong);
 }
 
 .venue h3 {
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
-    color: var(--color-neon, #0ff);
+    color: var(--color-neon, rgb(0, 162, 255));
 }
 
 .venue ul {
