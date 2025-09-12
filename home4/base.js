@@ -4,6 +4,31 @@
 const sections = [...document.querySelectorAll(".main-sections section")];
 const headers = sections.map(s => s.querySelector(".section-header"));
 
+// Create a horizontal tabs bar for inactive section headers
+const mainContainer = document.querySelector('.main-sections');
+let tabsBar = document.querySelector('.section-tabs');
+if (!tabsBar && mainContainer) {
+    tabsBar = document.createElement('nav');
+    tabsBar.className = 'section-tabs';
+    // insert as the first child of the main sections stack
+    mainContainer.insertBefore(tabsBar, mainContainer.firstChild);
+}
+
+// Move header elements into the tabs bar so they lay out horizontally
+if (tabsBar) {
+    headers.forEach((h, i) => {
+        if (!h) return;
+        // propagate the section's color-* class to the header so CSS vars remain
+        const sec = sections[i];
+        if (sec) {
+            [...sec.classList].forEach(cls => {
+                if (cls.startsWith('color-')) h.classList.add(cls);
+            });
+        }
+        if (h.parentElement !== tabsBar) tabsBar.appendChild(h);
+    });
+}
+
 let index = 0;
 const SWIPE_THRESHOLD = 30;
 
@@ -107,6 +132,10 @@ function setActive(i) {
     index = next;
     const el = sections[index];
     el.classList.add("active");
+    // Reflect active state on tabs (headers moved to the tabs bar)
+    headers.forEach(h => h && h.classList.remove('active'));
+    const activeHeader = headers[index];
+    if (activeHeader) activeHeader.classList.add('active');
     dispatch("section:activate", { id: el.dataset.id, el });
     // Now spin up effects for this section
     FX.activateSection(el);

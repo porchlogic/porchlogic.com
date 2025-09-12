@@ -151,6 +151,19 @@ header h1 {
     min-height: 0;
 }
 
+/* Horizontal tabs bar holding inactive section headers */
+.section-tabs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px 10px;
+    padding: 4px 8px;
+    border-bottom: 1px solid #1f2937;
+    background: #111;
+    flex: 0 0 auto;
+    overflow-x: auto;
+}
+
 section {
     transition: flex-grow 0.35s ease;
     display: flex;
@@ -204,12 +217,27 @@ section.active .section-header h2 {
         0 0 15px var(--neon-color)
 }
 
+/* When headers live in the horizontal tabs bar, mirror the active styles */
+.section-tabs .section-header.active h2 {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 1px var(--neon-color),
+        0 0 2px var(--neon-color),
+        0 0 15px var(--neon-color);
+}
+
 
 
 section.active .section-header::after {
     visibility: visible;
     box-shadow:
         0 2px 3px var(--neon-color)
+}
+
+.section-tabs .section-header.active::after {
+    visibility: visible;
+    box-shadow:
+        0 2px 3px var(--neon-color);
 }
 
 
