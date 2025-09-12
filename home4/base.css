@@ -26,6 +26,8 @@
     --pulse: 0.5;
 
     --neon-color: #0ff;
+
+    --tabs-w: 32px;
 }
 .color-green {
     --neon-color: rgb(34, 186, 52);
@@ -119,6 +121,7 @@ a {
 
 strong {
     color: var(--text-strong);
+    font-size: larger;
 }
 
 header {
@@ -129,6 +132,7 @@ header {
     top: 0;
     z-index: 1;
     flex: 0 0 auto;
+    margin-left: var(--tabs-w);
 }
 
 header h1 {
@@ -149,6 +153,10 @@ header h1 {
     flex-direction: column;
     flex: 1 1 auto;
     min-height: 0;
+    position: relative;
+    /* Reserve space for vertical tabs */
+    /* --tabs-w: 32px; */
+    padding-left: var(--tabs-w);
 }
 
 section {
@@ -156,6 +164,71 @@ section {
     display: flex;
     flex-direction: column;
     min-height: 0;
+}
+
+/* Left-side vertical tabs for inactive sections */
+.section-tabs {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--tabs-w);
+    display: grid;
+    grid-template-rows: repeat(var(--tab-count, 1), 1fr);
+    padding: 8px 4px;
+    box-sizing: border-box;
+    z-index: 2;
+}
+
+.section-tabs__item {
+    /* Evenly distributed rows via grid; keep items visually minimal */
+    width: 100%;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-sizing: border-box;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    user-select: none;
+}
+
+.section-tabs__item:hover { }
+
+.section-tabs__item.is-active { }
+
+.section-tabs__label {
+    /* Rotate text 90deg CCW by using vertical writing mode + 180deg flip */
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    line-height: 1;
+    color: var(--text-secondary);
+    text-align: center;
+    white-space: nowrap;
+    font-size: 1rem; /* match h2 base */
+}
+
+/* Neon-ish accent per-section using existing --neon-color */
+.section-tabs__item:focus-visible .section-tabs__label {
+    text-shadow:
+        0 0 1px var(--neon-color),
+        0 0 2px var(--neon-color),
+        0 0 15px var(--neon-color);
+}
+
+/* Active tab highlight: same glow and slightly larger text */
+.section-tabs__item.is-active .section-tabs__label {
+    /* color: var(--text-dark); */
+    color: var(--neon-color);
+    text-shadow:
+        0 0 1px var(--neon-color),
+        0 0 2px var(--neon-color),
+        0 0 15px var(--neon-color);
+    font-size: 1.5rem;
 }
 
 
@@ -166,6 +239,11 @@ section {
     padding: 4px 16px;
     cursor: pointer;
     user-select: none;
+}
+
+/* Do not show inline headers for inactive sections; use left tabs instead */
+.main-sections section:not(.active) .section-header {
+    display: none;
 }
 
 
@@ -207,7 +285,7 @@ section.active .section-header h2 {
 
 
 section.active .section-header::after {
-    visibility: visible;
+    visibility: hidden;
     box-shadow:
         0 2px 3px var(--neon-color)
 }
@@ -320,7 +398,8 @@ section[data-id="welcome"] p {
 
     /* Choose the limiting side of the parent */
     /* width: min(100cqw, calc(100cqh * (var(--w) / var(--h)))); */
-    width: min(100vw, calc(65vh * (var(--w) / var(--h))));
+    /* width: min(100vw, calc(75vh * (var(--w) / var(--h)))); */
+    width: min(100%, calc(130% * (var(--w) / var(--h))));
     height: auto;
 
     /* Optional cosmetics */

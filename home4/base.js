@@ -4,6 +4,32 @@
 const sections = [...document.querySelectorAll(".main-sections section")];
 const headers = sections.map(s => s.querySelector(".section-header"));
 
+// Build left-edge vertical tabs for inactive sections
+const mainContainer = document.querySelector('.main-sections');
+const tabsContainer = document.createElement('nav');
+tabsContainer.className = 'section-tabs';
+tabsContainer.style.setProperty('--tab-count', String(sections.length));
+
+// Create one tab per section
+const tabs = sections.map((section) => {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'section-tabs__item';
+    // Inherit the section's accent via its color-* class
+    for (const cls of section.classList) {
+        if (cls.startsWith('color-')) item.classList.add(cls);
+    }
+    const label = document.createElement('span');
+    label.className = 'section-tabs__label';
+    const h2 = section.querySelector('.section-header h2');
+    label.textContent = h2 ? h2.textContent : (section.dataset.id || '');
+    item.appendChild(label);
+    tabsContainer.appendChild(item);
+    return item;
+});
+
+mainContainer.prepend(tabsContainer);
+
 let index = 0;
 const SWIPE_THRESHOLD = 30;
 
@@ -102,6 +128,9 @@ function setActive(i) {
         dispatch("section:deactivate", { id: prevEl.dataset.id, el: prevEl });
         // Tell effects first so they can clean up before DOM classes change
         FX.deactivateSection(prevEl);
+        // Update tab states
+        const prevTab = tabs[index];
+        if (prevTab) prevTab.classList.remove('is-active');
     }
 
     index = next;
@@ -110,12 +139,19 @@ function setActive(i) {
     dispatch("section:activate", { id: el.dataset.id, el });
     // Now spin up effects for this section
     FX.activateSection(el);
+
+    // Mark the corresponding tab as active (hidden via CSS)
+    const activeTab = tabs[index];
+    if (activeTab) activeTab.classList.add('is-active');
 }
 
 function step(dir) { setActive(index + dir); }
 
-// Click headers
+// Click headers (inline active header)
 headers.forEach((h, i) => h && h.addEventListener("click", () => setActive(i)));
+
+// Click tabs (left rail)
+tabs.forEach((t, i) => t && t.addEventListener('click', () => setActive(i)));
 
 // Wheel
 window.addEventListener("wheel", (e) => {

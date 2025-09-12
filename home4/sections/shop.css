@@ -30,7 +30,7 @@
     display: flex;
     /* flex-wrap: wrap; */
     /* justify-content: center; */
-    gap: 2.5rem;
+    /* gap: 2.5rem; */
     width: 100%;
     max-width: 960px;
 }
@@ -38,7 +38,7 @@
 .version-card {
     background-color: #203c3b06;
     border-radius: 8px;
-    padding: 1.5rem;
+    /* padding: 1.5rem; */
     flex: 1 1 300px;
     display: flex;
     flex-direction: column;
@@ -46,6 +46,7 @@
     box-shadow: 0 0px 3px rgba(235, 235, 235, 0.2);
     width: 100%;
     max-width: 350px;
+    margin: 2rem;
 }
 
 .version-card__image img {
