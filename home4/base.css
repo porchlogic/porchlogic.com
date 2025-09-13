@@ -480,6 +480,14 @@ section[data-id="swarm"] p {
 }
 
 
+
+.contact {
+    display: flex;
+    flex-direction: column;
+}
+
+
+
 footer {
     color: var(--text-secondary);
 }
