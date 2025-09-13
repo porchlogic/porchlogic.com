@@ -1,0 +1,112 @@
+.versions {
+    padding: 2rem 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.versions__title {
+    font-size: 2rem;
+    margin-bottom: 0;
+    color: var(--text-primary);
+    font-family: "stealth57", sans-serif;
+}
+
+.versions__warning {
+    font-size: 1.25rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+}
+
+.versions__subnote {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.versions__cards {
+    display: flex;
+    /* flex-wrap: wrap; */
+    /* justify-content: center; */
+    /* gap: 2.5rem; */
+    width: 100%;
+    max-width: 960px;
+}
+
+.version-card {
+    background-color: #203c3b06;
+    border-radius: 8px;
+    /* padding: 1.5rem; */
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0px 3px rgba(235, 235, 235, 0.2);
+    width: 100%;
+    max-width: 350px;
+    margin: 2rem;
+}
+
+.version-card__image img {
+    width: 75%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.version-card__name {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    font-family: "stealth57";
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    /* border-bottom: 1px solid #374151; */
+    width: 100%;
+    text-align: center;
+}
+
+.version-card .btn {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.text-glow--yellow-subtle {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 1px var(--neonYellow),
+        0 0 2px var(--neonYellow),
+        0 0 4px var(--neonYellow);
+}
+
+.btn {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.btn--primary {
+    border: 2px solid var(--neonGreen);
+    background-color: rgba(6, 56, 117, 0.136);
+    color: rgb(149, 202, 231);
+    box-shadow: 0 2px 4px var(--neonBlue);
+}
+
+.btn--secondary {
+    border: 1px solid var(--neonGreen);
+    background-color: rgba(6, 56, 117, 0.136);
+    color: rgb(149, 202, 231);
+    /* box-shadow: 0 1px 3px var(--neonBlue); */
+}
+
+.btn--primary:hover {
+    background-color: var(--neonBlue);
+    color: black;
+    box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}

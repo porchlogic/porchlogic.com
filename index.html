@@ -1,289 +1,223 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
+
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Porch Logic</title>
-	<link rel="stylesheet" href="styles_new.css" />
-	<link rel="stylesheet" href="styles/hero.css" />
-	<link rel="stylesheet" href="styles/button.css" />
-	<link rel="stylesheet" href="styles/blurb.css" />
-	<link rel="stylesheet" href="styles/layout.css" />
-	<link rel="stylesheet" href="styles/versions.css" />
-	<link rel="stylesheet" href="styles/cart.css" />
-	<link rel="stylesheet" href="styles/poster.css" />
-	<link rel="stylesheet" href="styles/youtube_embed.css" />
-	<link rel="stylesheet" href="styles/newsletter.css" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
-	<script src="https://js.stripe.com/v3/"></script>
-	<script
-	type="module"
-	src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"
-	></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
+    <title>porchLogic</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <!-- Global layout -->
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="brand.css" />
+    <!-- Per-section styles -->
+    <link rel="stylesheet" href="sections/welcome.css" />
+    <link rel="stylesheet" href="sections/lineup.css" />
+    <link rel="stylesheet" href="sections/pulse.css" />
+    <link rel="stylesheet" href="sections/swarm.css" />
+    <link rel="stylesheet" href="sections/shop.css" />
+    <link rel="stylesheet" href="sections/venue.css" />
+
+    
 </head>
 
-<body onload="initPage();" >
-	<div id="header"></div>
-	<div class="main">
-		
-	</div>
+<body>
+    <header>
+        <!-- <h1 class="brand">porchLogic</h1> -->
+        <a href="/">
+            <h1 class="text-neonBlue">
+                <span class="text-neonGreen">p</span>
+                <span class="text-neonGreen">o</span>
+                <span class="text-neonGreen">r</span>
+                <span class="text-neonGrey">c</span>
+                <span class="text-neonGrey">h</span>
+        
+                <span class="text-neonWhite">L</span>
+                <span class="text-neonBlue">o</span>
+                <span class="text-neonYellow">g</span>
+                <span class="text-neonBlue">i</span>
+                <span class="text-neonWhite">c</span>
+            </h1>
+        </a>
+    </header>
 
+    <div class="main-sections" id="stack">
 
+        <section data-id="welcome" data-speed="14" class="color-green">
+            <div class="section-header">
+                <!-- <h2>Welcome</h2> -->
+            </div>
+            <div class="section-content fx-typeOut">
+                <p>Advanced</p>
+                <p>Cybernetic</p>
+                <p>Orchestrations</p>
+                <p>↓</p>
+            </div>
+        </section>
 
-	<!-- YouTube Embed -->
-		<div class="youtube-embed" id="youtube-container">
-			<!-- <iframe
-				id="youtube-iframe"
-				src="https://www.youtube.com/embed/MW2TUWE-rEE?si=oPPUH3aN-3PR7rs1&autoplay=1"
-				title="YouTube video player"
-				frameborder="0"
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-				referrerpolicy="strict-origin-when-cross-origin"
-				allowfullscreen
-			></iframe> -->
-			<iframe id="youtube-iframe" src="https://www.youtube.com/embed/FneHLxEG1Ww?si=DEf7Lgmd2POPQUd1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+        <section data-id="lineup" class="color-blue">
+            <div class="section-header">
+                <!-- <h2>Coming Up</h2> -->
+            </div>
+            <div class="section-content">
+                <div class="poster">
+                    <div class="poster__stage">
+                        <h3>System Rehearsal</h3>
+                        <p>Umday, Pertumber 16</p>
+                        <p>Lucky Lab?</p>
+                        <p>drum circle: 5:45pm</p>
+                        <p>roll-out: 6:15pm</p>
+                        <a href="http://troupe.porchlogic.com">👉 what you'll need</a>
+                        <img class="rider-group" src="/images/riders.png" alt="rider group" />
+                    </div>
+                </div>
+            </div>
+            
+        </section>
 
-			</iframe>
-		</div>
-	<div class="main">
+        <section data-id="pulse" class="color-red">
+            <div class="section-header">
+                <!-- <h2>Pulse</h2> -->
+            </div>
+            <!-- <a href="#" class="subheading-top">pulse.porchlogic.com</a> -->
+            <div class="section-content">
+                <p>Visit <a href="#">pulse.porchlogic.com</a> 
+                    to play along with the current performance and review the shared protocol.
+                </p>
 
-		
-		
-		<!-- <div class="poster">			
-			<div class="content">
-				<h2>mobile cyborg orchestrations</h2>
-			</div>
-		</div> -->
-		
-		
-		<div class="button-group">
-			<a href="https://discord.gg/PgeDHETwYq" class="social-button discord" target="_blank">
-				<i class="fa-brands fa-discord"></i> <span>Discord</span>
-			</a>
-			
-			<a href="https://www.twitch.tv/porchlogic" class="social-button twitch" target="_blank">
-				<i class="fa-brands fa-twitch"></i> <span>backstage</span>
-			</a>
-			<a href="https://www.youtube.com/@porchlogic" class="social-button youtube" target="_blank">
-				<p>^</p>
-				<i class="fa-brands fa-youtube"></i> <span>YouTube</span>
-			</a>
-			<a href="https://www.instagram.com/porchlogic" class="social-button instagram" target="_blank">
-				<i class="fa-brands fa-instagram"></i> <span>Instagram</span>
-			</a>
-			<a href="#hero" class="social-button shop">
-				<i class="fa fa-shopping-bag"></i> <span>Shop</span>
-			</a>
-		</div>
-	</div>
+            </div>
+        </section>
 
+        <section data-id="swarm" class="color-yellow">
+            <div class="section-header">
+                <!-- <h2>Swarm</h2> -->
+            </div>
+            <!-- <a href="#" class="subheading-top">swarm.porchlogic.com</a> -->
+            <div class="section-content">
+                <p>Visit <a href="https://swarm.porchlogic.com">swarm.porchlogic.com</a> 
+                    to create or join a group of portable speakers playing synchronized audio.</p>
 
+            </div>
+        </section>
 
-	<div class="main">			
-		<div id="poster">			
-		</div>
-	</div>
+        <section data-id="shop" class="color-pink">
+            <div class="section-header">
+                <!-- <h2>Shop</h2> -->
+            </div>
+            <div class="section-content">
+                <div class="versions__cards">
+                    <article class="version-card">
+                        <h3 class="version-card__name">_Device</h3>
+                        <div class="version-card__image">
+                            <img src="/images/smb1_1024x1024.png" alt="SMB1 Device Version">
+                        </div>
+                
+                        <!-- <button id="buy-smb1-default" class="btn btn--primary">Add to Cart</button> -->
+                        <div style="position: relative; text-align: center; margin-bottom: 1rem;">
+                            <button id="buy-smb1-default" class="btn btn--primary">Get in Touch</button>
+                            <p style="color: rgb(104, 203, 122);">
+                                $32
+                            </p>
+                        </div>
+                
+                
+                        <p>✔ connect your gear to the swarm</p>
+                        <br>
+                
+                    </article>
+                
+                    <article class="version-card">
+                        <h3 class="version-card__name">_Host</h3>
+                        <div class="version-card__image">
+                            <img src="/images/smb1_1024x1024.png" alt="SMB1 Host Version">
+                        </div>
+                
+                        <!-- <p style="margin: 0;">$32</p><button id="buy-smb1-host" class="btn btn--primary">Add to Cart</button> -->
+                        <div style="position: relative; text-align: center; margin-bottom: 1rem;">
+                            <button id="buy-smb1-host" class="btn btn--primary">Get in Touch</button>
+                            <p style="color: rgb(104, 203, 122);">
+                                $32
+                            </p>
+                        </div>
+                        <p>✔ connect your gear to the swarm</p>
+                        <br>
+                
+                    </article>
+                </div>
+            </div>
+        </section>
 
+        <section data-id="venue" class="color-grey">
+            <div class="section-header">
+                <!-- <h2>Venue</h2> -->
+            </div>
+            <div class="section-content">
+                <div class="venue">
+                    <p class="venue-tagline">The porchLogic Troupe is a mobile 3D sound system for street performances</p>
+                    
+                    <div class="venue-specs">
+                        <!-- <h3>1:</h3> -->
+                        <p><strong>1. </strong>Artists login to the secure portal at 
+                            <a href="backstage.porchlogic.com">backstage.porchlogic.com</a>
+                            to upload the individual components (stems) of their tracks. </p>
+                        <br>
+                        <!-- <h3>2:</h3> -->
+                        <p><strong>2. </strong>Each stem is assigned to a speaker type:</p>
+                        <p>[kick, snare, hats, bass, pads/chords, melody]</p>
+                        <br>
+                        <!-- <ul>
+                            <li><strong>Kick</strong></li>
+                            <li><strong>Snare</strong></li>
+                            <li><strong>Hats</strong></li>
+                            <li><strong>Bass</strong></li>
+                            <li><strong>Pads/Chords</strong></li>
+                            <li><strong>Melody</strong></li>
+                        </ul> -->
+                        <!-- <h3>3:</h3> -->
+                        <p><strong>3. </strong>The troupe riders select which types they want their speaker to play</p>
+                        <br>
+                        <!-- <h3>4:</h3> -->
+                        <p><strong>4. </strong>Artist name and link is displayed on the poster</p>
+                        <br>
+                    </div>
+                    
+                    <!-- <div class="venue-experience">
+                        <h3>Parameters</h3>
+                        <ul>
+                            <li><strong>Volume</strong></li>
+                            <li><strong>Speed</strong></li>
+                            <li><strong>Key/Scale</strong></li>
+                        </ul>
+                    </div> -->
+                
+                    <div class="venue-contact">
+                        <h3>Booking & Collabs</h3>
+                        <p><strong>Contact:</strong> <a href="mailto:booking@porchlogic.com">booking@porchlogic.com</a></p>
+                    </div>
+                </div>
 
-	<div class="main">		
+            </div>
+        </section>
 
-		<section class="blurb">
-			<h1 class="blurb__title text-neonPink">Advanced Cybernetic Orchestrations</h1>
-			<p>
-				Cruising the urban grid on electric wheels,
-				swarming with a 3d synchronized sound field.
-				Link up with SMB1:
-			</p>
-		</section>
-	
-	</div>
-
-	<section class="hero hero--smb1" id="hero">
-		<div class="hero__text">
-			<h2 class="hero__title">SMB1</h2>
-			<p class="hero__subtitle">connect to the audio swarm</p>
-			<div class="hero__button-group">
-				<a class="btn btn--primary" href="#versions">order now</a>
-				<!-- <p class="hero__note">delivery in Portland, OR</p> -->
-			</div>
-		</div>
-	</section>
-	
-
-
-
-	<div class="product">
-
-
-
-
-		
-		<section class="blurb">
-			<p>
-				The PorchLogic SMB1 lets you join or start <strong>wireless 3d audio swarms</strong>,
-				by connecting to your music gear (<strong>phones, synths, samplers, DAWs</strong>...
-				anything with USB MIDI) and linking your speaker output with every other SMB1 in the swarm.
-			</p>
-		</section>
-
-	
-		<section id="versions" class="versions">
-			<h2 class="versions__title">Pick Your Version</h2>
-			<h3 class="versions__warning text-glow--yellow-subtle">
-				<!-- <em>Get in touch for hand-delivery in Portland, OR.</em><br> -->
-				<em>Quantity pricing coming soon</em>
-			</h3>
-
-		
-			<div class="versions__cards">
-				<article class="version-card">
-					<h3 class="version-card__name">_Device</h3>
-					<div class="version-card__image">
-						<img src="images/smb1_1024x1024.png" alt="SMB1 Device Version">
-					</div>
-					
-					<!-- <button id="buy-smb1-default" class="btn btn--primary">Add to Cart</button> -->
-					<div style="position: relative; text-align: center; margin-bottom: 1rem;">
-						<button id="buy-smb1-default" class="btn btn--primary">Add to Cart</button>
-						<p style="
-							position: absolute;
-							top: 50%;
-							transform: translateY(-50%);
-							right: 50%;
-							transform: translateX(-200%) translateY(-50%);
-							color: rgb(104, 203, 122);
-							margin: 0 1rem 0 0;
-						">
-							$32
-						</p>
-					</div>
-
-
-					<p>✔ official badge case</p>
-					<p>✔ pre-flashed ESP32-S3</p>
-					<p>✔ easy over-the-air updates</p>
-					<p>✔ membership badge perks</p>
-					<p>---</p>
-					<p>✔ Connects to USB MIDI <strong>hosts</strong></p>
-					<p>⚡ Powered by left OR right USB port</p>
-					<br>
-					
-				</article>
-		
-				<article class="version-card">
-					<h3 class="version-card__name">_Host</h3>
-					<div class="version-card__image">
-						<img src="images/smb1_1024x1024.png" alt="SMB1 Host Version">
-					</div>
-					
-					<!-- <p style="margin: 0;">$32</p><button id="buy-smb1-host" class="btn btn--primary">Add to Cart</button> -->
-					 <div style="position: relative; text-align: center; margin-bottom: 1rem;">
-						<button id="buy-smb1-host" class="btn btn--primary">Add to Cart</button>
-						<p style="
-							position: absolute;
-							top: 50%;
-							transform: translateY(-50%);
-							right: 50%;
-							transform: translateX(-200%) translateY(-50%);
-							color: rgb(104, 203, 122);
-							margin: 0 1rem 0 0;
-						">
-							$32
-						</p>
-					</div>
-					<p>✔ official badge case</p>
-					<p>✔ pre-flashed ESP32-S3</p>
-					<p>✔ easy over-the-air updates</p>
-					<p>✔ membership badge perks</p>
-					<p>---</p>
-					<p>✔ Connects to USB MIDI <strong>devices</strong></p>
-					<p>⚡ Powered through left USB port, shares power to connected device</p>
-					<br>
-					
-				</article>
-			</div>
-		</section>
-
-		<section id="versions" class="versions">
-			<h2 class="versions__title">.Flashed your own device? </h2>
-
-			<p class="versions__subnote">Purchase a digital badge to show support and get:</p>
-		
-			<div class="versions__cards">
-				<article class="version-card">
-					<h3 class="version-card__name">activation code</h3>
-					<div class="version-card__image">
-						<img src="images/smb1_line-art.png" alt="SMB1 Device Version">
-					</div>
-					<div style="position: relative; text-align: center; margin-bottom: 1rem;">
-					<button id="buy-smb1-activation" class="btn btn--primary">Add to Cart</button>
-					<p style="
-												position: absolute;
-												top: 50%;
-												transform: translateY(-50%);
-												right: 50%;
-												transform: translateX(-200%) translateY(-50%);
-												color: rgb(104, 203, 122);
-												margin: 0 1rem 0 0;
-											">
-						$15
-					</p>
-				</div>
-					<p>✔ easy over-the-air updates</p>
-					<p>✔ membership badge features</p>
-					<br>
-					
-				</article>		
-
-			</div>
-		</section>
-
-		<!-- <section id="versions" class="versions">
-			<h2 class="versions__title">_</h2>
-
-			<p class="versions__subnote">Test Product</p>
-		
-			<div class="versions__cards">
-				<article class="version-card">
-					<h3 class="version-card__name">test product</h3>
-					<div class="version-card__image">
-						<img src="images/Shop_white.svg" alt="Test Product">
-					</div>
-					
-					<button id="buy-test-product" class="btn btn--primary">Add to Cart</button>
-					<p></p>
-
-					
-				</article>		
-
-			</div>
-		</section> -->
-		
-	
-
-	</div>
-
-
-	<div id="newsletter-container"></div>
-
-
-	
-	<div id="footer"></div>
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.2.12/marked.min.js"></script>
-	<script src="js/main.js"></script>
-
-	<script src="js/cart.js"></script>
-	
-<div id="cart-popup" class="cart-popup">
-    <div class="popup-content">
-        <p id="popup-message"></p>
-        <div class="popup-actions">
-            <a href="/cart.html" class="btn btn--secondary">Checkout</a>
-            <button class="btn btn--secondary" onclick="hideCartPopup()">Continue</button>
-        </div>
+        
     </div>
-</div>
+    <footer>
+        <p style="text-align: center;">© Porch Logic 2025</p>    
+    </footer>
 
+    <!-- Core behavior first -->
+    <script type="module" src="base.js"></script>
+
+    <!-- Per-section modules (self-contained, light) -->
+    <script type="module" src="sections/welcome.js" defer></script>
+    <script type="module" src="sections/lineup.js" defer></script>
+    <script type="module" src="sections/pulse.js" defer></script>
+    <script type="module" src="sections/swarm.js" defer></script>
+    <script type="module" src="sections/shop.js" defer></script>
+    <script type="module" src="sections/venue.js" defer></script>
 </body>
+
 </html>

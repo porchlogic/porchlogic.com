@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Porch Logic Retail Kiosk</title>
+    <link rel="stylesheet" href="test.css" />
+    <style>
+        header h1 {
+            display: inline-block;
+            padding: 0.5em 1em;
+            border-radius: 10px;
+            transition: box-shadow 0.05s ease;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="manifest" href="manifest.webmanifest">
+    <!-- iOS-only helpers (still useful) -->
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kiosk">
+</head>
+
+<body>
+
+    <header>
+        <a href="#">
+            <h1 class="font-stealth text-neonBlue text-4xl" id="glowHeading">
+                <span class="text-neonGrey">p</span>
+                <span class="text-neonGrey">o</span>
+                <span class="text-neonGreen">r</span>
+                <span class="text-neonGreen">c</span>
+                <span class="text-neonBlue">h</span>
+
+                <span class="text-neonBlue">L</span>
+                <span class="text-neonWhite">o</span>
+                <span class="text-neonWhite">g</span>
+                <span class="text-neonYellow">i</span>
+                <span class="text-neonYellow">c</span>
+            </h1>
+        </a>
+
+        <!-- <a href="#">
+            <h1 class="font-stealth text-4xl logo-word" id="glowHeading">
+                <span class="logo-letter">p</span>
+                <span class="logo-letter">o</span>
+                <span class="logo-letter">r</span>
+                <span class="logo-letter">c</span>
+                <span class="logo-letter">h</span>
+        
+                <span class="logo-letter">L</span>
+                <span class="logo-letter">o</span>
+                <span class="logo-letter">g</span>
+                <span class="logo-letter">i</span>
+                <span class="logo-letter">c</span>
+            </h1>
+        </a> -->
+
+
+        <h2><span class="text-neonGrey-subtle">Advanced Cybernetic Orchestrations</span></h2>
+    </header>
+
+    <div class="product">
+        <h3><span class="text-neonSubtle">Pulse<br>Modules</span></h3>
+        <p>alpha units</p>
+        <ul>
+            <li>⚙ membership keycard</li>
+            <li>⚙ live MIDI signal</li>
+            <li>❤ support porchLogic</li>
+        </ul>
+
+    </div>
+    <div class="edge-label left" aria-hidden="true">
+        <div class="price">$48</div>
+        <div>cyberPack<br>edtition</div>
+    </div>
+    <div class="edge-label right" aria-hidden="true">
+        <div class="price">$24</div>
+        <div>standard<br>edtition</div>
+    </div>
+
+    <script>
+        // Utility: simple smoothing to avoid flicker
+        function smooth(prev, next, alpha = 0.2) {
+            return prev + alpha * (next - prev);
+        }
+
+        let smoothed = 0;
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const analyser = audioContext.createAnalyser();
+                analyser.fftSize = 512;
+
+                const source = audioContext.createMediaStreamSource(stream);
+                source.connect(analyser);
+
+                const bins = new Uint8Array(analyser.frequencyBinCount);
+
+                function tick() {
+                    analyser.getByteFrequencyData(bins);
+
+                    // Focus on lows+low-mids for a stronger "beat" feel
+                    const start = 0;              // ~0 Hz
+                    const end = Math.min(32, bins.length); // ~< 1kHz region depending on sampleRate/fftSize
+
+                    let sum = 0;
+                    for (let i = start; i < end; i++) sum += bins[i];
+                    const avg = sum / (end - start);   // 0..255
+
+                    // Normalize & clamp (tune these if you want it punchier)
+                    const normalized = Math.min(1, avg / 140); // adjust 140 for sensitivity
+                    smoothed = smooth(smoothed, normalized, 0.15);
+
+                    // Map to a multiplier for shadow blur (min glow to strong glow)
+                    const pulse = 0.8 + smoothed * 2.2; // range ≈ 0.8..3.0
+
+                    document.documentElement.style.setProperty('--pulse', pulse.toFixed(3));
+
+                    requestAnimationFrame(tick);
+                }
+                tick();
+            })
+            .catch(err => {
+                console.error('Mic access error:', err);
+                // fallback: gentle idle pulse
+                let t = 0;
+                (function idle() {
+                    t += 0.03;
+                    const pulse = 1.2 + Math.sin(t) * 0.2;
+                    document.documentElement.style.setProperty('--pulse', pulse.toFixed(3));
+                    requestAnimationFrame(idle);
+                })();
+            });
+    </script>
+
+
+</body>
+
+</html>
