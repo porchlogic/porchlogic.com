@@ -27,7 +27,7 @@
 
     --neon-color: #0ff;
 
-    --tabs-w: 32px;
+    --tabs-w: 18px;
 }
 .color-green {
     --neon-color: rgb(34, 186, 52);
@@ -399,7 +399,7 @@ section[data-id="welcome"] p {
     /* Choose the limiting side of the parent */
     /* width: min(100cqw, calc(100cqh * (var(--w) / var(--h)))); */
     /* width: min(100vw, calc(75vh * (var(--w) / var(--h)))); */
-    width: min(100%, calc(130% * (var(--w) / var(--h))));
+    width: min(100%, calc(140% * (var(--w) / var(--h))));
     height: auto;
 
     /* Optional cosmetics */
