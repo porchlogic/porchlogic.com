@@ -413,7 +413,17 @@ section[data-id="welcome"] p {
 }
 
 .poster h3 {
-    font-size: 5cqw;
+    /* font-size: 5cqw; */
+    font-size: 5em;
+    margin-bottom: 0;
+    color: var(--neonGreen);
+}
+
+.poster p {
+    font-size: 1.5em;
+    line-height: 25%;
+    font-weight: lighter;
+    color: var(--text-secondary);
 }
 
 .poster img {
