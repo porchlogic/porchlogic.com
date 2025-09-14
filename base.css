@@ -98,6 +98,7 @@ body {
     font-family: "Share Tech Mono", monospace;
     background: #111;
     color: var(--text-primary);
+    font-size: 16px;
 }
 
 body {
@@ -414,9 +415,11 @@ section[data-id="welcome"] p {
 
 .poster h3 {
     /* font-size: 5cqw; */
-    font-size: 5em;
+    font-size: 5rem;
     margin-bottom: 0;
     color: var(--neonGreen);
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .poster p {
