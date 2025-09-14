@@ -436,7 +436,8 @@ section[data-id="welcome"] p {
 
 section[data-id="pulse"] p {
     font-size: 1.5em;
-    max-width: 25rem;
+    /* max-width: 25rem; */
+    padding: 10%;
     text-align: justify;
 }
 
@@ -449,8 +450,9 @@ section[data-id="pulse"] p {
 }
 
 section[data-id="swarm"] p {
+    padding: 10%;
     font-size: 1.5em;
-    max-width: 25rem;
+    /* max-width: 25rem; */
     text-align: justify;
 }
 
