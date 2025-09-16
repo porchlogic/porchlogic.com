@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<title>SMB1 Flasher</title>
+	<title>SMB1 Flasher + Serial Console</title>
 	<script type="module" src="https://unpkg.com/esp-web-tools@10.0.1/dist/web/install-button.js?module"></script>
 	<style>
 		:root {
@@ -12,6 +12,7 @@
 			--accent: #0af;
 			--accent-hover: #09c;
 			--border: #333;
+			--muted: #aaa;
 		}
 
 		* {
@@ -26,44 +27,63 @@
 			padding: 2em 1em;
 			display: flex;
 			justify-content: center;
-			align-items: center;
+			align-items: flex-start;
 			min-height: 100vh;
-			}
+		}
 
 		.container {
 			background: #1a1a1a;
 			padding: 2em;
 			border-radius: 12px;
 			width: 100%;
-			max-width: 400px;
+			max-width: 800px;
 			box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-			}
+		}
 
 		h1 {
-			font-size: 1.5em;
-			margin-bottom: 1em;
+			font-size: 1.6em;
+			margin: 0 0 1em;
 			text-align: center;
+		}
+
+		h2 {
+			font-size: 1.1em;
+			margin: 1.5em 0 .75em;
+		}
+
+		.row {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			gap: .75em;
+		}
+
+		.row>* {
+			min-width: 0;
 		}
 
 		label {
 			display: block;
-			margin-bottom: 1em;
+			font-size: .9em;
+			color: var(--muted);
+			margin-bottom: .35em;
 		}
 
 		select,
-		button {
+		button,
+		input[type="text"] {
 			width: 100%;
 			font-size: 1em;
-			padding: 0.75em;
+			padding: .7em .8em;
 			border-radius: 8px;
 			border: 1px solid var(--border);
 			background: #222;
 			color: var(--fg);
-			transition: background 0.2s;
+			transition: background .2s, border-color .2s;
 		}
 
 		select:focus,
-		button:focus {
+		button:focus,
+		input[type="text"]:focus {
 			outline: none;
 			border-color: var(--accent);
 		}
@@ -72,59 +92,313 @@
 			background: var(--accent);
 			color: #000;
 			cursor: pointer;
-			margin-top: 0.5em;
-			transition: background 0.2s;
 		}
 
 		button:hover {
 			background: var(--accent-hover);
 		}
 
+		button.ghost {
+			background: #222;
+			color: var(--fg);
+		}
+
+		button.ghost:hover {
+			background: #2a2a2a;
+		}
+
+		.controls {
+			display: flex;
+			gap: .5em;
+			flex-wrap: wrap;
+		}
+
+		.controls>* {
+			flex: 1 1 auto;
+		}
+
+		.terminal {
+			background: #000;
+			color: #e2e2e2;
+			font: 13px/1.45 Consolas, "SFMono-Regular", Menlo, Monaco, monospace;
+			border: 1px solid #222;
+			border-radius: 10px;
+			padding: .8em;
+			height: 360px;
+			overflow: auto;
+			white-space: pre-wrap;
+			word-break: break-word;
+		}
+
+		.muted {
+			color: var(--muted);
+			font-size: .9em;
+		}
+
+		.bar {
+			display: flex;
+			gap: .5em;
+			align-items: center;
+			flex-wrap: wrap;
+			margin: .75em 0;
+		}
+
+		.bar .spacer {
+			flex: 1;
+		}
+
+		.badge {
+			display: inline-block;
+			padding: .25em .5em;
+			border: 1px solid var(--border);
+			border-radius: 6px;
+			font-size: .85em;
+		}
+
+		details {
+			border-top: 1px solid var(--border);
+			margin-top: 1.5em;
+			padding-top: 1.5em;
+		}
+
+		details summary {
+			cursor: pointer;
+			user-select: none;
+		}
+
 		esp-web-install-button {
 			display: block;
-			margin-top: 1.5em;
+			margin-top: 1em;
 		}
 	</style>
 </head>
 
 <body>
 	<div class="container">
-		<h1>SMB1 Flasher</h1>
+		<h1>SMB1 Serial Console (and optional Flasher)</h1>
 
-		<label>
-			Select Variant:
-			<select id="variant">
-				<option value="">-- Choose one --</option>
-				<option value="N16R8">N16R8</option>
-				<option value="N8R2">N8R2</option>
-			</select>
-		</label>
+		<!-- SERIAL CONSOLE -->
+		<section>
+			<h2>Serial Console</h2>
+			<p class="muted">Read device logs over USB without flashing. Works best on Chrome/Edge via HTTPS or
+				localhost.</p>
 
-		<button id="prepare">Connect Device + Prepare Flashing</button>
+			<div class="row" style="margin-bottom:.75em;">
+				<div>
+					<label for="baud">Baud rate</label>
+					<select id="baud">
+						<option value="115200" selected>115200</option>
+						<option value="921600">921600</option>
+						<option value="460800">460800</option>
+						<option value="230400">230400</option>
+						<option value="57600">57600</option>
+						<option value="38400">38400</option>
+						<option value="19200">19200</option>
+						<option value="9600">9600</option>
+					</select>
+				</div>
+				<div>
+					<label>&nbsp;</label>
+					<button id="connect">Connect</button>
+				</div>
+				<div>
+					<label>&nbsp;</label>
+					<button id="disconnect" class="ghost" disabled>Disconnect</button>
+				</div>
+			</div>
 
-		<esp-web-install-button id="install" disabled></esp-web-install-button>
+			<div class="bar">
+				<label><input type="checkbox" id="timestamps" checked> Timestamps</label>
+				<label><input type="checkbox" id="autoscroll" checked> Auto-scroll</label>
+				<div class="spacer"></div>
+				<button id="clear" class="ghost">Clear</button>
+				<button id="saveLog">Save Log</button>
+			</div>
+
+			<div id="term" class="terminal" aria-live="polite"></div>
+
+			<div class="bar">
+				<span id="status" class="badge">Idle</span>
+				<div class="spacer"></div>
+				<span class="muted" id="hint"></span>
+			</div>
+		</section>
+
+		<!-- OPTIONAL FLASHER -->
+		<details>
+			<summary><strong>Optional:</strong> Flash firmware</summary>
+			<p class="muted">Use this if you actually want to install firmware. Not required for reading logs.</p>
+
+			<label style="margin-top: .75em;">
+				Select Variant:
+				<select id="variant">
+					<option value="">-- Choose one --</option>
+					<option value="N16R8">N16R8</option>
+					<option value="N8R2">N8R2</option>
+				</select>
+			</label>
+
+			<button id="prepare" style="margin-top:.5em;">Connect Device + Prepare Flashing</button>
+			<esp-web-install-button id="install" disabled></esp-web-install-button>
+		</details>
 	</div>
 
 	<script type="module">
-		document.getElementById('prepare').addEventListener('click', async () => {
-			const variant = document.getElementById('variant').value;
-			const installBtn = document.getElementById('install');
+		// ---------- Serial Console ----------
+		const el = (id) => document.getElementById(id);
+		const term = el('term');
+		const status = el('status');
+		const hint = el('hint');
+		const connectBtn = el('connect');
+		const disconnectBtn = el('disconnect');
+		const baudEl = el('baud');
+		const clearBtn = el('clear');
+		const saveBtn = el('saveLog');
+		const timestampsEl = el('timestamps');
+		const autoscrollEl = el('autoscroll');
 
+		let port = null;
+		let reader = null;
+		let readableStreamClosed = null;
+		let cancelRequested = false;
+		let lineBuffer = ""; // For timestamped line assembly
+
+		function setStatus(text, kind = "badge") {
+			status.textContent = text;
+		}
+		function setHint(text) { hint.textContent = text || ""; }
+		function appendToTerm(text) {
+			// If timestamps enabled, add one per line.
+			if (timestampsEl.checked) {
+				const parts = (lineBuffer + text).split(/\r?\n/);
+				// Keep last partial line in buffer
+				lineBuffer = parts.pop();
+				const now = () => {
+					const d = new Date();
+					const pad = (n, l = 2) => String(n).padStart(l, '0');
+					return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${pad(d.getMilliseconds(), 3)}`;
+				};
+				for (const line of parts) {
+					term.append(document.createTextNode(`[${now()}] ${line}\n`));
+				}
+			} else {
+				term.append(document.createTextNode(text));
+			}
+			if (autoscrollEl.checked) term.scrollTop = term.scrollHeight;
+		}
+		function clearTerm() {
+			term.textContent = "";
+			lineBuffer = "";
+		}
+
+		async function connectSerial() {
+			if (!('serial' in navigator)) {
+				alert("This browser doesn't support Web Serial. Try Chrome or Edge over HTTPS/localhost.");
+				return;
+			}
+			try {
+				setStatus("Requesting port…");
+				setHint("Grant USB permission to your device.");
+				port = await navigator.serial.requestPort();
+				const baudRate = parseInt(baudEl.value, 10) || 115200;
+
+				await port.open({ baudRate });
+				setStatus(`Connected @ ${baudRate} baud`);
+				setHint("Reading…");
+
+				connectBtn.disabled = true;
+				disconnectBtn.disabled = false;
+				baudEl.disabled = true;
+
+				// Setup text decoding pipeline
+				const textDecoder = new TextDecoderStream();
+				readableStreamClosed = port.readable.pipeTo(textDecoder.writable).catch(() => { });
+				reader = textDecoder.readable.getReader();
+
+				cancelRequested = false;
+				while (!cancelRequested) {
+					const { value, done } = await reader.read();
+					if (done) break;
+					if (value) appendToTerm(value);
+				}
+			} catch (err) {
+				console.error(err);
+				setStatus("Error");
+				setHint(err?.message || "Failed to connect/read.");
+			} finally {
+				await closeSerial();
+			}
+		}
+
+		async function closeSerial() {
+			try {
+				cancelRequested = true;
+				if (reader) {
+					try { await reader.cancel(); } catch { }
+					try { reader.releaseLock(); } catch { }
+					reader = null;
+				}
+				if (port) {
+					try { await port.close(); } catch { }
+				}
+			} finally {
+				port = null;
+				connectBtn.disabled = false;
+				disconnectBtn.disabled = true;
+				baudEl.disabled = false;
+				setStatus("Disconnected");
+				setHint("");
+			}
+		}
+
+		connectBtn.addEventListener('click', connectSerial);
+		disconnectBtn.addEventListener('click', closeSerial);
+		clearBtn.addEventListener('click', clearTerm);
+		saveBtn.addEventListener('click', () => {
+			const blob = new Blob([term.textContent], { type: "text/plain;charset=utf-8" });
+			const a = document.createElement('a');
+			a.href = URL.createObjectURL(blob);
+			a.download = `serial-log-${new Date().toISOString().replace(/[:.]/g, '-')}.txt`;
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+		});
+
+		// Auto reflect device connect/disconnect events
+		if ('serial' in navigator) {
+			navigator.serial.addEventListener('connect', () => setHint("Device connected."));
+			navigator.serial.addEventListener('disconnect', () => setHint("Device disconnected."));
+			// Optional: Auto-list previously granted ports and suggest connecting
+			(async () => {
+				const ports = await navigator.serial.getPorts();
+				if (ports.length) setHint("Previously authorized device detected. Click Connect.");
+			})();
+		}
+
+		window.addEventListener('beforeunload', async (e) => {
+			if (port) await closeSerial();
+		});
+
+		// ---------- Optional Flasher (unchanged behavior) ----------
+		const prepareBtn = document.getElementById('prepare');
+		const installBtn = document.getElementById('install');
+		const variantEl = document.getElementById('variant');
+
+		prepareBtn?.addEventListener('click', async () => {
+			const variant = variantEl.value;
 			if (!variant) return alert("Please select a variant.");
 
 			try {
-				// Request serial port access
+				// Request serial port access (lets the flasher grab the same port)
 				const port = await navigator.serial.requestPort();
 				await port.open({ baudRate: 115200 });
 				await port.close();
 
-				// Get a temporary token
-				const res = await fetch(`https://smb1-firmware.porchlogic.com/download/generate-token`, {
-					method: 'POST'
-				});
+				// Get token
+				const res = await fetch(`https://smb1-firmware.porchlogic.com/download/generate-token`, { method: 'POST' });
 				const { token } = await res.json();
 
-				// Get the manifest
+				// Get manifest
 				const manifestRes = await fetch(`https://smb1-firmware.porchlogic.com/download/${variant}/manifest.json`);
 				const manifest = await manifestRes.json();
 
@@ -136,16 +410,14 @@
 						part.path = url.toString();
 					}
 				}
-
 				const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
 				const manifestUrl = URL.createObjectURL(blob);
 
 				installBtn.manifest = manifestUrl;
 				installBtn.disabled = false;
-
 			} catch (err) {
-				alert("Failed to connect or prepare firmware.");
 				console.error(err);
+				alert("Failed to connect or prepare firmware.");
 			}
 		});
 	</script>
