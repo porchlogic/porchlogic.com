@@ -222,9 +222,9 @@ FX.register('typeOut', (el, { section }) => {
             for (let i = 0; i <= line.length; i++) {
                 if (cancelled) return;
                 p.textContent = line.slice(0, i);
-                await new Promise(r => setTimeout(r, 20));
+                await new Promise(r => setTimeout(r, 10));
             }
-            await new Promise(r => setTimeout(r, 20));
+            await new Promise(r => setTimeout(r, 10));
         }
     }
 
