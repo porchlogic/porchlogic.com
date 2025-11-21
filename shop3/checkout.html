@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+    <title>Checkout · Porch Logic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="./shop.css" />
+    <script src="https://js.stripe.com/basil/stripe.js"></script>
+</head>
+
+<body class="pl-body">
+    <header class="pl-header">
+        <div class="pl-header-left">
+            <h1>Checkout</h1>
+            <p class="pl-tagline">Secure payment powered by Stripe.</p>
+        </div>
+        <div class="pl-header-right">
+            <button class="button pl-cart-button" type="button" onclick="window.location.href='./index.html'">
+                <span>Back to shop</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="pl-checkout-layout">
+        <div class="pl-breadcrumb">
+            <a href="./index.html">Shop</a> · <span>Checkout</span>
+        </div>
+
+        <section id="checkout-empty" class="pl-panel" hidden>
+            <h2>Cart is empty</h2>
+            <p>Add an item first, then come back here to pay.</p>
+            <button class="button" type="button" onclick="window.location.href='./index.html'">
+                Return to shop
+            </button>
+        </section>
+
+        <section id="checkout-main" class="pl-checkout-grid" hidden>
+            <!-- Cart summary (read-only here) -->
+            <div class="pl-panel">
+                <h2>Order summary</h2>
+                <p>Review your items before payment.</p>
+
+                <table class="pl-cart-table" id="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th class="pl-cart-num">Qty</th>
+                            <th class="pl-cart-num">Price</th>
+                            <th class="pl-cart-num">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summary-items"></tbody>
+                </table>
+
+                <div class="pl-cart-total">
+                    <span>Items total (before tax & shipping)</span>
+                    <strong id="summary-total">$0.00</strong>
+                </div>
+
+                <p class="pl-payment-meta">
+                    Tax and shipping are calculated by Stripe after you enter your address.
+                </p>
+            </div>
+
+            <!-- Payment panel -->
+            <div class="pl-panel">
+                <h2>Payment</h2>
+                <p>Card details handled securely by Stripe. Porch Logic never sees your card number.</p>
+
+                <form id="payment-form">
+                    <div id="payment-element"></div>
+
+                    <div id="payment-loading" class="pl-alert pl-alert-info" style="margin-top:0.75rem;">
+                        <span class="pl-spinner" style="margin-right:0.4rem; vertical-align:middle;"></span>
+                        <span>Initializing secure payment form…</span>
+                    </div>
+
+                    <div id="payment-error" class="pl-alert pl-alert-error" style="display:none;"></div>
+
+                    <div class="pl-payment-footer">
+                        <button class="button" id="pay-button" type="submit" disabled>
+                            <span id="pay-button-label">Pay now</span>
+                        </button>
+                        <div class="pl-payment-meta">
+                            Stripe will redirect you back here after payment.<br />
+                            You’ll receive a receipt at the email you enter.
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pl-footer">
+        <p>Porch Logic · porchlogic.com</p>
+    </footer>
+
+    <script src="./cart-utils.js"></script>
+    <script src="./checkout.js"></script>
+</body>
+
+</html>

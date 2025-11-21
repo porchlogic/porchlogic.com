@@ -28,6 +28,9 @@ if (paymentFormEl) {
 // ---- main init ----
 
 async function initialize() {
+    console.log("🛒 Initializing checkout…");
+    console.log("🛒 Cart items (from sessionStorage):", getCartItems());
+
     const cartItems = getCartItems(); // from cart.js
 
     // If cart is empty, don't try to talk to Stripe at all
@@ -37,6 +40,8 @@ async function initialize() {
     }
 
     // Hit your existing backend exactly like before
+    console.log("➡️ Sending POST to /create-checkout-session:", JSON.stringify({ cartItems }, null, 2));
+
     const promise = fetch(`${THIS_API_BASE}/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
