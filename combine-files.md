@@ -1,764 +1,654 @@
 <!-- combine-files:
-home4/index.html
-home4/base.css
-home4/base.js
+cart.html
+js/cart.js
+js/checkout.js
 -->
 
 ---
 
 
 # Code Bundle
-> Generated 2025-09-05T12:04:57.240Z
+> Generated 2025-10-14T13:01:43.778Z
 
-### index.html
-**Path:** `home4/index.html`
+### cart.html
+**Path:** `cart.html`
 
 ```html
-<!doctype html>
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
-    <title>porchLogic</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-
-    <!-- Global layout -->
-    <link rel="stylesheet" href="base.css" />
-    <link rel="stylesheet" href="brand.css" />
-    <!-- Per-section styles -->
-    <link rel="stylesheet" href="sections/welcome.css" />
-    <link rel="stylesheet" href="sections/lineup.css" />
-    <link rel="stylesheet" href="sections/pulse.css" />
-    <link rel="stylesheet" href="sections/swarm.css" />
-    <link rel="stylesheet" href="sections/shop.css" />
-    <link rel="stylesheet" href="sections/venue.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Cart - Porch Logic</title>
+    <link rel="stylesheet" href="styles_new.css" />
+    <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/cart.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- <script src="https://js.stripe.com/v3/"></script> -->
+    <script src="https://js.stripe.com/basil/stripe.js"></script>
+    <style>
+        .item-error-message {
+            color: #f66;
+            font-size: 0.9em;
+            margin-top: 6px;
+        }
+    </style>
 </head>
-
 <body>
-    <header>
-        <!-- <h1 class="brand">porchLogic</h1> -->
-        <a href="/">
-            <h1 class="text-neonBlue text-4xl">
-                <span class="text-neonGreen">p</span>
-                <span class="text-neonGreen">o</span>
-                <span class="text-neonGreen">r</span>
-                <span class="text-neonGrey">c</span>
-                <span class="text-neonGrey">h</span>
-        
-                <span class="text-neonWhite">L</span>
-                <span class="text-neonBlue">o</span>
-                <span class="text-neonYellow">g</span>
-                <span class="text-neonBlue">i</span>
-                <span class="text-neonWhite">c</span>
-            </h1>
-        </a>
-    </header>
+    <div id="header"></div>
 
-    <div class="main-sections" id="stack">
+    <div class="main">
+        <h1>Your Shopping Cart</h1>
+        <div id="cart-items-container">
+            <!-- Cart items will be rendered here by js/cart.js -->
+        </div>
+        <div class="cart-summary">
+            <h3>Total: <span id="cart-total">$0.00</span></h3>
+        </div>
 
-        <section data-id="welcome" data-speed="14" class="color-white">
-            <div class="section-header">
-                <h2 class="text-neon">Welcome</h2>
-            </div>
-            <div class="section-content fx-typeOut">
-                <p>Advanced</p>
-                <p>Cybernetic</p>
-                <p>Orchestrations</p>
-            </div>
-        </section>
+        <div class="payment-section">
+            <h2>Payment Information</h2>
+            <h3 class="warning text-glow--yellow-subtle">
+				<!-- <em>⚠ test mode, no transactions will be processed</em><br>
+                <em>Get in touch if you are in PDX!</em> -->
+			</h3>
+            <!-- <form id="payment-form">
+                <div id="card-element"></div>
+                <button id="submit" class="buy-button">Pay Now</button>
+                <div id="payment-message"></div>
+            </form> -->
 
-        <section data-id="lineup" class="color-blue">
-            <div class="section-header">
-                <h2 class="text-neon">Coming Up</h2>
-            </div>
-            <div class="section-content">
-                <div class="poster">
-                    <h3>System Rehearsal</h3>
-                    <p>Umday, Pertumber 16</p>
-                    <p>240 SE Clay St.</p>
-                    <p>roll-out 6:15pm</p>
-                    <a href="#">what you'll need</a>
-                    <img class="rider-group" src="/images/riders.png" alt="rider group" />
+            <form id="payment-form">
+                <h4>Email</h4>
+                <label>
+
+                    <input type="text" id="email" placeholder="you@example.com"
+                  /></label>
+
+                  <label style="display: flex; align-items: center; gap: 0.5em; margin-top: 0.5em; color: cornflowerblue;">
+                    <input type="checkbox" id="subscribe-checkbox" style="transform: scale(1.5);" />
+                    Subscribe to updates from Porch Logic
+                    </label>
+
+                    <br>
+
+                <!-- <h4>Billing Address</h4>
+                <div id="billing-address-element">
+                </div> -->
+                <h4>Shipping Address</h4>
+                <div id="shipping-address-element">
+                  <!--Stripe.js injects the Address Element-->
                 </div>
-            </div>
-            
-        </section>
-
-        <section data-id="pulse" class="color-red">
-            <div class="section-header">
-                <h2 class="text-neon">Pulse</h2>
-            </div>
-            <div class="section-content">
-                <p>pulse.porchlogic.com</p>
-                <p>our current song structure:</p>
-            </div>
-        </section>
-
-        <section data-id="swarm" class="color-yellow">
-            <div class="section-header">
-                <h2 class="text-neon">Swarm</h2>
-            </div>
-            <div class="section-content">
-                <h3>join the porchLogic swarm:</h3>
-                <a href="#">swarm.porchlogic.com/main</a>
-                <br>
-                <h3>or create your own swarm:</h3>
-                <a href="#">swarm.porchlogic.com</a>
-            </div>
-        </section>
-
-        <section data-id="shop" class="color-green">
-            <div class="section-header">
-                <h2 class="text-neon">Shop</h2>
-            </div>
-            <div class="section-content">
-                <div class="product-card">
-                    <h3>SMB1</h3>
-                </div>
-                <div class="product-card">
-                    <h3>SMB1 founders edition</h3>
-                </div>
-            </div>
-        </section>
-
-        <section data-id="venue" class="color-grey">
-            <div class="section-header">
-                <h2 class="text-neon">Venue</h2>
-            </div>
-            <div class="section-content">
-                <div class="venue">
-                    <p class="venue-tagline">A mobile, distributed 3D sound system — carried by riders.</p>
-                
-                    <div class="venue-specs">
-                        <h3>System Specs</h3>
-                        <ul>
-                            <li><strong>Format:</strong> Networked speaker swarm (up to 20+ nodes)</li>
-                            <li><strong>Coverage:</strong> Expands to cover streets, plazas, clubs</li>
-                            <li><strong>Sync:</strong> Ultra-low latency MIDI clock + wireless link</li>
-                            <li><strong>Inputs:</strong> Standard DJ/mixer stereo line in (TRS / RCA)</li>
-                            <li><strong>Power:</strong> Self-powered nodes (battery / portable)</li>
-                        </ul>
-                    </div>
-                
-                    <div class="venue-experience">
-                        <h3>For Artists</h3>
-                        <ul>
-                            <li>Plug-and-play with your existing gear</li>
-                            <li>Audience fully immersed in a moving 3D soundscape</li>
-                            <li>Perfect for DJs, live PA, experimental sets</li>
-                            <li>Bring the underground into the open air</li>
-                        </ul>
-                    </div>
-                
-                    <div class="venue-contact">
-                        <h3>Booking & Collabs</h3>
-                        <p>We’re looking for DJs, live artists, and sonic explorers.</p>
-                        <p><strong>Contact:</strong> <a href="mailto:booking@porchlogic.net">booking@porchlogic.net</a></p>
-                    </div>
+                <h4>Payment</h4>
+                <div id="payment-element">
+                  <!--Stripe.js injects the Payment Element-->
                 </div>
 
-            </div>
-        </section>
+                <!-- <label for="public-key">Your SMB1 Device Public Key:</label>
+                <textarea id="public-key" rows="8" placeholder="Paste your public key here" style="width: 100%;"></textarea>
+                <p style="font-size: 0.9em; color: #888;">You can find this in your SMB1 device config page.</p> -->
 
-        
+                <button id="submit">
+                  <div class="spinner hidden" id="spinner"></div>
+                  <span id="button-text">Pay now</span>
+                </button>
+                <div id="payment-message" class="hidden"></div>
+            </form>
+
+        </div>
     </div>
-    <footer>
-        <p style="text-align: center;">© Porch Logic 2025</p>    
-    </footer>
 
-    <!-- Core behavior first -->
-    <script type="module" src="base.js"></script>
+    <div id="footer"></div>
 
-    <!-- Per-section modules (self-contained, light) -->
-    <script type="module" src="sections/welcome.js" defer></script>
-    <script type="module" src="sections/lineup.js" defer></script>
-    <script type="module" src="sections/pulse.js" defer></script>
-    <script type="module" src="sections/swarm.js" defer></script>
-    <script type="module" src="sections/shop.js" defer></script>
-    <script type="module" src="sections/venue.js" defer></script>
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/checkout.js"></script>
+    <script>
+        // Initialize the page elements like header and footer
+        initPage();
+
+        // Initialize Stripe Elements when the page is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ensure cart items are rendered before initializing Stripe
+            renderCartItems();
+            // Only initialize Stripe if there are items in the cart
+            // if (getCartItems().length > 0) {
+            //     initializeStripeElements(); // Call the function from js/cart.js
+            // }
+        });
+    </script>
 </body>
-
 </html>
 ```
 
-### base.css
-**Path:** `home4/base.css`
+### cart.js
+**Path:** `js/cart.js`
 
-```css
-:root {
-    /* Backgrounds */
-    --bg: #0e0e10;
-    --bg-light: #1a1a1d;
+```javascript
+// Cart data will be stored in Session Storage
+const CART_STORAGE_KEY = 'porchlogic_cart';
 
-    /* Text */
-    --text-primary: rgba(165, 181, 175, 0.954);
-    --text-strong: rgba(123, 220, 183, 0.954);
-    --text-secondary: rgb(94, 103, 107);
-    --text-dark: rgb(16, 16, 16);
-
-    /* Accent Colors */
-    --neonGreen: rgb(34, 186, 52);
-    --neonGrey: rgb(95, 94, 94);
-    --neonWhite: rgb(237, 237, 237);
-    --neonYellow: rgb(162, 254, 63);
-    --neonBlue: rgb(16, 111, 244);
-    --neonPurple: rgb(130, 80, 250);
-    --neonPink: rgb(248, 57, 117);
-    --neonRed: rgba(218, 22, 22, 0.886);
-
-    /* Borders / Shadows */
-    --border-color: #4b5563;
-    --shadow-color: rgba(0, 0, 0, 0.5);
-
-    --pulse: 0.5;
-
-    --neon-color: #0ff;
-}
-.color-green {
-    --neon-color: rgb(34, 186, 52);
-}
-.color-yellow {
-    --neon-color: rgb(162, 254, 63);
-}
-.color-white {
-    --neon-color: rgb(237, 237, 237);
-}
-.color-blue {
-    --neon-color: rgb(16, 111, 244);
-}
-.color-grey {
-    --neon-color: rgb(95, 94, 94);
-}
-.color-pink {
-    --neon-color: rgb(248, 57, 117);
+// Get cart items from Session Storage
+function getCartItems() {
+    const cartItemsString = sessionStorage.getItem(CART_STORAGE_KEY);
+    return cartItemsString ? JSON.parse(cartItemsString) : [];
 }
 
-.color-red {
-    --neon-color: rgba(218, 22, 22, 0.886);
-}
-.text-neon {
-    color: var(--text-dark);
-    text-shadow:
-        0 0 2px var(--neon-color);
-        0 0 5px var(--neon-color);
-}
-.text-neon-bright {
-    color: var(--text-dark);
-    text-shadow:
-        0 0 calc(2px * var(--pulse)) var(--neon-color),
-        0 0 calc(4px * var(--pulse)) var(--neon-color),
-        0 0 calc(6px * var(--pulse)) var(--neon-color),
-        0 0 calc(18px * var(--pulse)) var(--neon-color);
+// Save cart items to Session Storage
+function saveCartItems(cartItems) {
+    sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
 }
 
-.share-tech-mono-regular {
-    font-family: "Share Tech Mono", monospace;
-    font-weight: 400;
-    font-style: normal;
-}
-/* @font-face {
-    font-family: "stealth57";
-
-    src: url("/fonts/stealth57.ttf") format("truetype");
-
-    font-weight: normal;
-
-    font-style: normal;
-} */
-
-.font-stealth {
-    font-family: stealth57, sans-serif;
+// Add an item to the cart
+function addItemToCart(item) {
+    const cartItems = getCartItems();
+    // Check if item already exists in cart and update quantity if needed
+    const existingItemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
+    if (existingItemIndex > -1) {
+        cartItems[existingItemIndex].quantity += item.quantity || 1;
+    } else {
+        cartItems.push({ ...item, quantity: item.quantity || 1 });
+    }
+    saveCartItems(cartItems);
+    updateCartIconCount();
 }
 
-.text-4xl {
-    font-size: 2.75rem;
-    line-height: 2.5rem;
+// Remove an item from the cart (optional for basic flow)
+function removeItemFromCart(itemId) {
+    let cartItems = getCartItems();
+    cartItems = cartItems.filter(item => item.id !== itemId);
+    saveCartItems(cartItems);
+    updateCartIconCount();
+    // Re-render cart if on cart page
+    if (document.getElementById('cart-items-container')) {
+        renderCartItems();
+        window.location.reload();
+    }
 }
 
-html,
-body {
-    margin: 0;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    /* font-family: system-ui, sans-serif; */
-    font-family: "Share Tech Mono", monospace;
-    background: #111;
-    color: var(--text-primary);
+// Update the cart item count displayed in the header
+function updateCartIconCount() {
+    const cartItems = getCartItems();
+    const totalItems = cartItems.reduce((count, item) => count + item.quantity, 0);
+    const cartCountSpan = document.querySelector('.cart-count');
+    if (cartCountSpan) {
+        cartCountSpan.textContent = totalItems;
+    }
 }
 
-header {
-    background: #111;
-    text-align: center;
-    padding: 2px 6px;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    flex: 0 0 auto;
+// Render cart items on the cart page
+function renderCartItems(errorItemId = null, errorMessage = '') {
+    const cartItemsContainer = document.getElementById('cart-items-container');
+    if (!cartItemsContainer) return;
+
+    const cartItems = getCartItems();
+    cartItemsContainer.innerHTML = ''; // Clear current items
+
+    if (cartItems.length === 0) {
+        cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+        document.getElementById('cart-total').textContent = '$0.00';
+        // Disable payment form if cart is empty
+        const paymentForm = document.getElementById('payment-form');
+        if (paymentForm) {
+            paymentForm.style.display = 'none';
+        }
+        return;
+    }
+
+    const itemList = document.createElement('ul');
+    itemList.className = 'cart-item-list';
+
+    cartItems.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.className = 'cart-item';
+        listItem.setAttribute('data-cart-item-id', item.id);
+        listItem.innerHTML = `
+            <span>${item.name}</span>
+            <span>Qty: ${item.quantity}</span>
+            <span>$${(item.price * item.quantity).toFixed(2)}</span>
+            <button class="remove-item" data-item-id="${item.id}">Remove</button>
+        `;
+        itemList.appendChild(listItem);
+    });
+
+    cartItemsContainer.appendChild(itemList);
+    updateCartTotal();
+
+    // Add event listeners to remove buttons
+    cartItemsContainer.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const itemId = event.target.dataset.itemId;
+            removeItemFromCart(itemId);
+        });
+    });
+
+    // Show payment form if hidden
+    const paymentForm = document.getElementById('payment-form');
+    if (paymentForm) {
+        paymentForm.style.display = 'block';
+    }
+}
+// function renderCartItems() {
+// 	const cartItemsContainer = document.getElementById('cart-items-container');
+// 	if (!cartItemsContainer) return;
+
+// 	const cartItems = getCartItems();
+// 	cartItemsContainer.innerHTML = ''; // Clear current items
+
+// 	if (cartItems.length === 0) {
+// 		cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+// 		document.getElementById('cart-total').textContent = '$0.00';
+// 		// Disable payment form if cart is empty
+// 		const paymentForm = document.getElementById('payment-form');
+// 		if (paymentForm) {
+// 			paymentForm.style.display = 'none';
+// 		}
+// 		return;
+// 	}
+
+// 	const itemList = document.createElement('ul');
+// 	itemList.className = 'cart-item-list';
+
+// 	cartItems.forEach(item => {
+// 		if (item.id === 'smb1_activation') {
+// 			// Render each activation on a separate line
+// 			for (let i = 0; i < item.quantity; i++) {
+// 				const listItem = document.createElement('li');
+// 				listItem.className = 'cart-item';
+// 				listItem.innerHTML = `
+//                     <div>
+//                         <span>${item.name} #${i + 1}</span>
+//                         <span>$${item.price.toFixed(2)}</span>
+//                         <button class="remove-item" data-item-id="${item.id}">Remove</button>
+//                     </div>
+//                     <div class="activation-public-key" style="margin-top: 10px;">
+//                         <label for="public-key-${i}">Public Key for Activation #${i + 1}:</label>
+//                         <textarea id="public-key-${i}" rows="6" placeholder="Paste public key here" style="width: 100%;"></textarea>
+//                     </div>
+//                 `;
+// 				itemList.appendChild(listItem);
+// 			}
+// 		} else {
+// 			// Normal item
+// 			const listItem = document.createElement('li');
+// 			listItem.className = 'cart-item';
+// 			listItem.innerHTML = `
+// 				<span>${item.name}</span>
+// 				<span>Qty: ${item.quantity}</span>
+// 				<span>$${(item.price * item.quantity).toFixed(2)}</span>
+// 				<button class="remove-item" data-item-id="${item.id}">Remove</button>
+// 			`;
+// 			itemList.appendChild(listItem);
+// 		}
+// 	});
+
+// 	cartItemsContainer.appendChild(itemList);
+// 	updateCartTotal();
+
+// 	// Add event listeners to remove buttons
+// 	cartItemsContainer.querySelectorAll('.remove-item').forEach(button => {
+// 		button.addEventListener('click', (event) => {
+// 			const itemId = event.target.dataset.itemId;
+// 			removeItemFromCart(itemId);
+// 		});
+// 	});
+
+// 	// Show payment form if hidden
+// 	const paymentForm = document.getElementById('payment-form');
+// 	if (paymentForm) {
+// 		paymentForm.style.display = 'block';
+// 	}
+// }
+
+
+// Calculate and display the cart total
+function updateCartTotal() {
+    const cartItems = getCartItems();
+    const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const cartTotalElement = document.getElementById('cart-total');
+    if (cartTotalElement) {
+        cartTotalElement.textContent = `$${total.toFixed(2)}`;
+    }
 }
 
-.brand {
-    margin: 0;
-    font-size: 1.2rem;
+// Initialize cart on page load
+document.addEventListener('DOMContentLoaded', () => {
+    updateCartIconCount();
+    // If on the cart page, render the items
+    if (document.getElementById('cart-items-container')) {
+        renderCartItems();
+    }
+});
+
+// Add event listeners to "Add to Cart" buttons on index.html
+// This assumes this script is loaded on index.html
+document.addEventListener('DOMContentLoaded', () => {
+    const buySmb1DefaultButton = document.getElementById('buy-smb1-default');
+    if (buySmb1DefaultButton) {
+        buySmb1DefaultButton.addEventListener('click', () => {
+            // Define the item details for SMB1 Default
+            const smb1DefaultItem = {
+                id: 'smb1_default', // Unique ID for the item
+                name: 'SMB1 _Device',
+                price: 32.00 // Price as a number
+            };
+            addItemToCart(smb1DefaultItem);
+            showCartPopup(`${smb1DefaultItem.name} added to cart!`);
+        });
+    }
+
+    const buySmb1HostButton = document.getElementById('buy-smb1-host');
+    if (buySmb1HostButton) {
+        buySmb1HostButton.addEventListener('click', () => {
+            // Define the item details for SMB1 Host
+            const smb1HostItem = {
+                id: 'smb1_host', // Unique ID for the item
+                name: 'SMB1 _Host',
+                price: 32.00 // Price as a number
+            };
+            addItemToCart(smb1HostItem);
+            showCartPopup(`${smb1HostItem.name} added to cart!`);
+        });
+    }
+
+    const buySmb1ActivationButton = document.getElementById('buy-smb1-activation');
+    if (buySmb1ActivationButton) {
+        buySmb1ActivationButton.addEventListener('click', () => {
+            // Define the item details for SMB1 Host
+            const smb1ActivationItem = {
+                id: 'smb1_activation', // Unique ID for the item
+                name: 'SMB1 _Activate',
+                price: 15.00 // Price as a number
+            };
+            addItemToCart(smb1ActivationItem);
+            showCartPopup(`${smb1ActivationItem.name} added to cart!`);
+        });
+    }
+
+    const buyTestProductButton = document.getElementById('buy-test-product');
+    if (buyTestProductButton) {
+        buyTestProductButton.addEventListener('click', () => {
+            const TestProductItem = {
+                id: 'Test Product', // Unique ID for the item
+                name: 'Test Product',
+                price: 0.50 // Price as a number
+            };
+            addItemToCart(TestProductItem);
+            showCartPopup(`${TestProductItem.name} added to cart!`);
+        });
+    }
+});
+
+
+
+// Show the cart popup
+function showCartPopup(message) {
+    const cartPopup = document.getElementById('cart-popup');
+    const popupMessage = document.getElementById('popup-message');
+    if (cartPopup && popupMessage) {
+        popupMessage.textContent = message;
+        cartPopup.classList.add('visible');
+        // Automatically hide after a few seconds
+        // setTimeout(hideCartPopup, 5000); // Hide after 5 seconds
+    }
 }
 
-.main-sections {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-}
-
-section {
-    transition: flex-grow 0.35s ease;
-    display: flex;
-    flex-direction: column;
-}
-
-.section-header {
-    position: relative;
-    flex-shrink: 0;
-    padding: 4px 16px;
-    cursor: pointer;
-    user-select: none;
-}
-
-/* Neon underline tube */
-.section-header::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 4px;
-    /* sits just below the text */
-    height: 1px;
-    width: 100%;
-    /* collapsed by default */
-    background: var(--neon-color);
-    visibility: hidden;
-    /* neon cyan color */
-    box-shadow:
-        0 0 0px var(--neon-color),
-        0 0 0px var(--neon-color),
-        0 0 0px var(--neon-color);
-    transition: box-shadow 1.4s ease;
-}
-
-/* Grow to text width by default */
-.section-header h2 {
-    display: inline-block;
-    position: relative;
-    margin-block-start: 0.1em;
-    margin-block-end: 0.1em;
-}
-
-
-
-section.active .section-header::after {
-    visibility: visible;
-    box-shadow:
-        0 0 1px var(--neon-color),
-        0 0 2px var(--neon-color),
-        0 0 3px var(--neon-color);
-}
-
-
-section.active {
-    flex-grow: 1;
-    /* background: #141414; */
-    text-align: center;
-}
-
-
-
-.section-content {
-    flex: 1;
-    display: none;
-    overflow: hidden;
-    flex-direction: column;
-    
-    justify-content: center;
-    /* horizontal center */
-    align-items: center;
-    /* vertical center */
-    width: 100%;
-    /* height: 100%; */
-    text-align: center;
-
-    min-width: 0;
-    /* avoid flex overflow */
-    min-height: 0;
-    container-type: size;
-}
-
-
-
-
-section.active .section-content {
-    display: flex;
-    flex-grow: 1;
-}
-
-
-
-/* Disable accordion/underline transitions during initial boot only */
-.no-anim section {
-    transition: none !important;
-}
-
-.no-anim .section-header::after,
-.no-anim .section-header h2::after {
-    transition: none !important;
-}
-
-
-/* Hidden by default so first paint never shows full text */
-.fx-typeOut p {
-    visibility: hidden;
-}
-
-/* JS will add .typing to the .fx-typeOut container right before drawing */
-.fx-typeOut.typing p {
-    visibility: visible;
-}
-
-
-section.active .section-content.fx-typeOut {
-    display: flex;
-    flex-direction: column;
-}
-
-section.active .section-content.fx-typeOut p {
-    /* visibility: visible; */
-    display: block;
-    /* ensure each line stays its own row */
-    white-space: pre;
-    /* preserves spaces while typing */
-    margin: 0 0 0.5em 0;
-}
-
-
-section[data-id="welcome"] p {
-    font-size: 2.5em;
-}
-
-
-.poster {
-    --w: 2;
-    /* poster width ratio  */
-    --h: 3;
-    /* poster height ratio */
-    aspect-ratio: var(--w) / var(--h);
-
-    /* Choose the limiting side of the parent */
-    width: min(100cqw, calc(100cqh * (var(--w) / var(--h))));
-    height: auto;
-
-    /* Optional cosmetics */
-    border-radius: 12px;
-    overflow: hidden;
-    /* demo visuals; remove if you have your own */
-    box-shadow: 0 0 0 1px hsl(0 0% 100% / .08) inset;
-    background: #0b0b0b;
-
-    margin-top: 1.0em;
-}
-
-.poster h3 {
-    font-size: 3em;
-}
-
-.poster img {
-    width: 100%;
-    margin-top:2em;
-}
-
-
-.venue {
-    padding: 1rem;
-    margin: 1rem auto;
-    color: #fff;
-    text-align: left;
-}
-
-.venue-title {
-    font-size: 2rem;
-    text-align: center;
-    margin-bottom: 0.5rem;
-    color: var(--color-neon, #0ff);
-    text-shadow: 0 0 10px var(--color-neon, #0ff);
-}
-
-.venue-tagline {
-    text-align: center;
-    font-style: italic;
-    margin-bottom: 2rem;
-}
-
-.venue h3 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--color-neon, #0ff);
-}
-
-.venue ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-.venue li {
-    margin: 0.25rem 0;
-}
-
-
-footer {
-    color: var(--text-secondary);
+// Hide the cart popup
+function hideCartPopup() {
+    const cartPopup = document.getElementById('cart-popup');
+    if (cartPopup) {
+        cartPopup.classList.remove('visible');
+    }
 }
 ```
 
-### base.js
-**Path:** `home4/base.js`
+### checkout.js
+**Path:** `js/checkout.js`
 
 ```javascript
-// base.js — section activation + generic effect hooks
+// This is your test publishable API key.
+const stripe = Stripe("pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr");
 
-// ------- Sections & navigation -------
-const sections = [...document.querySelectorAll(".main-sections section")];
-const headers = sections.map(s => s.querySelector(".section-header"));
+// const stripe = Stripe("pk_test_51J3mlbABTHjSuIhXEk8OMPk7CGOzeecUuo0Kr5B5vUa9vnHddxWrB4UqO3fGLM1WyXkexXJALAxNYXvRdwxiGYbN00BbssH1nY");
+const THIS_API_BASE = 'https://api.porchlogic.com';
+let checkout;
+initialize();
 
-let index = 0;
-const SWIPE_THRESHOLD = 30;
-
-function dispatch(name, detail) {
-    window.dispatchEvent(new CustomEvent(name, { detail }));
-}
-
-// ------- Minimal effect system -------
-// Usage in HTML:
-//   <section data-id="welcome" data-fx="sectionPulse">
-//     <div class="section-content" data-fx="typeOut sparkle"></div>
-//   </section>
-//
-// Or class form (equivalent):
-//   data-fx="typeOut"  <=>  class="fx-typeOut"
-//
-// Register effects below with FX.register('typeOut', (el, ctx)=>({...}))
-// where factory returns { activate(), deactivate() } (both optional).
-const FX = {
-    registry: new Map(),            // name -> factory(el, ctx) => {activate,deactivate}
-    instances: new WeakMap(),       // el -> Map<name, instance>
-
-    register(name, factory) {
-        this.registry.set(name, factory);
-    },
-
-    _parseNames(el) {
-        // Prefer data-fx="a b c", also support class="fx-a fx-b"
-        const set = new Set();
-        const data = el.dataset.fx;
-        if (data) data.split(/\s+/).filter(Boolean).forEach(n => set.add(n));
-        el.classList.forEach(cls => {
-            if (cls.startsWith('fx-')) set.add(cls.slice(3));
-        });
-        return [...set];
-    },
-
-    _getInstance(el, name, ctx) {
-        let perEl = this.instances.get(el);
-        if (!perEl) {
-            perEl = new Map();
-            this.instances.set(el, perEl);
-        }
-        if (!perEl.has(name)) {
-            const factory = this.registry.get(name);
-            if (!factory) return null; // unknown effect name: ignore silently
-            const instance = factory(el, ctx) || {};
-            perEl.set(name, instance);
-        }
-        return perEl.get(name);
-    },
-
-    _targetEls(sectionEl) {
-        // Section itself may have fx, plus any descendants with fx
-        const targets = [];
-        if (sectionEl.dataset.fx || [...sectionEl.classList].some(c => c.startsWith('fx-'))) {
-            targets.push(sectionEl);
-        }
-        sectionEl.querySelectorAll('[data-fx], [class*="fx-"]').forEach(el => targets.push(el));
-        return targets;
-    },
-
-    activateSection(sectionEl) {
-        const ctx = { section: sectionEl };
-        for (const el of this._targetEls(sectionEl)) {
-            for (const name of this._parseNames(el)) {
-                const inst = this._getInstance(el, name, ctx);
-                if (inst?.activate) inst.activate(ctx);
-            }
-        }
-    },
-
-    deactivateSection(sectionEl) {
-        if (!sectionEl) return;
-        const ctx = { section: sectionEl };
-        for (const el of this._targetEls(sectionEl)) {
-            const names = this._parseNames(el);
-            const perEl = this.instances.get(el);
-            if (!perEl) continue;
-            for (const name of names) {
-                const inst = perEl.get(name);
-                if (inst?.deactivate) inst.deactivate(ctx);
-            }
-        }
-    }
+const validateEmail = async (email) => {
+	const updateResult = await checkout.updateEmail(email);
+	const isValid = updateResult.type !== "error";
+	
+	return { isValid, message: !isValid ? updateResult.error.message : null };
 };
 
-// ------- Activation flow -------
-function setActive(i) {
-    const next = Math.max(0, Math.min(sections.length - 1, i));
-    if (next === index && sections[next].classList.contains("active")) return;
+document.querySelector("#payment-form").addEventListener("submit", handleSubmit);
 
-    const prevEl = sections[index];
-    if (prevEl) {
-        prevEl.classList.remove("active");
-        dispatch("section:deactivate", { id: prevEl.dataset.id, el: prevEl });
-        // Tell effects first so they can clean up before DOM classes change
-        FX.deactivateSection(prevEl);
-    }
+// Fetches a Checkout Session and captures the client secret
+//test
+async function initialize_old() {
+	const cartItems = getCartItems(); // from sessionStorage
+	// const publicKey = document.getElementById("public-key")?.value || "";
 
-    index = next;
-    const el = sections[index];
-    el.classList.add("active");
-    dispatch("section:activate", { id: el.dataset.id, el });
-    // Now spin up effects for this section
-    FX.activateSection(el);
+	const promise = fetch(`${THIS_API_BASE}/create-checkout-session`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ cartItems })
+	})
+	.then((r) => r.json())
+	.then((r) => r.clientSecret);
+
+	
+	const appearance = {
+		theme: 'night',
+	};
+	
+	checkout = await stripe.initCheckout({
+		fetchClientSecret: () => promise,
+		elementsOptions: { appearance },
+	});
+	
+	document.querySelector("#button-text").textContent = `Pay ${
+		checkout.session().total.total.amount
+	} now`;
+	
+	const emailInput = document.getElementById("email");
+	const emailErrors = document.getElementById("email-errors");
+	
+	emailInput.addEventListener("input", () => {
+		// Clear any validation errors
+		emailErrors.textContent = "";
+	});
+	
+	emailInput.addEventListener("blur", async () => {
+		const newEmail = emailInput.value;
+		if (!newEmail) {
+			return;
+		}
+		
+		const { isValid, message } = await validateEmail(newEmail);
+		if (!isValid) {
+			emailErrors.textContent = message;
+		}
+	});
+	
+	const paymentElement = checkout.createPaymentElement();
+	paymentElement.mount("#payment-element");
+	//   const billingAddressElement = checkout.createBillingAddressElement();
+	//   billingAddressElement.mount("#billing-address-element");
+	const shippingAddressElement = checkout.createShippingAddressElement();
+	shippingAddressElement.mount("#shipping-address-element");
 }
 
-function step(dir) { setActive(index + dir); }
+async function initialize() {
+	const cartItems = getCartItems(); // from sessionStorage
+	// const publicKey = document.getElementById("public-key")?.value || "";
 
-// Click headers
-headers.forEach((h, i) => h && h.addEventListener("click", () => setActive(i)));
+	const promise = fetch(`${THIS_API_BASE}/create-checkout-session`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ cartItems })
+	})
+	.then((r) => r.json())
+	// .then((r) => {
+	// 	console.log("Checkout session response:", r);
+	// 	return r.clientSecret;
+	// });
+	.then((r) => {
+		if (r.error === "InventoryError") {
+			showInventoryError(r.itemId, r.message);
+			throw new Error("Inventory error");
+		}
+		return r.clientSecret;
+	});
+	
+	
 
-// Wheel
-window.addEventListener("wheel", (e) => {
-    if (Math.abs(e.deltaY) < 10) return;
-    e.preventDefault();
-    step(e.deltaY > 0 ? 1 : -1);
-}, { passive: false });
+	
+	const appearance = {
+		theme: 'night',
+	};
+	
+	// checkout = await stripe.initCheckout({
+	// 	fetchClientSecret: () => promise,
+	// 	elementsOptions: { appearance },
+	// });
+	checkout = await stripe.initCheckout({
+		fetchClientSecret: async () => {
+			const res = await promise;
+			if (typeof res !== "string") {
+				console.error("🚫 Missing or invalid clientSecret:", res);
+				throw new Error("Checkout session creation failed");
+			}
+			return res;
+		},
+		elementsOptions: { appearance }
+	});
 
-// Touch swipe
-let startY = null;
-window.addEventListener("touchstart", (e) => { startY = e.touches[0].clientY; }, { passive: true });
-window.addEventListener("touchmove", (e) => { e.preventDefault(); }, { passive: false });
-window.addEventListener("touchend", (e) => {
-    if (startY == null) return;
-    const endY = (e.changedTouches[0] || e.touches[0]).clientY;
-    const dy = endY - startY;
-    if (Math.abs(dy) > SWIPE_THRESHOLD) step(dy < 0 ? 1 : -1);
-    startY = null;
-}, { passive: false });
+	
+	document.querySelector("#button-text").textContent = `Pay ${
+		checkout.session().total.total.amount
+	} now`;
+	
+	const emailInput = document.getElementById("email");
+	const emailErrors = document.getElementById("email-errors");
+	
+	emailInput.addEventListener("input", () => {
+		// Clear any validation errors
+		emailErrors.textContent = "";
+	});
+	
+	emailInput.addEventListener("blur", async () => {
+		const newEmail = emailInput.value;
+		if (!newEmail) {
+			return;
+		}
+		
+		const { isValid, message } = await validateEmail(newEmail);
+		if (!isValid) {
+			emailErrors.textContent = message;
+		}
+	});
+	
+	const paymentElement = checkout.createPaymentElement();
+	paymentElement.mount("#payment-element");
+	//   const billingAddressElement = checkout.createBillingAddressElement();
+	//   billingAddressElement.mount("#billing-address-element");
+	const shippingAddressElement = checkout.createShippingAddressElement();
+	shippingAddressElement.mount("#shipping-address-element");
+}
 
-// Keyboard
-window.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowDown" || e.key === "PageDown") step(1);
-    else if (e.key === "ArrowUp" || e.key === "PageUp") step(-1);
-    else if (e.key === "Home") setActive(0);
-    else if (e.key === "End") setActive(sections.length - 1);
-});
+async function handleSubmit(e) {
+	e.preventDefault();
+	setLoading(true);
 
-// start
-// setActive(0);
+	const email = document.getElementById("email").value;
+	const { isValid, message } = await validateEmail(email);
+	if (!isValid) {
+		showMessage(message);
+		setLoading(false);
+		return;
+	}
 
-// start: activate first section without any accordion animation on first paint
-document.documentElement.classList.add('no-anim');
-requestAnimationFrame(() => {
-    setActive(0); // runs FX.activateSection -> typeOut still animates
-    requestAnimationFrame(() => {
-        document.documentElement.classList.remove('no-anim');
-    });
-});
-
-
-// ------- Example reusable effects -------
-
-// 1) typeOut — types the text content of each <p> in sequence, preserving lines
-FX.register('typeOut', (el, { section }) => {
-    let cancelled = false;
-    let original = null;
-
-    function snapshot() {
-        if (original) return;
-        original = Array.from(el.querySelectorAll('p')).map(p => p.textContent);
-    }
-
-    async function animate() {
-        cancelled = false;
-        snapshot();
-
-        // 1) Clear while still invisible
-        el.querySelectorAll('p').forEach(p => p.textContent = '');
-
-        // 2) Reveal only when we're ready to type
-        el.classList.add('typing');
-
-        // 3) Type each line
-        for (let li = 0; li < original.length; li++) {
-            const line = original[li] || '';
-            const p = el.querySelectorAll('p')[li];
-            for (let i = 0; i <= line.length; i++) {
-                if (cancelled) return;
-                p.textContent = line.slice(0, i);
-                await new Promise(r => setTimeout(r, 30));
-            }
-            await new Promise(r => setTimeout(r, 80));
-        }
-    }
-
-    return {
-        activate() {
-            // Cancel any prior run and start fresh
-            cancelled = true;
-            // Start on next tick to let DOM/class changes settle
-            setTimeout(() => { animate(); }, 0);
-        },
-        deactivate() {
-            // Stop current animation and restore original text
-            cancelled = true;
-            el.classList.remove('typing');
-            if (original) {
-                el.querySelectorAll('p').forEach((p, i) => { p.textContent = original[i] || ''; });
-            }
-        }
-    };
-});
+	const subscribe = document.getElementById("subscribe-checkbox").checked;
+	if (subscribe) {
+		try {
+			await fetch(`${THIS_API_BASE}/newsletter-signup`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ email })
+			});
+		} catch (err) {
+			console.warn("Newsletter signup failed:", err);
+		}
+	}
 
 
-// 2) sparkle — “generic” example; gets the activated section via ctx.section
-FX.register('sparkle', (el, { section }) => {
-    let raf = null, t = 0;
 
-    function loop() {
-        // toy effect: pulse opacity; replace with your real sparkle logic
-        t += 0.02;
-        el.style.opacity = (0.85 + 0.15 * Math.sin(t)).toFixed(3);
-        raf = requestAnimationFrame(loop);
-    }
 
-    return {
-        activate() {
-            // You can use section if you need section-level context or lookups
-            // e.g., section.dataset.id to alter behavior per section
-            if (!raf) loop();
-        },
-        deactivate() {
-            if (raf) cancelAnimationFrame(raf);
-            raf = null;
-            el.style.opacity = '';
-        }
-    };
-});
 
+	// Proceed to confirm payment
+	const { error } = await checkout.confirm();
+
+	
+
+	if (error) {
+		showMessage(error.message);
+		setLoading(false);
+		return;
+	}
+
+	// (normal flow will redirect to return_url)
+}
+
+function showInventoryError(itemId, message) {
+	const itemRow = document.querySelector(`[data-cart-item-id="${itemId}"]`);
+	if (itemRow) {
+		const msg = document.createElement("div");
+		msg.className = "item-error-message";
+		msg.textContent = message;
+		itemRow.appendChild(msg);
+	}
+
+	// Disable the checkout form
+	const submitBtn = document.querySelector("#submit");
+	if (submitBtn) submitBtn.disabled = true;
+
+	const spinner = document.querySelector("#spinner");
+	if (spinner) spinner.classList.add("hidden");
+
+	const btnText = document.querySelector("#button-text");
+	if (btnText) {
+		btnText.classList.remove("hidden");
+		btnText.textContent = "Fix issues above";
+	}
+}
+
+
+// ------- UI helpers -------
+
+function showMessage(messageText) {
+	const messageContainer = document.querySelector("#payment-message");
+	
+	messageContainer.classList.remove("hidden");
+	messageContainer.textContent = messageText;
+	
+	setTimeout(function () {
+		messageContainer.classList.add("hidden");
+		messageContainer.textContent = "";
+	}, 4000);
+}
+
+// Show a spinner on payment submission
+function setLoading(isLoading) {
+	if (isLoading) {
+		// Disable the button and show a spinner
+		document.querySelector("#submit").disabled = true;
+		document.querySelector("#spinner").classList.remove("hidden");
+		document.querySelector("#button-text").classList.add("hidden");
+	} else {
+		document.querySelector("#submit").disabled = false;
+		document.querySelector("#spinner").classList.add("hidden");
+		document.querySelector("#button-text").classList.remove("hidden");
+	}
+}
 ```

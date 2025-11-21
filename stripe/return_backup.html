@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Payment Successful</title>
+	<link rel="stylesheet" href="../styles/base.css">
+	<link rel="stylesheet" href="../styles/text.css">
+	<link rel="stylesheet" href="/styles_new.css" />
+	<link rel="stylesheet" href="/styles/cart.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
+	<script src="/js/main.js"></script>
+</head>
+<body onload="initPage();" class="bg-bg text-white flex flex-col items-center justify-center h-screen">
+	<div class="main">
+	<div id="header"></div>
+
+	<h1 class="font-stealth text-4xl text-neonGreen">Thank You!</h1>
+	<p class="text-lg mt-4">Your purchase was successful.</p>
+
+	<p>Status: <span id="status"></span></p>
+	<p>Email: <span id="email"></span></p>
+
+	<div id="activation-section" style="display:none;">
+		<h3>Your Activation Code:</h3>
+		<!-- Codes will be inserted here -->
+	</div>
+	</div>
+
+	<script>
+		const urlParams = new URLSearchParams(window.location.search);
+		const sessionId = urlParams.get('session_id');
+
+		if (!sessionId) {
+			document.getElementById('status').textContent = 'No session ID found.';
+		} else {
+			fetch(`https://api.porchlogic.com/session-status?session_id=${sessionId}`)
+				.then(r => {
+					if (!r.ok) throw new Error(`HTTP error! Status: ${r.status}`);
+					return r.json();
+				})
+				.then(data => {
+					document.getElementById('status').textContent = data.status;
+					document.getElementById('email').textContent = data.customer_email;
+
+					console.log("✅ Clearing cart from sessionStorage after successful purchase.");
+					sessionStorage.removeItem("cart");
+
+					if (data.activation_codes && data.activation_codes.length > 0) {
+						const activationSection = document.getElementById('activation-section');
+						activationSection.innerHTML = '<h3>Your Activation Codes:</h3>';
+
+						data.activation_codes.forEach(code => {
+							const codeWrapper = document.createElement('div');
+							codeWrapper.style = 'margin-bottom: 10px; display: flex; align-items: center;';
+
+							const pre = document.createElement('pre');
+							pre.className = 'copy-code';
+							pre.style = 'font-size:1.5em; background:#eee; color:black; padding:10px; cursor:pointer; margin:0;';
+							pre.textContent = code;
+
+							const status = document.createElement('span');
+							status.style = 'margin-left:10px; color:limegreen; font-weight:bold; display:none;';
+							status.textContent = 'Copied!';
+
+							pre.addEventListener('click', function() {
+								navigator.clipboard.writeText(code)
+									.then(() => {
+										// Show subtle copied message
+										status.style.display = 'inline';
+										setTimeout(() => {
+											status.style.display = 'none';
+										}, 2000);
+									})
+									.catch(err => {
+										console.error('Failed to copy:', err);
+									});
+							});
+
+							codeWrapper.appendChild(pre);
+							codeWrapper.appendChild(status);
+							activationSection.appendChild(codeWrapper);
+						});
+
+						const helpText = document.createElement('p');
+						helpText.textContent = 'Click a code to copy it. Then paste it into your device config page.';
+						activationSection.appendChild(helpText);
+
+						activationSection.style.display = 'block';
+					}
+				})
+				.catch(err => {
+					console.error('Error fetching session status:', err);
+					document.getElementById('status').textContent = 'Error fetching session status.';
+				});
+
+				
+		}
+	</script>
+
+</body>
+</html>
