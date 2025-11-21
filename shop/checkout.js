@@ -1,75 +1,112 @@
 // Publishable Stripe API key (live)
 const stripe = Stripe("pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr");
 
-const THIS_API_BASE = 'https://api.porchlogic.com';
-let checkout;
+const THIS_API_BASE = "https://api.porchlogic.com";
+let checkout = null;
 
 // Kick off once this file is loaded (on cart page)
-initialize();
+initialize().catch(err => {
+    console.error("❌ Failed to initialize checkout:", err);
+});
+
+// ---- helpers that depend on checkout (guarded) ----
 
 const validateEmail = async (email) => {
+    if (!checkout) {
+        return { isValid: false, message: "Checkout not initialized yet." };
+    }
     const updateResult = await checkout.updateEmail(email);
     const isValid = updateResult.type !== "error";
     return { isValid, message: !isValid ? updateResult.error.message : null };
 };
 
-const paymentForm = document.querySelector("#payment-form");
-if (paymentForm) {
-    paymentForm.addEventListener("submit", handleSubmit);
+const paymentFormEl = document.querySelector("#payment-form");
+if (paymentFormEl) {
+    paymentFormEl.addEventListener("submit", handleSubmit);
 }
 
-// Fetch Checkout Session and initialize Custom Checkout UI
+// ---- main init ----
+
 async function initialize() {
     const cartItems = getCartItems(); // from cart.js
 
-    // If cart is empty, don't hit Stripe
+    // If cart is empty, don't try to talk to Stripe at all
     if (!cartItems || cartItems.length === 0) {
+        console.warn("🛒 No cart items, skipping checkout init.");
         return;
     }
 
+    // Hit your existing backend exactly like before
     const promise = fetch(`${THIS_API_BASE}/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cartItems })
-    })
-        .then((r) => r.json())
-        .then((r) => {
-            if (r.error === "InventoryError") {
-                showInventoryError(r.itemId, r.message);
-                throw new Error("Inventory error");
+    }).then(async (res) => {
+        let data = null;
+        try {
+            data = await res.json();
+        } catch (e) {
+            console.error("❌ Non-JSON response from /create-checkout-session:", e);
+            throw new Error("Server returned non-JSON response.");
+        }
+
+        // If HTTP status is not OK, surface and throw
+        if (!res.ok) {
+            console.error("❌ /create-checkout-session HTTP error:", res.status, data);
+
+            // Inventory special handling (matches your server.js)
+            if (data && data.error === "InventoryError") {
+                const msg = data.message || "Not enough inventory.";
+                showInventoryError(data.itemId, msg);
+                showMessage(msg);
+                throw new Error(msg);
             }
-            return r.clientSecret;
-        });
 
-    const appearance = {
-        theme: 'night',
-    };
+            const msg =
+                (data && (data.message || data.error)) ||
+                "Checkout session failed. Please try again.";
 
+            showMessage(msg);
+            throw new Error(msg);
+        }
+
+        // Happy path: ensure clientSecret exists
+        if (!data || typeof data.clientSecret !== "string") {
+            console.error("❌ No clientSecret in successful response:", data);
+            showMessage("Checkout session error. Please try again or contact support.");
+            throw new Error("Missing clientSecret");
+        }
+
+        return data.clientSecret;
+    });
+
+    const appearance = { theme: "night" };
+
+    // Hand the promise to Stripe's Custom Checkout
     checkout = await stripe.initCheckout({
-        fetchClientSecret: async () => {
-            const clientSecret = await promise;
-            if (typeof clientSecret !== "string") {
-                console.error("🚫 Missing or invalid clientSecret:", clientSecret);
-                throw new Error("Checkout session creation failed");
-            }
-            return clientSecret;
-        },
+        fetchClientSecret: () => promise,
         elementsOptions: { appearance }
     });
 
-    // Update button label with Stripe’s computed total
+    // Update button label with Stripe’s computed total, if available
     const btnTextNode = document.querySelector("#button-text");
     if (btnTextNode) {
-        const session = checkout.session();
-        if (session && session.total && session.total.total && typeof session.total.total.amount === "number") {
-            const amountCents = session.total.total.amount;
-            const amountDollars = (amountCents / 100).toFixed(2);
-            btnTextNode.textContent = `Pay $${amountDollars}`;
-        } else {
+        try {
+            const session = checkout.session();
+            const amountCents = session?.total?.total?.amount;
+            if (typeof amountCents === "number") {
+                const amountDollars = (amountCents / 100).toFixed(2);
+                btnTextNode.textContent = `Pay $${amountDollars}`;
+            } else {
+                btnTextNode.textContent = "Pay";
+            }
+        } catch (e) {
+            console.warn("⚠️ Could not read checkout.session().total:", e);
             btnTextNode.textContent = "Pay";
         }
     }
 
+    // Email validation wiring
     const emailInput = document.getElementById("email");
     const emailErrors = document.getElementById("email-errors");
 
@@ -83,7 +120,7 @@ async function initialize() {
             if (!newEmail) return;
 
             const { isValid, message } = await validateEmail(newEmail);
-            if (!isValid) {
+            if (!isValid && message) {
                 emailErrors.textContent = message;
             }
         });
@@ -97,22 +134,33 @@ async function initialize() {
     shippingAddressElement.mount("#shipping-address-element");
 }
 
+// ---- submit handler ----
+
 async function handleSubmit(e) {
     e.preventDefault();
-    if (!checkout) return;
+
+    if (!checkout) {
+        showMessage("Checkout is not ready yet. Please reload the page.");
+        return;
+    }
 
     setLoading(true);
 
-    const email = document.getElementById("email").value;
+    const emailInput = document.getElementById("email");
+    const email = emailInput ? emailInput.value : "";
+
     const { isValid, message } = await validateEmail(email);
     if (!isValid) {
-        showMessage(message);
+        if (message) showMessage(message);
         setLoading(false);
         return;
     }
 
-    const subscribe = document.getElementById("subscribe-checkbox").checked;
-    if (subscribe) {
+    // Newsletter opt-in
+    const subscribeCheckbox = document.getElementById("subscribe-checkbox");
+    const subscribe = subscribeCheckbox ? subscribeCheckbox.checked : false;
+
+    if (subscribe && email) {
         try {
             await fetch(`${THIS_API_BASE}/newsletter-signup`, {
                 method: "POST",
@@ -124,6 +172,7 @@ async function handleSubmit(e) {
         }
     }
 
+    // Confirm with Stripe
     const { error } = await checkout.confirm();
 
     if (error) {
@@ -132,10 +181,11 @@ async function handleSubmit(e) {
         return;
     }
 
-    // Normal flow redirects to return_url handled by your existing /stripe/return.html
+    // On success, Stripe will redirect to YOUR_DOMAIN/stripe/return.html
 }
 
-// Inventory error helper (same pattern as old version)
+// ---- inventory + UI helpers ----
+
 function showInventoryError(itemId, message) {
     const itemRow = document.querySelector(`[data-cart-item-id="${itemId}"]`);
     if (itemRow) {
@@ -157,8 +207,6 @@ function showInventoryError(itemId, message) {
         btnText.textContent = "Fix issues above";
     }
 }
-
-// ------- UI helpers -------
 
 function showMessage(messageText) {
     const messageContainer = document.querySelector("#payment-message");
