@@ -24,165 +24,215 @@
         <h1>Your cart</h1>
 
         <section class="cart-layout">
+            <!-- Full-width cart panel only -->
             <div class="cart-panel card">
                 <h2>Items</h2>
                 <div id="cart-items-container" class="cart-items"></div>
+
                 <div class="cart-summary">
                     <span>Total</span>
                     <strong id="cart-total">$0.00</strong>
                 </div>
+
                 <div class="cart-actions">
                     <a href="./index.html" class="button">Continue shopping</a>
-                </div>
-            </div>
-
-            <div class="checkout-panel card">
-                <h2>Checkout</h2>
-                <p class="small-note">
-                    All payments handled by Stripe. We don’t see your card details.
-                </p>
-
-                <form id="payment-form">
-                    <div class="form-section">
-                        <label for="email">Email</label>
-                        <input id="email" type="email" autocomplete="email" required />
-                        <div id="email-errors" class="field-error"></div>
-                    </div>
-
-                    <div class="form-section">
-                        <label>
-                            <input type="checkbox" id="subscribe-checkbox" />
-                            <span>Keep me in the loop about future Porch Logic experiments.</span>
-                        </label>
-                    </div>
-
-                    <div class="form-section">
-                        <label>Shipping address</label>
-                        <div id="shipping-address-element" class="stripe-element"></div>
-                    </div>
-
-                    <div class="form-section">
-                        <label>Payment</label>
-                        <div id="payment-element" class="stripe-element"></div>
-                    </div>
-
-                    <div id="payment-message" class="payment-message hidden"></div>
-
-                    <button id="submit" class="button button-primary" type="submit">
-                        <span id="spinner" class="spinner hidden"></span>
-                        <span id="button-text">Pay</span>
+                    <button id="go-to-checkout" class="button button-primary" type="button">
+                        Checkout
                     </button>
-                </form>
-
-                <p class="small-note">
-                    After payment, you’ll be redirected back to Porch Logic to confirm everything
-                    worked.
-                </p>
+                </div>
             </div>
         </section>
     </main>
 
-    <style>
-        #pixel-grid {
-            display: grid;
-            grid-template-rows: repeat(8, 1fr);
-            gap: 2px;
-            width: 320px;
-            padding: 8px;
-            background: #222;
-        }
     
-        .pixel-row {
-            display: grid;
-            grid-template-columns: repeat(32, 1fr);
-            gap: 2px;
-        }
     
-        .pixel {
-            width: 10px;
-            height: 10px;
-            cursor: pointer;
-            background: white;
-            border-radius: 2px;
-            transition: background 0.15s;
-        }
-    </style>
-    
-    <div id="pixel-grid"></div>
+    <!-- <canvas id="mound-grid" width="640" height="240"
+        style="border:1px solid #444; width:100%; max-width:640px; display:block; margin:auto;">
+    </canvas>
+
+    <div style="text-align:center; margin-top:10px;">
+        <button id="mode-toggle" style="padding:6px 14px; font-size:16px; cursor:pointer;">
+            ON
+        </button>
+    </div>
     
     <script>
         (function () {
 
-            // Pixel states → background colors
-            const COLORS = {
-                0: "white",
-                0.5: "gray",
-                1: "black"
-            };
+            const ROWS = 8;
+            const COLS = 16;
+            const WIDTH = 640;
+            const HEIGHT = 240;
 
-            // Internal data: 8 rows × 32 columns
-            let gridData = Array.from({ length: 8 }, () =>
-                Array.from({ length: 32 }, () => 0)
+            let moundData = Array.from({ length: ROWS }, () =>
+                Array.from({ length: COLS }, () => 0)
             );
 
-            function cycleValue(v) {
-                if (v === 0) return 0.5;
-                if (v === 0.5) return 1;
-                return 0;
+            const canvas = document.getElementById("mound-grid");
+            const ctx = canvas.getContext("2d");
+            const toggleBtn = document.getElementById("mode-toggle");
+
+            let isDragging = false;
+            let dragButton = 0;  // 0 = left, 2 = right (right-click)
+            let changedThisDrag = new Set();
+            let mode = "ON";     // ON means left-click = add
+
+            toggleBtn.addEventListener("click", () => {
+                mode = (mode === "ON" ? "OFF" : "ON");
+                toggleBtn.innerText = mode;
+            });
+
+            function getHitInfo(x, y) {
+                const colWidth = WIDTH / COLS;
+                const rowHeight = HEIGHT / ROWS;
+
+                const col = Math.floor(x / colWidth);
+                const row = Math.floor(y / rowHeight);
+
+                if (row < 0 || row >= ROWS || col < 0 || col >= COLS) return null;
+                return { row, col };
             }
 
-            function renderGrid() {
-                const container = document.getElementById("pixel-grid");
-                container.innerHTML = "";
+            function applyAction(row, col, button) {
+                const key = `${row}:${col}`;
+                if (changedThisDrag.has(key)) return;
+                changedThisDrag.add(key);
 
-                gridData.forEach((row, rIdx) => {
-                    const rowDiv = document.createElement("div");
-                    rowDiv.className = "pixel-row";
+                let turnOn;
 
-                    row.forEach((value, cIdx) => {
-                        const cell = document.createElement("div");
-                        cell.className = "pixel";
-                        cell.style.background = COLORS[value];
+                if (mode === "ON") {
+                    // normal mode
+                    turnOn = (button === 0);   // left → on, right → off
+                } else {
+                    // inverted mode
+                    turnOn = (button === 2);   // right → on, left → off
+                }
 
-                        cell.addEventListener("click", () => {
-                            gridData[rIdx][cIdx] = cycleValue(gridData[rIdx][cIdx]);
-                            cell.style.background = COLORS[gridData[rIdx][cIdx]];
-                        });
-
-                        rowDiv.appendChild(cell);
-                    });
-
-                    container.appendChild(rowDiv);
-                });
+                moundData[row][col] = turnOn ? 1 : 0;
+                draw();
             }
 
-            // Public API
-            window.pixelGrid = {
-                getData: () => JSON.parse(JSON.stringify(gridData)),
-                setData: (newData) => {
-                    gridData = JSON.parse(JSON.stringify(newData));
-                    renderGrid();
+            function draw() {
+                ctx.clearRect(0, 0, WIDTH, HEIGHT);
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "#ccc";
+
+                const colWidth = WIDTH / COLS;
+                const rowHeight = HEIGHT / ROWS;
+
+                for (let r = 0; r < ROWS; r++) {
+                    const baseY = r * rowHeight + rowHeight / 2;
+
+                    ctx.beginPath();
+
+                    for (let c = 0; c < COLS; c++) {
+
+                        const h = moundData[r][c];
+                        const hNext = (c < COLS - 1) ? moundData[r][c + 1] : null;
+
+                        const x0 = c * colWidth;
+                        const x1 = x0 + colWidth;
+                        const midX = (x0 + x1) / 2;
+
+                        const yPeak = baseY - (h * (rowHeight * 0.35));
+
+                        if (c === 0)
+                            ctx.moveTo(x0, baseY);
+
+                        // plateau
+                        if (h === 1 && hNext === 1) {
+                            ctx.lineTo(x1, yPeak);
+                            continue;
+                        }
+
+                        // mound segment (ON)
+                        if (h === 1) {
+                            ctx.lineTo(midX, yPeak);  // up the left slope
+                            ctx.lineTo(x1, baseY);    // down the right slope
+                        }
+
+                        // flat segment (OFF)
+                        if (h === 0) {
+                            ctx.lineTo(x1, baseY);
+                        }
+                    }
+
+                    ctx.stroke();
+                }
+            }
+
+            function getCanvasCoords(evt) {
+                const rect = canvas.getBoundingClientRect();
+                return {
+                    x: (evt.clientX - rect.left) * (canvas.width / rect.width),
+                    y: (evt.clientY - rect.top) * (canvas.height / rect.height)
+                };
+            }
+
+            canvas.addEventListener("contextmenu", e => e.preventDefault());
+
+            canvas.addEventListener("mousedown", evt => {
+                isDragging = true;
+                dragButton = evt.button;
+                changedThisDrag.clear();
+
+                const { x, y } = getCanvasCoords(evt);
+                const hit = getHitInfo(x, y);
+                if (hit) applyAction(hit.row, hit.col, dragButton);
+            });
+
+            canvas.addEventListener("mousemove", evt => {
+                if (!isDragging) return;
+                const { x, y } = getCanvasCoords(evt);
+                const hit = getHitInfo(x, y);
+                if (hit) applyAction(hit.row, hit.col, dragButton);
+            });
+
+            canvas.addEventListener("mouseup", () => {
+                isDragging = false;
+                changedThisDrag.clear();
+            });
+            document.addEventListener("mouseup", () => {
+                isDragging = false;
+                changedThisDrag.clear();
+            });
+
+            // public API
+            window.moundGrid = {
+                getData: () => JSON.parse(JSON.stringify(moundData)),
+                setData: (d) => {
+                    moundData = JSON.parse(JSON.stringify(d));
+                    draw();
                 }
             };
 
-            renderGrid();
+            draw();
 
         })();
-    </script>
+    </script> -->
+
 
 
     <footer class="shop-footer">
         <p>Porch Logic &copy; <span id="year"></span></p>
     </footer>
 
-    <!-- Stripe.js v3 – latest (Basil or newer) -->
-    <script src="https://js.stripe.com/basil/stripe.js"></script>
+    <!-- No Stripe here anymore -->
     <script src="./cart.js"></script>
-    <script src="./checkout.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const y = document.getElementById("year");
             if (y) y.textContent = new Date().getFullYear();
+
+            const checkoutBtn = document.getElementById("go-to-checkout");
+            if (checkoutBtn) {
+                checkoutBtn.addEventListener("click", () => {
+                    // Only navigate if there are items
+                    const cartItems = getCartItems();
+                    if (!cartItems || cartItems.length === 0) return;
+                    window.location.href = "./checkout.html";
+                });
+            }
         });
     </script>
 </body>
