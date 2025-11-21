@@ -3,114 +3,107 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Porch Logic Shop</title>
+    <title>Porch Logic – Shop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="./shop.css" />
 </head>
 
-<body class="pl-body">
-    <header class="pl-header">
-        <div class="pl-header-left">
-            <h1>Porch Logic Shop</h1>
-            <p class="pl-tagline">Small, weird, carefully made things.</p>
-        </div>
-        <div class="pl-header-right">
-            <button class="button pl-cart-button" onclick="window.location.href='./checkout.html'">
+<body>
+    <header class="shop-header">
+        <a href="/" class="logo-link">Porch Logic</a>
+        <nav class="shop-nav">
+            <a href="./cart.html" class="cart-link">
                 <span>Cart</span>
-                <span class="pl-cart-pill">
-                    <span data-cart-count>0</span>
-                </span>
-            </button>
-        </div>
+                <span class="cart-count">0</span>
+            </a>
+        </nav>
     </header>
 
-    <main class="pl-main">
-        <section class="pl-products">
-            <!-- M8 Plate -->
-            <article class="card card-product" data-product-id="m8_plate_1">
+    <main class="shop-main">
+        <section class="hero">
+            <h1>Porch Logic Shop</h1>
+            <p>A minimal little storefront for things we’re building and iterating on.</p>
+        </section>
+
+        <section class="product-grid">
+            <article class="card card-product">
+                <header class="card-header">
+                    <h2>M8 Plate</h2>
+                    <p class="price">$32</p>
+                </header>
                 <div class="card-body">
-                    <h2 class="card-title">M8 Plate</h2>
-                    <p class="card-price">$32</p>
-                    <p class="card-subtitle">Custom 3D-printed faceplate for Dirtywave M8.</p>
-                    <ul class="card-details">
-                        <li>Includes one future upgrade at 50% off.</li>
-                        <li>Limited small-batch runs.</li>
-                        <li>Designed & printed by Porch Logic.</li>
+                    <p>
+                        Custom 3D-printed faceplate for the Dirtywave M8. Built to be used,
+                        iterated, and upgraded.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Includes one future upgrade at 50% off</li>
+                        <li>Designed and printed by Porch Logic</li>
+                        <li>We are always iterating on this</li>
                     </ul>
                 </div>
                 <footer class="card-footer">
-                    <div class="pl-product-qty">
-                        <label for="m8-qty">Qty</label>
-                        <input id="m8-qty" type="number" min="1" value="1" step="1" />
-                    </div>
-                    <button class="button button-product" data-add-to-cart data-product-id="m8_plate_1"
-                        data-product-name="M8 Plate" data-product-price="32">
+                    <button id="buy-m8-plate-1" class="button button-product">
                         Add to cart
                     </button>
                 </footer>
             </article>
 
-            <!-- SMB1 beta (coming soon) -->
-            <article class="card card-product card-disabled">
-                <div class="card-ribbon">Coming soon</div>
+            <article class="card card-product coming-soon">
+                <header class="card-header">
+                    <h2>SMB1 Beta</h2>
+                    <p class="price">Coming soon</p>
+                </header>
                 <div class="card-body">
-                    <h2 class="card-title">SMB1 beta</h2>
-                    <p class="card-price">TBD</p>
-                    <p class="card-subtitle">Wireless MIDI sync device for group rides.</p>
-                    <ul class="card-details">
-                        <li>ESP32-based mini cyber-pack.</li>
-                        <li>Designed for synchronized group music.</li>
-                        <li>Beta hardware in development.</li>
-                    </ul>
+                    <p>Experimental MIDI sync hardware for group performances and weird projects.</p>
+                    <p class="small-note">Not available yet – watch this space.</p>
                 </div>
                 <footer class="card-footer">
                     <button class="button button-product" disabled>
-                        Not yet available
+                        Coming soon
                     </button>
                 </footer>
             </article>
         </section>
-
-        <section class="pl-cart-summary">
-            <h2>Your cart</h2>
-            <div id="cart-empty" class="pl-cart-empty">
-                Cart is empty. Add an M8 Plate to get started.
-            </div>
-            <div id="cart-filled" class="pl-cart-filled" hidden>
-                <table class="pl-cart-table">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th class="pl-cart-num">Qty</th>
-                            <th class="pl-cart-num">Price</th>
-                            <th class="pl-cart-num">Subtotal</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="cart-items"></tbody>
-                </table>
-                <div class="pl-cart-footer">
-                    <div class="pl-cart-total">
-                        <span>Estimated total (before tax & shipping)</span>
-                        <strong id="cart-total">$0.00</strong>
-                    </div>
-                    <div class="pl-cart-actions">
-                        <button class="button" id="checkout-button" type="button"
-                            onclick="window.location.href='./checkout.html'">
-                            Go to checkout
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
-    <footer class="pl-footer">
-        <p>Porch Logic · Albuquerque, NM · porchlogic.com</p>
+    <div id="cart-popup" class="cart-popup">
+        <div class="cart-popup-inner card">
+            <p id="popup-message"></p>
+            <div class="cart-popup-actions">
+                <button class="button" onclick="hideCartPopup()">Keep browsing</button>
+                <a href="./cart.html" class="button button-primary">Go to cart</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="shop-footer">
+        <p>Porch Logic &copy; <span id="year"></span></p>
     </footer>
 
-    <script src="./cart-utils.js"></script>
-    <script src="./shop.js"></script>
+    <script src="./cart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Footer year
+            const y = document.getElementById("year");
+            if (y) y.textContent = new Date().getFullYear();
+
+            // M8 Plate buy button
+            const buyBtn = document.getElementById("buy-m8-plate-1");
+            if (buyBtn) {
+                buyBtn.addEventListener("click", () => {
+                    const item = {
+                        id: "m8_plate_1",       // MUST match PRICE_LOOKUP on the server
+                        name: "M8 Plate",
+                        price: 32.0,
+                        quantity: 1
+                    };
+                    addItemToCart(item);
+                    showCartPopup(`${item.name} added to cart.`);
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

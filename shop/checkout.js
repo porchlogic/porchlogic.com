@@ -1,222 +1,190 @@
-(function () {
-    "use strict";
+// Publishable Stripe API key (live)
+const stripe = Stripe("pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr");
 
-    const API_BASE = "https://api.porchlogic.com";
-    const STRIPE_PUBLISHABLE_KEY =
-        "pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr";
+const THIS_API_BASE = 'https://api.porchlogic.com';
+let checkout;
 
-    const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+// Kick off once this file is loaded (on cart page)
+initialize();
 
-    let checkout = null;       // like your old code
-    let payButton = null;
-    let payButtonLabel = null;
-    let errorBox = null;
-    let loadingBox = null;
+const validateEmail = async (email) => {
+    const updateResult = await checkout.updateEmail(email);
+    const isValid = updateResult.type !== "error";
+    return { isValid, message: !isValid ? updateResult.error.message : null };
+};
 
-    function formatMoney(amount) {
-        return "$" + amount.toFixed(2);
+const paymentForm = document.querySelector("#payment-form");
+if (paymentForm) {
+    paymentForm.addEventListener("submit", handleSubmit);
+}
+
+// Fetch Checkout Session and initialize Custom Checkout UI
+async function initialize() {
+    const cartItems = getCartItems(); // from cart.js
+
+    // If cart is empty, don't hit Stripe
+    if (!cartItems || cartItems.length === 0) {
+        return;
     }
 
-    function showError(message) {
-        if (!errorBox) return;
-        if (!message) {
-            errorBox.style.display = "none";
-            errorBox.textContent = "";
-            return;
-        }
-        errorBox.textContent = message;
-        errorBox.style.display = "block";
-    }
-
-    function setPayLoading(isLoading) {
-        if (!payButton || !payButtonLabel) return;
-        payButton.disabled = isLoading || !checkout;
-        payButtonLabel.textContent = isLoading ? "Processing…" : "Pay now";
-    }
-
-    function buildSummary(cartItems) {
-        const tableBody = document.getElementById("summary-items");
-        const totalEl = document.getElementById("summary-total");
-        const countEls = document.querySelectorAll("[data-cart-count]");
-
-        if (!tableBody || !totalEl) return;
-
-        tableBody.innerHTML = "";
-        let total = 0;
-        let count = 0;
-
-        cartItems.forEach((item) => {
-            const price = Number(item.price || 0);
-            const qty = item.quantity || 0;
-            const subtotal = price * qty;
-
-            count += qty;
-            total += subtotal;
-
-            const tr = document.createElement("tr");
-
-            const tdName = document.createElement("td");
-            tdName.textContent = item.name || item.id;
-
-            const tdQty = document.createElement("td");
-            tdQty.className = "pl-cart-num";
-            tdQty.textContent = String(qty);
-
-            const tdPrice = document.createElement("td");
-            tdPrice.className = "pl-cart-num";
-            tdPrice.textContent = formatMoney(price);
-
-            const tdSubtotal = document.createElement("td");
-            tdSubtotal.className = "pl-cart-num";
-            tdSubtotal.textContent = formatMoney(subtotal);
-
-            tr.appendChild(tdName);
-            tr.appendChild(tdQty);
-            tr.appendChild(tdPrice);
-            tr.appendChild(tdSubtotal);
-
-            tableBody.appendChild(tr);
-        });
-
-        totalEl.textContent = formatMoney(total);
-        countEls.forEach((el) => (el.textContent = String(count)));
-    }
-
-    /**
-     * This mirrors your old `initialize()` function:
-     * - builds a Promise that calls /create-checkout-session
-     * - passes that to stripe.initCheckout via fetchClientSecret
-     * - mounts Payment Element
-     */
-    async function initializeStripe(cartItems) {
-        // Promise that fetches clientSecret from your API
-        const clientSecretPromise = fetch(API_BASE + "/create-checkout-session", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                cartItems: cartItems.map((item) => ({
-                    id: item.id,
-                    quantity: item.quantity || 1,
-                })),
-            }),
-        })
-            .then(async (res) => {
-                const data = await res.json();
-
-                // Handle inventory error the way you did before
-                if (!res.ok || data.error === "InventoryError") {
-                    const msg =
-                        data?.message ||
-                        "Inventory error – one of the items is no longer available in that quantity.";
-                    // For this new UI, we just surface the message at the top.
-                    showError(msg);
-                    throw new Error(msg);
-                }
-
-                if (!data.clientSecret || typeof data.clientSecret !== "string") {
-                    const msg = "Checkout session creation failed (no client secret).";
-                    console.error("🚫 Missing or invalid clientSecret:", data);
-                    throw new Error(msg);
-                }
-
-                return data.clientSecret;
-            })
-            .catch((err) => {
-                console.error("Error creating checkout session", err);
-                throw err;
-            });
-
-        const appearance = {
-            theme: "night",
-        };
-
-        // OLD PATTERN: await stripe.initCheckout + fetchClientSecret
-        checkout = await stripe.initCheckout({
-            fetchClientSecret: async () => {
-                const secret = await clientSecretPromise;
-                return secret;
-            },
-            elementsOptions: { appearance },
-        });
-
-        // Mount Payment Element (no extra email/shipping widgets in this version)
-        const paymentElement = checkout.createPaymentElement();
-        paymentElement.mount("#payment-element");
-
-        // Turn off "loading" banner and enable the button
-        if (loadingBox) loadingBox.style.display = "none";
-        if (payButton) payButton.disabled = false;
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const emptySection = document.getElementById("checkout-empty");
-        const mainSection = document.getElementById("checkout-main");
-
-        payButton = document.getElementById("pay-button");
-        payButtonLabel = document.getElementById("pay-button-label");
-        errorBox = document.getElementById("payment-error");
-        loadingBox = document.getElementById("payment-loading");
-
-        const cartItems = window.ShopCart.getCartItems();
-
-        // No items → show "empty cart" panel
-        if (!cartItems.length) {
-            if (emptySection) emptySection.hidden = false;
-            if (mainSection) mainSection.hidden = true;
-            return;
-        }
-
-        // Show main checkout UI
-        if (emptySection) emptySection.hidden = true;
-        if (mainSection) mainSection.hidden = false;
-
-        // Build order summary (read-only)
-        buildSummary(cartItems);
-
-        // Start Stripe init in the background
-        (async function () {
-            try {
-                showError("");
-                if (loadingBox) loadingBox.style.display = "block";
-                if (payButton) payButton.disabled = true;
-
-                await initializeStripe(cartItems);
-            } catch (err) {
-                console.error("Stripe setup failed", err);
-                showError(err.message || "Could not initialize payment.");
-                if (loadingBox) loadingBox.style.display = "none";
-                if (payButton) payButton.disabled = true;
+    const promise = fetch(`${THIS_API_BASE}/create-checkout-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems })
+    })
+        .then((r) => r.json())
+        .then((r) => {
+            if (r.error === "InventoryError") {
+                showInventoryError(r.itemId, r.message);
+                throw new Error("Inventory error");
             }
-        })();
+            return r.clientSecret;
+        });
 
-        // Submit handler – uses checkout.confirm() like your old code
-        const form = document.getElementById("payment-form");
-        if (form) {
-            form.addEventListener("submit", async function (evt) {
-                evt.preventDefault();
-                showError("");
+    const appearance = {
+        theme: 'night',
+    };
 
-                if (!checkout) {
-                    showError("Payment form is still loading. Please wait a moment.");
-                    return;
-                }
-
-                setPayLoading(true);
-
-                try {
-                    const { error } = await checkout.confirm();
-                    if (error) {
-                        showError(error.message || "Payment failed. Try again.");
-                        setPayLoading(false);
-                        return;
-                    }
-                    // Normal flow: Stripe will redirect to return_url.
-                } catch (err) {
-                    console.error("checkout.confirm() error", err);
-                    showError(err.message || "Payment failed. Try again.");
-                    setPayLoading(false);
-                }
-            });
-        }
+    checkout = await stripe.initCheckout({
+        fetchClientSecret: async () => {
+            const clientSecret = await promise;
+            if (typeof clientSecret !== "string") {
+                console.error("🚫 Missing or invalid clientSecret:", clientSecret);
+                throw new Error("Checkout session creation failed");
+            }
+            return clientSecret;
+        },
+        elementsOptions: { appearance }
     });
-})();
+
+    // Update button label with Stripe’s computed total
+    const btnTextNode = document.querySelector("#button-text");
+    if (btnTextNode) {
+        const session = checkout.session();
+        if (session && session.total && session.total.total && typeof session.total.total.amount === "number") {
+            const amountCents = session.total.total.amount;
+            const amountDollars = (amountCents / 100).toFixed(2);
+            btnTextNode.textContent = `Pay $${amountDollars}`;
+        } else {
+            btnTextNode.textContent = "Pay";
+        }
+    }
+
+    const emailInput = document.getElementById("email");
+    const emailErrors = document.getElementById("email-errors");
+
+    if (emailInput && emailErrors) {
+        emailInput.addEventListener("input", () => {
+            emailErrors.textContent = "";
+        });
+
+        emailInput.addEventListener("blur", async () => {
+            const newEmail = emailInput.value;
+            if (!newEmail) return;
+
+            const { isValid, message } = await validateEmail(newEmail);
+            if (!isValid) {
+                emailErrors.textContent = message;
+            }
+        });
+    }
+
+    // Stripe UI elements
+    const paymentElement = checkout.createPaymentElement();
+    paymentElement.mount("#payment-element");
+
+    const shippingAddressElement = checkout.createShippingAddressElement();
+    shippingAddressElement.mount("#shipping-address-element");
+}
+
+async function handleSubmit(e) {
+    e.preventDefault();
+    if (!checkout) return;
+
+    setLoading(true);
+
+    const email = document.getElementById("email").value;
+    const { isValid, message } = await validateEmail(email);
+    if (!isValid) {
+        showMessage(message);
+        setLoading(false);
+        return;
+    }
+
+    const subscribe = document.getElementById("subscribe-checkbox").checked;
+    if (subscribe) {
+        try {
+            await fetch(`${THIS_API_BASE}/newsletter-signup`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email })
+            });
+        } catch (err) {
+            console.warn("Newsletter signup failed:", err);
+        }
+    }
+
+    const { error } = await checkout.confirm();
+
+    if (error) {
+        showMessage(error.message);
+        setLoading(false);
+        return;
+    }
+
+    // Normal flow redirects to return_url handled by your existing /stripe/return.html
+}
+
+// Inventory error helper (same pattern as old version)
+function showInventoryError(itemId, message) {
+    const itemRow = document.querySelector(`[data-cart-item-id="${itemId}"]`);
+    if (itemRow) {
+        const msg = document.createElement("div");
+        msg.className = "item-error-message";
+        msg.textContent = message;
+        itemRow.appendChild(msg);
+    }
+
+    const submitBtn = document.querySelector("#submit");
+    if (submitBtn) submitBtn.disabled = true;
+
+    const spinner = document.querySelector("#spinner");
+    if (spinner) spinner.classList.add("hidden");
+
+    const btnText = document.querySelector("#button-text");
+    if (btnText) {
+        btnText.classList.remove("hidden");
+        btnText.textContent = "Fix issues above";
+    }
+}
+
+// ------- UI helpers -------
+
+function showMessage(messageText) {
+    const messageContainer = document.querySelector("#payment-message");
+    if (!messageContainer) return;
+    messageContainer.classList.remove("hidden");
+    messageContainer.textContent = messageText;
+    setTimeout(function () {
+        messageContainer.classList.add("hidden");
+        messageContainer.textContent = "";
+    }, 4000);
+}
+
+function setLoading(isLoading) {
+    const submitBtn = document.querySelector("#submit");
+    const spinner = document.querySelector("#spinner");
+    const btnText = document.querySelector("#button-text");
+
+    if (!submitBtn || !spinner || !btnText) return;
+
+    if (isLoading) {
+        submitBtn.disabled = true;
+        spinner.classList.remove("hidden");
+        btnText.classList.add("hidden");
+    } else {
+        submitBtn.disabled = false;
+        spinner.classList.add("hidden");
+        btnText.classList.remove("hidden");
+    }
+}
