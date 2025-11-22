@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Brand Style Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Optional font imports – safe to remove if you want system-only -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Oswald:wght@500;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="page -grid-bg">
+    <!-- Top navigation -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand-mark">
+                <span class="brand-logo">SD</span>
+                <span class="brand-subtitle">Self Discipline</span>
+            </div>
+
+            <nav class="main-nav">
+                <a href="#overview" class="nav-link is-active">Overview</a>
+                <a href="#colors" class="nav-link">Colors</a>
+                <a href="#type" class="nav-link">Typography</a>
+                <a href="#buttons" class="nav-link">Buttons</a>
+                <a href="#forms" class="nav-link">Forms</a>
+                <a href="#cards" class="nav-link">Cards</a>
+                <a href="#layout" class="nav-link">Layout</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="btn btn-ghost btn-sm">Store</button>
+                <button class="btn btn-outline btn-icon btn-sm" aria-label="Cart">
+                    <span class="icon-circle"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Overview / Hero -->
+        <section id="overview" class="section hero">
+            <div class="container hero-inner">
+                <div class="hero-copy">
+                    <p class="eyebrow">Design System</p>
+                    <h1 class="hero-title">ALL STYLES</h1>
+                    <p class="hero-subtitle">
+                        This page defines the core look and feel of the brand:
+                        color, type, buttons, controls, cards, and layout primitives.
+                    </p>
+                    <div class="hero-meta">
+                        <span class="badge badge-muted">v1.0</span>
+                        <span class="badge badge-accent">Base Theme</span>
+                    </div>
+                </div>
+                <div class="hero-panel">
+                    <p class="hero-panel-label">Quick Stats</p>
+                    <ul class="hero-stats">
+                        <li>
+                            <span class="hero-stat-label">Font stack</span>
+                            <span class="hero-stat-value">Space Grotesk / Oswald</span>
+                        </li>
+                        <li>
+                            <span class="hero-stat-label">Grid</span>
+                            <span class="hero-stat-value">12 col · 4px base</span>
+                        </li>
+                        <li>
+                            <span class="hero-stat-label">Accent</span>
+                            <span class="hero-stat-value">Electric Lime</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Colors -->
+        <section id="colors" class="section">
+            <div class="container">
+                <header class="section-header">
+                    <h2 class="section-title">Color System</h2>
+                    <p class="section-subtitle">
+                        Neutral surfaces with high-contrast black type and a sharp
+                        neon accent used for CTAs and key indicators.
+                    </p>
+                </header>
+
+                <div class="swatch-grid">
+                    <article class="swatch-card">
+                        <div class="swatch -primary"></div>
+                        <div class="swatch-body">
+                            <h3>Primary Background</h3>
+                            <p>Token: <code>--color-bg</code></p>
+                            <p>Hex: <strong>#F5F3EA</strong></p>
+                        </div>
+                    </article>
+
+                    <article class="swatch-card">
+                        <div class="swatch -surface"></div>
+                        <div class="swatch-body">
+                            <h3>Surface</h3>
+                            <p>Token: <code>--color-surface</code></p>
+                            <p>Hex: <strong>#EEEBDD</strong></p>
+                        </div>
+                    </article>
+
+                    <article class="swatch-card">
+                        <div class="swatch -ink"></div>
+                        <div class="swatch-body">
+                            <h3>Ink</h3>
+                            <p>Token: <code>--color-ink</code></p>
+                            <p>Hex: <strong>#111111</strong></p>
+                        </div>
+                    </article>
+
+                    <article class="swatch-card">
+                        <div class="swatch -muted"></div>
+                        <div class="swatch-body">
+                            <h3>Muted</h3>
+                            <p>Token: <code>--color-muted</code></p>
+                            <p>Hex: <strong>#7E7B72</strong></p>
+                        </div>
+                    </article>
+
+                    <article class="swatch-card">
+                        <div class="swatch -accent"></div>
+                        <div class="swatch-body">
+                            <h3>Accent</h3>
+                            <p>Token: <code>--color-accent</code></p>
+                            <p>Hex: <strong>#E4FF37</strong></p>
+                        </div>
+                    </article>
+
+                    <article class="swatch-card">
+                        <div class="swatch -accent-dark"></div>
+                        <div class="swatch-body">
+                            <h3>Accent Dark</h3>
+                            <p>Token: <code>--color-accent-dark</code></p>
+                            <p>Hex: <strong>#B1C809</strong></p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Typography -->
+        <section id="type" class="section">
+            <div class="container">
+                <header class="section-header">
+                    <h2 class="section-title">Typography</h2>
+                    <p class="section-subtitle">
+                        Condensed, high-impact headings combined with clean grotesk body
+                        text. All caps are reserved for navigation, buttons, and hero copy.
+                    </p>
+                </header>
+
+                <div class="type-grid">
+                    <div class="type-column">
+                        <p class="eyebrow">Display</p>
+                        <h1 class="type-display">SELF-DISCIPLINE</h1>
+                        <p class="type-meta">Font: Oswald 700 · Tracking: 0.14em · Uppercase</p>
+
+                        <h2 class="type-h2">Section Heading</h2>
+                        <p class="type-meta">Font: Space Grotesk 700 · 28px</p>
+
+                        <h3 class="type-h3">Subheading / Card Title</h3>
+                        <p class="type-meta">Font: Space Grotesk 500 · 18px</p>
+                    </div>
+
+                    <div class="type-column">
+                        <p class="eyebrow">Body</p>
+                        <p class="type-body">
+                            This is the primary body style. It balances a neutral tone with
+                            strong legibility. Line lengths should stay between 60–80
+                            characters for comfortable reading.
+                        </p>
+
+                        <p class="type-body -muted">
+                            Muted body copy is used for helper text, product metadata, and
+                            secondary descriptions.
+                        </p>
+
+                        <p class="type-label">Label / UI Text</p>
+                        <p class="type-caption">
+                            Caption and meta text live at 12px–13px and should avoid long
+                            sentences. Use for prices, timestamps, or category labels.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Buttons & controls -->
+        <section id="buttons" class="section">
+            <div class="container">
+                <header class="section-header">
+                    <h2 class="section-title">Buttons & Controls</h2>
+                    <p class="section-subtitle">
+                        CTAs use the neon accent with rounded pills. Secondary actions are
+                        outlined or ghost to keep focus on the primary path.
+                    </p>
+                </header>
+
+                <div class="control-grid">
+                    <div class="control-group">
+                        <h3 class="type-h3">Buttons</h3>
+                        <div class="control-row">
+                            <button class="btn btn-primary">Primary Action</button>
+                            <button class="btn btn-outline">Secondary</button>
+                            <button class="btn btn-ghost">Ghost</button>
+                        </div>
+                        <div class="control-row">
+                            <button class="btn btn-primary btn-sm">Small</button>
+                            <button class="btn btn-outline btn-sm">Small Ghost</button>
+                            <button class="btn btn-primary btn-icon">
+                                <span class="icon-circle"></span>
+                                <span>Icon Button</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <h3 class="type-h3">Pills & Filters</h3>
+                        <div class="pill-row">
+                            <button class="pill is-active">All</button>
+                            <button class="pill">Band</button>
+                            <button class="pill">21 Day</button>
+                            <button class="pill">Gear</button>
+                            <button class="pill">Towels</button>
+                        </div>
+
+                        <h3 class="type-h3 space-top-sm">Badges</h3>
+                        <div class="badge-row">
+                            <span class="badge badge-accent">New</span>
+                            <span class="badge badge-outline">Limited</span>
+                            <span class="badge badge-muted">Archived</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Forms -->
+        <section id="forms" class="section">
+            <div class="container">
+                <header class="section-header">
+                    <h2 class="section-title">Forms & Inputs</h2>
+                    <p class="section-subtitle">
+                        Clean, minimal inputs with strong focus outlines. Grouped fields use
+                        subtle dividers and labels stay compact above controls.
+                    </p>
+                </header>
+
+                <div class="form-grid">
+                    <form class="form-card">
+                        <h3 class="type-h3">Account Form</h3>
+
+                        <label class="field">
+                            <span class="field-label">Email</span>
+                            <input class="input" type="email" placeholder="you@example.com" />
+                        </label>
+
+                        <label class="field">
+                            <span class="field-label">Password</span>
+                            <input class="input" type="password" placeholder="••••••••" />
+                            <span class="field-help">Use at least 10 characters.</span>
+                        </label>
+
+                        <div class="field field-inline">
+                            <label class="checkbox">
+                                <input type="checkbox" />
+                                <span class="checkbox-label">Keep me signed in</span>
+                            </label>
+                            <a href="#" class="link-muted">Forgot password?</a>
+                        </div>
+
+                        <button class="btn btn-primary btn-full">Create account</button>
+                    </form>
+
+                    <div class="newsletter-card">
+                        <h3 class="type-h3">Newsletter Block</h3>
+                        <p class="type-body -muted">
+                            Example of the hero/footer newsletter callout used across the
+                            site.
+                        </p>
+
+                        <div class="newsletter-inline">
+                            <input class="input input-inline" type="email" placeholder="Your email" />
+                            <button class="btn btn-primary btn-inline">Sign up</button>
+                        </div>
+
+                        <p class="newsletter-caption">No spam. Only high-signal content.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cards / Product grid -->
+        <section id="cards" class="section">
+            <div class="container">
+                <header class="section-header">
+                    <h2 class="section-title">Cards & Product Grid</h2>
+                    <p class="section-subtitle">
+                        Product tiles are minimal, centered, and rely heavily on negative
+                        space. Prices and CTAs stay compact to keep focus on the item.
+                    </p>
+                </header>
+
+                <div class="product-filters">
+                    <div class="pill-row">
+                        <button class="pill is-active">All (6)</button>
+                        <button class="pill">Bands</button>
+                        <button class="pill">Programs</button>
+                        <button class="pill">Apparel</button>
+                        <button class="pill">Accessories</button>
+                    </div>
+
+                    <div class="product-search">
+                        <input class="input input-sm" type="search" placeholder="Search products" />
+                    </div>
+                </div>
+
+                <div class="product-grid">
+                    <article class="card card-product">
+                        <div class="card-media -placeholder">
+                            <span class="card-media-label">Band</span>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">Self-Discipline Band</h3>
+                            <p class="card-meta">Physical reminder · Everyday carry</p>
+                            <div class="card-footer">
+                                <span class="card-price">$12.00</span>
+                                <button class="btn-circle" aria-label="Add to cart">
+                                    <span class="icon-arrow"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card-product">
+                        <div class="card-media -placeholder">
+                            <span class="card-media-label">Program</span>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">21 Day Challenge</h3>
+                            <p class="card-meta">Structured habit reset.</p>
+                            <div class="card-footer">
+                                <span class="card-price">$39.00</span>
+                                <button class="btn-circle" aria-label="Add to cart">
+                                    <span class="icon-arrow"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card-product">
+                        <div class="card-media -placeholder">
+                            <span class="card-media-label">Tee</span>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">SD Gear Tee</h3>
+                            <p class="card-meta">Mid-weight · Boxy fit</p>
+                            <div class="card-footer">
+                                <span class="card-price">$32.00</span>
+                                <button class="btn-circle" aria-label="Add to cart">
+                                    <span class="icon-arrow"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card-product">
+                        <div class="card-media -placeholder">
+                            <span class="card-media-label">Towel</span>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">Training Towel</h3>
+                            <p class="card-meta">Black · Fast-dry</p>
+                            <div class="card-footer">
+                                <span class="card-price">$18.00</span>
+                                <button class="btn-circle" aria-label="Add to cart">
+                                    <span class="icon-arrow"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Layout primitives -->
+        <section id="layout" class="section section-inverse">
+            <div class="container container-wide">
+                <header class="section-header section-header-inverse">
+                    <h2 class="section-title">Layout & Footer</h2>
+                    <p class="section-subtitle">
+                        Dark mode footer with strong typography. Use this pattern for major
+                        sign-ups or end-of-page anchors.
+                    </p>
+                </header>
+
+                <div class="layout-grid">
+                    <div class="layout-panel">
+                        <h3 class="layout-heading">Grid Example</h3>
+                        <div class="layout-columns">
+                            <div class="layout-col">
+                                <p class="layout-label">Column</p>
+                            </div>
+                            <div class="layout-col">
+                                <p class="layout-label">Column</p>
+                            </div>
+                            <div class="layout-col">
+                                <p class="layout-label">Column</p>
+                            </div>
+                        </div>
+                        <p class="layout-note">
+                            Use 12 columns with 24px gutters for larger screens. Collapse to a
+                            single column under 768px.
+                        </p>
+                    </div>
+
+                    <footer class="brand-footer">
+                        <div class="brand-footer-top">
+                            <nav class="footer-nav">
+                                <a href="#" class="footer-link">Home</a>
+                                <a href="#" class="footer-link">About</a>
+                                <a href="#" class="footer-link">Store</a>
+                                <a href="#" class="footer-link">Contact</a>
+                            </nav>
+
+                            <div class="footer-newsletter">
+                                <p class="footer-label">Sign up to our newsletter</p>
+                                <div class="newsletter-inline newsletter-inline-dark">
+                                    <input class="input input-inline -dark" type="email" placeholder="Your email" />
+                                    <button class="btn btn-primary btn-inline">Join</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="brand-footer-main">
+                            <h2 class="footer-display">SELF-DISCIPLINE</h2>
+                        </div>
+
+                        <div class="brand-footer-bottom">
+                            <span class="footer-meta">© 2025 Self Discipline</span>
+                            <span class="footer-meta">Shipping · Handling · Terms</span>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

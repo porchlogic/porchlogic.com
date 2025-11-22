@@ -1,0 +1,141 @@
+:root {
+    /* Backgrounds */
+    --bg: #0e0e10;
+    --bg-light: #1a1a1d;
+
+    /* Text */
+    --text-primary: rgba(165, 181, 175, 0.954);
+    --text-strong: rgba(123, 220, 183, 0.954);
+    --text-secondary: rgb(94, 103, 107);
+    --text-dark: rgb(16, 16, 16);
+
+    /* Accent Colors */
+    --neonGreen: rgb(34, 186, 52);
+    --neonGrey: rgb(95, 94, 94);
+    --neonWhite: rgb(237, 237, 237);
+    --neonYellow: rgb(162, 254, 63);
+    --neonBlue: rgb(16, 111, 244);
+    --neonPurple: rgb(130, 80, 250);
+    --neonPink: rgb(248, 57, 117);
+    --neonRed: rgba(218, 22, 22, 0.886);
+
+    /* Borders / Shadows */
+    --border-color: #4b5563;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+
+    --pulse: 5.5;
+}
+
+body {
+    background-color: var(--bg);
+    font-family: "Share Tech Mono", monospace;
+    /* font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; */
+}
+
+a {
+    text-decoration: none;
+}
+
+/*-------------- BUTTONS ------------*/
+
+button {
+    padding: 0.5rem 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    border: 2px solid var(--neonGreen);
+    transition: all 0.2s ease;
+    background-color: rgba(6, 56, 117, 0.136);
+    color: rgb(149, 202, 231);
+    box-shadow: 0 2px 4px var(--neonBlue);
+    text-decoration: none;
+    text-align: center;
+}
+
+button:hover {
+    /* background-color: rgba(16, 111, 244, 0.2); */
+    box-shadow: 0 2px 4px var(--neonWhite);
+    cursor: pointer;
+}
+
+/*-------------- NEON ------------*/
+.text-neonGreen {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonGreen),
+        0 0 calc(4px * var(--pulse)) var(--neonGreen),
+        0 0 calc(6px * var(--pulse)) var(--neonGreen),
+        0 0 calc(18px * var(--pulse)) var(--neonGreen);
+}
+
+.logo-text-1 {
+    color: var(--text-dark);
+    text-shadow: -1px -1px 1px var(--neonBlue),
+                1px 1px 1px var(--neonGreen);
+}
+
+.logo-text-2 {
+    color: var(--text-dark);
+    text-shadow: -1px -1px 1px var(--neonBlue),
+        1px 1px 1px var(--neonGrey);
+}
+
+.text-neonGrey-subtle {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(6px * 0.1) var(--neonGrey),
+        0 0 calc(9px * 0.5) var(--neonGrey);
+}
+
+.text-neonWhite {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) rgba(235, 235, 235, 1),
+        0 0 calc(4px * var(--pulse)) rgba(235, 235, 235, 0.8),
+        0 0 calc(6px * var(--pulse)) rgba(235, 235, 235, 0.5),
+        0 0 calc(18px * var(--pulse)) rgba(235, 235, 235, 0.2);
+}
+
+.text-neonBlue {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonBlue),
+        0 0 calc(4px * var(--pulse)) var(--neonBlue),
+        0 0 calc(6px * var(--pulse)) var(--neonBlue),
+        0 0 calc(18px * var(--pulse)) var(--neonBlue);
+}
+
+.text-neonYellow {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonYellow),
+        0 0 calc(4px * var(--pulse)) var(--neonYellow),
+        0 0 calc(6px * var(--pulse)) var(--neonYellow),
+        0 0 calc(18px * var(--pulse)) var(--neonYellow);
+}
+
+.text-neonYellowSubtle {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(1px * var(--pulse)) var(--neonYellow),
+        0 0 calc(2px * var(--pulse)) var(--neonYellow),
+        0 0 calc(4px * var(--pulse)) var(--neonYellow);
+}
+
+.text-neonPink {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(1px * var(--pulse)) var(--neonPink),
+        0 0 calc(1px * var(--pulse)) var(--neonPink),
+        0 0 calc(2px * var(--pulse)) var(--neonPink),
+        0 0 calc(5px * var(--pulse)) rgba(219, 61, 111, 0.548);
+}
+
+.text-neonSubtle {
+    color: var(--text-primary);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonGrey),
+        0 0 calc(4px * var(--pulse)) var(--neonGrey),
+        0 0 calc(6px * var(--pulse)) var(--neonGrey),
+        0 0 calc(18px * var(--pulse)) var(--neonGrey);
+}

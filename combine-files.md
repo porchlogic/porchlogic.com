@@ -11,9 +11,12 @@
 
 ---
 
+I think we need to make it so that the glyph data only goes to our backend. It shouldn't be sent to stripe. Is that what it's currently doing? Because we are getting an error when going to checkout like:
+❌ Failed to initialize checkout: Error: Metadata values can have up to 500 characters, but you passed in a value that is 801 characters. Invalid value: [{"id":"m8_plate_1","name":"M8 Plate","price":32,"quantity":1,"customGlyphEnabled":true,"glyphData":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0],[0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0],
+...
 
-# Code Bundle
-> Generated 2025-11-21T23:03:02.760Z
+So, if the checkout completes (payment is successful), then the glyph for each product ordered is saved in an "orders.json" file on the server. We might as well make that include any other relevant order info we have, so that it can exist on the server records. Don't you think? Anything else?
+
 
 ### cart-utils.js
 **Path:** `/shop/cart-utils.js`
@@ -2147,5 +2150,524 @@ button {
         rebuildCartUI();
     });
 })();
+
+```
+
+---
+
+### server.js
+```javascript
+const VERSION = "2025.06.23";
+
+// This is your test secret API key.
+
+const express = require("express");
+const app = express();
+const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
+	apiVersion: "2025-04-30.basil",
+});
+const YOUR_DOMAIN = "https://porchlogic.com";
+
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || null;
+
+const INV_PATH = path.join(__dirname, "inventory.json");
+const LOG_PATH = path.join(__dirname, "events.log");
+
+// ---------- Logging + Admin auth ----------
+
+function logEvent(type, details = {}) {
+	const entry = {
+		ts: new Date().toISOString(),
+		type,
+		...details,
+	};
+
+	try {
+		fs.appendFileSync(LOG_PATH, JSON.stringify(entry) + "\n");
+	} catch (err) {
+		console.error("Failed to write log entry", err);
+	}
+}
+
+function requireAdmin(req, res, next) {
+	// Shared-secret auth: send `x-admin-token` header or `?token=...`
+	const token = req.header("x-admin-token") || req.query.token;
+
+	if (!ADMIN_TOKEN) {
+		console.warn("⚠️ ADMIN_TOKEN is not set – blocking admin access.");
+		return res.status(500).json({ error: "Admin not configured" });
+	}
+
+	if (token !== ADMIN_TOKEN) {
+		return res.status(401).json({ error: "Unauthorized" });
+	}
+
+	next();
+}
+
+// ---------- Stripe webhook (raw body) ----------
+
+app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
+	let event;
+
+	try {
+		event = stripe.webhooks.constructEvent(
+			req.body,
+			req.headers["stripe-signature"],
+			process.env.STRIPE_WEBHOOK_SECRET
+		);
+	} catch (err) {
+		console.error("Webhook err", err.message);
+		return res.sendStatus(400);
+	}
+
+	logEvent("stripe_webhook_received", {
+		type: event.type,
+		id: event.id,
+	});
+
+	if (event.type === "checkout.session.completed") {
+		const session = event.data.object;
+		const { metadata } = session;
+
+		if (metadata?.reserved) {
+			const inv = loadInv();
+			JSON.parse(metadata.reserved).forEach(({ id, quantity }) => {
+				inv[id] = (inv[id] ?? 0) - quantity;
+			});
+			saveInv(inv);
+		}
+
+		logEvent("checkout_session_completed", {
+			session_id: session.id,
+			customer_email: session.customer_details?.email || "",
+			metadata: session.metadata || {},
+		});
+	}
+
+	// If you later want to undo holds on expired/canceled sessions, re-enable this:
+	// if (
+	// 	event.type === "checkout.session.expired" ||
+	// 	event.type === "payment_intent.canceled"
+	// ) {
+	// 	const { metadata } = event.data.object;
+	// 	if (metadata?.reserved) {
+	// 		const inv = loadInv();
+	// 		JSON.parse(metadata.reserved).forEach(({ id, quantity }) => {
+	// 			inv[id] = (inv[id] || 0) + quantity;
+	// 		});
+	// 		saveInv(inv);
+	// 	}
+	// }
+
+	res.json({ received: true });
+});
+
+// ---------- Normal middlewares ----------
+
+app.use(cors());
+app.use(express.json());
+app.use(express.static("public"));
+
+// ---------- Basic health check ----------
+
+app.get("/ping", (req, res) => {
+	res.send("pong");
+});
+
+// ---------- Inventory helpers ----------
+
+function loadInv() {
+	return JSON.parse(fs.readFileSync(INV_PATH));
+}
+
+function saveInv(inv) {
+	fs.writeFileSync(INV_PATH, JSON.stringify(inv, null, 2));
+}
+
+/**
+ * Reserve items – throws if any qty unavailable.
+ * Returns the map of { id: qty } actually reserved so we can
+ * roll it back later if checkout fails.
+ */
+function reserve(inv, cart) {
+	for (const { id, quantity } of cart) {
+		if ((inv[id] ?? 0) < quantity) {
+			const remaining = inv[id] ?? 0;
+			const err = new Error(`Only ${remaining} left of ${id}`);
+			err.name = "InventoryError";
+			err.itemId = id;
+			err.remaining = remaining;
+			throw err;
+		}
+	}
+	// All good – decrement
+	cart.forEach(({ id, quantity }) => (inv[id] -= quantity));
+}
+
+// ---------- Price lookup ----------
+
+// test mode:
+// const PRICE_LOOKUP = {
+// 	'smb1_default': 'price_1RP7gdABTHjSuIhXXZfq0oyv',
+// 	'smb1_host': 'price_1RddCnABTHjSuIhXSpr276RI',
+// 	'smb1_activation': 'price_1RWJTEABTHjSuIhXyEJGdbaO'
+// };
+
+const PRICE_LOOKUP = {
+	smb1_default: "price_1RddA2ABTHjSuIhXaL0YkdVs",
+	smb1_host: "price_1RddCnABTHjSuIhXSpr276RI",
+	smb1_activation: "price_1RbM7eABTHjSuIhX0FsjSFVl",
+	"Test Product": "price_1RdEK7ABTHjSuIhXcn6e3kVw",
+	m8_plate_1: "price_1RdEK7ABTHjSuIhXcn6e3kVw",
+};
+
+// ---------- Checkout session creation ----------
+
+app.post("/create-checkout-session", async (req, res) => {
+	console.log("🔥 /create-checkout-session hit");
+	console.log("🔥 Raw cartItems from client:", JSON.stringify(req.body, null, 2));
+
+	const { cartItems } = req.body;
+
+	// Debug each cart item and lookup
+	for (const item of cartItems) {
+		console.log(`🔍 Checking item:`, item);
+		console.log(`🔍 PRICE_LOOKUP['${item.id}'] =`, PRICE_LOOKUP[item.id]);
+	}
+
+	try {
+		// 1. check inventory
+		const inv = loadInv();
+		for (const { id, quantity } of cartItems) {
+			if ((inv[id] ?? 0) < quantity) {
+				const remaining = inv[id] ?? 0;
+				const err = new Error(`Only ${remaining} left of ${id}`);
+				err.name = "InventoryError";
+				err.itemId = id;
+				err.remaining = remaining;
+				throw err;
+			}
+		}
+
+		// 2. build Stripe line_items
+		const line_items = cartItems.map(({ id, quantity }) => ({
+			price: PRICE_LOOKUP[id],
+			quantity,
+		}));
+
+		const session = await stripe.checkout.sessions.create({
+			ui_mode: "custom",
+			billing_address_collection: "auto",
+			shipping_address_collection: {
+				allowed_countries: ["US"],
+			},
+			line_items,
+			mode: "payment",
+			return_url: `${YOUR_DOMAIN}/stripe/return.html?session_id={CHECKOUT_SESSION_ID}`,
+			automatic_tax: { enabled: true },
+
+			// metadata lets us undo the hold later
+			metadata: { reserved: JSON.stringify(cartItems) },
+		});
+
+		logEvent("checkout_session_created", {
+			session_id: session.id,
+			amount_total: session.amount_total,
+			currency: session.currency,
+			line_items: cartItems,
+		});
+
+		res.send({ clientSecret: session.client_secret });
+	} catch (err) {
+		console.error("🔥 Checkout session error:", err);
+
+		logEvent("checkout_session_error", {
+			message: err.message,
+			name: err.name,
+			stack: err.stack,
+		});
+
+		if (err.name === "InventoryError") {
+			return res.status(400).json({
+				error: "InventoryError",
+				message: err.message,
+				itemId: err.itemId,
+				remaining: err.remaining,
+			});
+		}
+
+		res.status(400).json({ error: err.message });
+	}
+});
+
+// ---------- Session status + activation codes ----------
+
+app.get("/session-status", async (req, res) => {
+	const session = await stripe.checkout.sessions.retrieve(req.query.session_id, {
+		expand: ["line_items"],
+	});
+
+	let activation_codes = [];
+
+	if (session.status === "complete") {
+		const activationItem = session.line_items.data.find(
+			(item) => item.price.id === PRICE_LOOKUP["smb1_activation"]
+		);
+		const quantity = activationItem ? activationItem.quantity : 0;
+
+		if (quantity > 0) {
+			// Load current activations
+			const activatedFile = path.join(__dirname, "activation_codes.json");
+			let activated = [];
+			if (fs.existsSync(activatedFile)) {
+				const data = fs.readFileSync(activatedFile);
+				activated = JSON.parse(data);
+			}
+
+			// Check if already saved for this session
+			let existing = activated.find((entry) => entry.session_id === session.id);
+			if (existing) {
+				activation_codes = existing.activation_codes;
+			} else {
+				// Generate new codes
+				for (let i = 0; i < quantity; i++) {
+					activation_codes.push(generateActivationCode());
+				}
+
+				activated.push({
+					session_id: session.id,
+					customer_email: session.customer_details?.email || "",
+					activation_codes,
+					activated_at: new Date().toISOString(),
+				});
+
+				fs.writeFileSync(activatedFile, JSON.stringify(activated, null, 2));
+				console.log(
+					`✅ Generated ${quantity} activation codes for session ${session.id}`
+				);
+
+				logEvent("activation_codes_generated", {
+					session_id: session.id,
+					customer_email: session.customer_details?.email || "",
+					quantity,
+				});
+
+				// Kick off Worker sync, but don't block the HTTP response
+				pushCodesToWorkerKV(activation_codes).catch((err) => {
+					console.error("❌ Failed to push codes to Worker KV:", err);
+					logEvent("worker_kv_sync_error", {
+						message: err.message,
+					});
+				});
+			}
+		}
+	}
+
+	res.send({
+		status: session.status,
+		customer_email: session.customer_details?.email || "",
+		activation_codes,
+	});
+});
+
+// ---------- Newsletter ----------
+
+app.post("/newsletter-signup", (req, res) => {
+	const { email } = req.body;
+
+	if (!email || !email.includes("@")) {
+		return res.status(400).json({ error: "Invalid email" });
+	}
+
+	const filePath = path.join(__dirname, "signups.json");
+
+	// Read current signups
+	let currentSignups = [];
+	if (fs.existsSync(filePath)) {
+		try {
+			const data = fs.readFileSync(filePath);
+			currentSignups = JSON.parse(data);
+		} catch (err) {
+			console.error("Error reading signups.json:", err);
+		}
+	}
+
+	// Check for duplicates
+	if (currentSignups.includes(email)) {
+		return res.status(200).json({ message: "Already signed up!" });
+	}
+
+	currentSignups.push(email);
+
+	// Save updated list
+	try {
+		fs.writeFileSync(filePath, JSON.stringify(currentSignups, null, 2));
+
+		logEvent("newsletter_signup", { email });
+
+		res.status(200).json({ message: "Thanks for signing up!" });
+	} catch (err) {
+		console.error("Error writing to signups.json:", err);
+		logEvent("newsletter_signup_error", {
+			email,
+			message: err.message,
+		});
+		res.status(500).json({ error: "Failed to save email" });
+	}
+});
+
+// ---------- Admin API ----------
+
+// Basic server status
+app.get("/admin/status", requireAdmin, (req, res) => {
+	res.json({
+		version: VERSION,
+		uptimeSeconds: process.uptime(),
+		nodeVersion: process.version,
+		env: process.env.NODE_ENV || "development",
+	});
+});
+
+// Inventory (read-only)
+app.get("/admin/inventory", requireAdmin, (req, res) => {
+	try {
+		const inv = loadInv();
+		res.json(inv);
+	} catch (err) {
+		console.error("Failed to load inventory in /admin/inventory", err);
+		res.status(500).json({ error: "Failed to load inventory" });
+	}
+});
+
+// Newsletter list
+app.get("/admin/newsletter", requireAdmin, (req, res) => {
+	const filePath = path.join(__dirname, "signups.json");
+	if (!fs.existsSync(filePath)) {
+		return res.json({ count: 0, emails: [] });
+	}
+	try {
+		const data = fs.readFileSync(filePath);
+		const emails = JSON.parse(data);
+		res.json({ count: emails.length, emails });
+	} catch (err) {
+		console.error("Failed to read signups.json", err);
+		res.status(500).json({ error: "Failed to read signups" });
+	}
+});
+
+// Activation codes overview
+app.get("/admin/activation-codes", requireAdmin, (req, res) => {
+	const activatedFile = path.join(__dirname, "activation_codes.json");
+	if (!fs.existsSync(activatedFile)) {
+		return res.json({ sessions: [], totalCodes: 0 });
+	}
+	try {
+		const data = fs.readFileSync(activatedFile);
+		const sessions = JSON.parse(data);
+		const totalCodes = sessions.reduce(
+			(sum, entry) => sum + (entry.activation_codes?.length || 0),
+			0
+		);
+		res.json({ sessions, totalCodes });
+	} catch (err) {
+		console.error("Failed to read activation_codes.json", err);
+		res.status(500).json({ error: "Failed to read activation codes" });
+	}
+});
+
+// Logs (tail)
+app.get("/admin/logs", requireAdmin, (req, res) => {
+	const limit = parseInt(req.query.limit || "200", 10);
+
+	if (!fs.existsSync(LOG_PATH)) {
+		return res.json({ entries: [] });
+	}
+
+	try {
+		const raw = fs.readFileSync(LOG_PATH, "utf8");
+		const lines = raw.trim().split("\n").filter(Boolean);
+		const slice = lines.slice(-limit);
+		const entries = slice.map((line) => {
+			try {
+				return JSON.parse(line);
+			} catch (err) {
+				return { ts: null, type: "parse_error", raw: line };
+			}
+		});
+		res.json({ entries });
+	} catch (err) {
+		console.error("Failed to read events log", err);
+		res.status(500).json({ error: "Failed to read logs" });
+	}
+});
+
+// ---------- Startup ----------
+
+console.log(`Porch Logic API Server ${VERSION} is now running on port 4242`);
+
+app.listen(4242, "0.0.0.0", () => console.log("Running on port 4242"));
+
+// ---------- Helpers ----------
+
+function generateActivationCode() {
+	// Example simple random code: 8 uppercase letters/numbers
+	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	let code = "";
+	for (let i = 0; i < 8; i++) {
+		code += chars.charAt(Math.floor(Math.random() * chars.length));
+	}
+	return code;
+}
+
+async function pushCodesToWorkerKV(activation_codes) {
+	const WORKER_KV_URL =
+		"https://smb1-update.porchlogic.com/update-activation-codes";
+	const WORKER_API_KEY = "d4ah1H8Mf82rEsLIkKiip55h"; // Same as Worker expects!
+
+	const controller = new AbortController();
+	const timeout = setTimeout(() => controller.abort(), 5000); // 5 sec timeout
+
+	try {
+		const response = await fetch(WORKER_KV_URL, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${WORKER_API_KEY}`,
+			},
+			body: JSON.stringify({ activation_codes }),
+			signal: controller.signal,
+		});
+
+		clearTimeout(timeout);
+
+		if (response.ok) {
+			console.log(
+				"✅ Successfully updated Worker KV with new activation codes."
+			);
+			logEvent("worker_kv_sync_ok", {
+				count: activation_codes.length,
+			});
+		} else {
+			const text = await response.text();
+			console.error(
+				`❌ Failed to update Worker KV: ${response.status} ${text}`
+			);
+			logEvent("worker_kv_sync_failed", {
+				status: response.status,
+				body: text,
+			});
+		}
+	} catch (err) {
+		clearTimeout(timeout);
+		console.error("❌ Error pushing codes to Worker KV:", err);
+		logEvent("worker_kv_sync_error", {
+			message: err.message,
+		});
+	}
+}
 
 ```

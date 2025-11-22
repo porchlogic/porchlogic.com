@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEON // 001 Dark Theme Style Guide</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        /* Custom Configuration for this futuristic theme */
+        :root {
+            /* Core Palette */
+            --color-primary-dark: #0A0A0A;
+            /* Near-black background */
+            --color-secondary-dark: #1F1F1F;
+            /* Slightly lighter background for cards/sections */
+            --color-text-light: #FAFAFA;
+            /* Primary white text */
+            --color-text-subtle: #888888;
+            /* Subtle gray text for secondary info */
+            --color-accent-blue: #00FFFF;
+            /* High-tech cyan for accents */
+            --color-divider: rgba(250, 250, 250, 0.1);
+            /* Subtle white divider */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-primary-dark);
+            color: var(--color-text-light);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* TYPOGRAPHY STYLES (Emulating the high-contrast, all-caps style) */
+        .h-futuristic {
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .text-accent {
+            color: var(--color-accent-blue);
+        }
+
+        /* COMPONENT STYLES */
+        .card-futuristic {
+            background-color: var(--color-secondary-dark);
+            border: 1px solid var(--color-divider);
+            box-shadow: 0 4px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Button Styling */
+        .btn-primary-futuristic {
+            @apply px-6 py-3 rounded-md font-bold transition duration-300 ease-in-out h-futuristic text-xs;
+            background-color: var(--color-text-light);
+            color: var(--color-primary-dark);
+        }
+
+        .btn-primary-futuristic:hover {
+            box-shadow: 0 0 10px var(--color-accent-blue);
+        }
+
+        .btn-secondary-futuristic {
+            @apply px-6 py-3 rounded-md font-bold transition duration-300 ease-in-out h-futuristic text-xs;
+            border: 1px solid var(--color-accent-blue);
+            color: var(--color-accent-blue);
+            background-color: transparent;
+        }
+
+        .btn-secondary-futuristic:hover {
+            background-color: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 8px var(--color-accent-blue);
+        }
+
+        /* Divider Style (subtle line) */
+        .hr-futuristic {
+            height: 1px;
+            background-color: var(--color-divider);
+            margin: 2rem 0;
+        }
+
+        /* Utility for 3D/Circular Nav Element Emulation */
+        .circular-nav {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(250, 250, 250, 0.2), rgba(0, 255, 255, 0.2));
+            border: 1px solid rgba(250, 250, 250, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="p-8 md:p-12 lg:p-20">
+
+    <header class="mb-12 border-b pb-6 border-gray-800">
+        <h1 class="text-4xl h-futuristic text-accent">AEON // 001 - DARK THEME</h1>
+        <p class="text-sm text-gray-500 mt-2">Design system reference based on high-contrast, futuristic, monochrome
+            aesthetic.</p>
+    </header>
+
+    <!-- 1. COLOR PALETTE -->
+    <section class="mb-16">
+        <h2 class="text-2xl mb-6 h-futuristic">1. Color Palette</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- Primary Dark -->
+            <div class="p-4 rounded-xl h-40 flex flex-col justify-end bg-black"
+                style="background-color: var(--color-primary-dark);">
+                <p class="text-white h-futuristic text-xs">Primary Dark</p>
+                <code class="text-xs text-gray-500 mt-1">#0A0A0A</code>
+            </div>
+            <!-- Secondary Dark -->
+            <div class="p-4 rounded-xl h-40 flex flex-col justify-end bg-gray-900"
+                style="background-color: var(--color-secondary-dark);">
+                <p class="text-white h-futuristic text-xs">Secondary Dark</p>
+                <code class="text-xs text-gray-500 mt-1">#1F1F1F</code>
+            </div>
+            <!-- Text Light -->
+            <div class="p-4 rounded-xl h-40 flex flex-col justify-end bg-white border border-gray-800"
+                style="background-color: var(--color-secondary-dark);">
+                <p class="text-white h-futuristic text-xs">Text Light</p>
+                <code class="text-xs text-gray-400 mt-1">#FAFAFA</code>
+            </div>
+            <!-- Accent Blue (Cyan) -->
+            <div class="p-4 rounded-xl h-40 flex flex-col justify-end bg-cyan-500"
+                style="background-color: var(--color-accent-blue); color: var(--color-primary-dark);">
+                <p class="h-futuristic text-xs">ACCENT</p>
+                <code class="text-xs mt-1">#00FFFF</code>
+            </div>
+        </div>
+    </section>
+
+    <div class="hr-futuristic"></div>
+
+    <!-- 2. TYPOGRAPHY -->
+    <section class="mb-16">
+        <h2 class="text-2xl mb-6 h-futuristic">2. Typography</h2>
+        <div class="space-y-6">
+            <p class="text-gray-500 text-sm">Font Family: Inter (Sans-serif, neutral, high readability)</p>
+
+            <h1 class="text-5xl h-futuristic text-accent">HEADING 1 // SYNTHESIS</h1>
+            <h2 class="text-3xl h-futuristic">HEADING 2 // FIBROTRONIC</h2>
+            <h3 class="text-xl h-futuristic text-gray-400">HEADING 3 // SPECIFICATION_MODEL_D8</h3>
+
+            <div class="py-4">
+                <p class="text-sm h-futuristic text-gray-400">BODY TEXT (PRIMARY) - REGULAR</p>
+                <p class="mt-2 text-base max-w-2xl">
+                    This technology is designed to integrate synthetic fibers into tissues to precisely monitor vitals,
+                    temperature, or electricity. Minimalist typography focuses on legibility and high contrast.
+                </p>
+            </div>
+
+            <div class="py-4">
+                <p class="text-sm h-futuristic text-gray-400">BODY TEXT (SUBTLE) - SECONDARY</p>
+                <p class="mt-2 text-sm max-w-2xl text-gray-500">
+                    D-2022. COL_COMPETITION. The subtle text is crucial for secondary metadata, using a dimmer gray to
+                    separate it visually from primary content.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="hr-futuristic"></div>
+
+    <!-- 3. INTERACTIVE ELEMENTS & BUTTONS -->
+    <section class="mb-16">
+        <h2 class="text-2xl mb-6 h-futuristic">3. Interactive Elements</h2>
+        <div class="space-y-8">
+            <!-- Buttons -->
+            <div>
+                <h3 class="text-xl mb-4 h-futuristic text-gray-400">BUTTONS</h3>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <button class="btn-primary-futuristic">
+                        ADD TO CART // 001
+                    </button>
+                    <button class="btn-secondary-futuristic">
+                        VIEW PRODUCT DATA
+                    </button>
+                    <button class="btn-secondary-futuristic opacity-50 cursor-not-allowed">
+                        OUT OF STOCK
+                    </button>
+                </div>
+            </div>
+
+            <!-- Input Field -->
+            <div>
+                <h3 class="text-xl mb-4 h-futuristic text-gray-400">INPUT FIELD</h3>
+                <input type="text" placeholder="ENTER MODEL ID"
+                    class="w-full sm:w-96 p-3 text-sm rounded-md border text-white border-gray-700 bg-gray-900 focus:ring-1 outline-none"
+                    style="background-color: var(--color-secondary-dark); border-color: var(--color-divider); focus-ring-color: var(--color-accent-blue);">
+                <p class="text-xs text-gray-500 mt-2">Input fields maintain a dark background with light, legible text.
+                </p>
+            </div>
+
+            <!-- Circular Navigation Element Emulation -->
+            <div>
+                <h3 class="text-xl mb-4 h-futuristic text-gray-400">CIRCULAR NAV ELEMENT</h3>
+                <div class="flex items-center space-x-4">
+                    <div class="circular-nav">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-gray-500">Emulates the floating, high-tech navigational globe shown in the
+                        reference image.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="hr-futuristic"></div>
+
+    <!-- 4. EXAMPLE CARD (PRODUCT LISTING) -->
+    <section class="mb-16">
+        <h2 class="text-2xl mb-6 h-futuristic">4. Example Component: Product Card</h2>
+        <div class="w-full max-w-sm p-6 rounded-2xl card-futuristic">
+            <!-- Header/Navigation Placeholder -->
+            <div class="flex justify-between text-gray-500 mb-8">
+                <!-- Back Arrow -->
+                <svg class="w-6 h-6 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                <!-- Menu Dots -->
+                <svg class="w-6 h-6 cursor-pointer" fill="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="1.5" />
+                    <circle cx="12" cy="5" r="1.5" />
+                    <circle cx="12" cy="19" r="1.5" />
+                </svg>
+            </div>
+
+            <!-- Product Placeholder (Image should be white/light gray on this dark background) -->
+            <div class="h-48 w-full mb-8 flex items-center justify-center bg-gray-800 rounded-lg">
+                <span class="text-4xl text-white opacity-80 font-mono">PRODUCT 3D</span>
+            </div>
+
+            <!-- Product Details -->
+            <div class="space-y-2">
+                <p class="text-xs text-gray-500 h-futuristic">MODEL: 005_ULTRASENSE</p>
+                <h3 class="text-3xl font-light text-white">$1,199.00</h3>
+                <p class="text-base text-gray-400">超感覚 // ULTRA SENSE</p>
+            </div>
+
+            <!-- Metadata / Subtle Separator -->
+            <div class="mt-4 pt-4 border-t" style="border-color: var(--color-divider);">
+                <p class="text-xs text-gray-600 mb-4">D-2022. COL_COMPETITION.</p>
+                <button class="btn-primary-futuristic w-full">
+                    ADD TO CART
+                </button>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

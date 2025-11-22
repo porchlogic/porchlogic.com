@@ -10,19 +10,30 @@
     --border-strong: rgba(255, 255, 255, 0.16);
 
     /* Accent (green + blue) */
-    --accent: #7bff88;
-    /* primary neon green */
+    --accent: #7bff88; /* primary neon green */
     --accent-soft: rgba(123, 255, 136, 0.24);
-    --accent-strong: #4ecbff;
-    /* strong blue end of gradient */
-    --accent-secondary: #4ecbff;
-    /* secondary neon blue */
+    --accent-strong: #4ecbff; /* strong blue end of gradient */
+    --accent-secondary: #4ecbff; /* secondary neon blue */
 
     /* Text */
     --text: #f5f7fb;
     --muted: #9095a3;
     --muted-soft: #6b7280;
     --danger: #ff4b4b;
+
+    /* Brand neon tokens */
+    --text-primary: rgba(127, 146, 139, 0.954);
+    --text-strong: rgba(123, 220, 183, 0.954);
+    --text-secondary: rgb(94, 103, 107);
+    --text-dark: rgb(16, 16, 16);
+
+    --neonGreen: rgb(34, 186, 52);
+    --neonGrey: rgb(95, 94, 94);
+    --neonWhite: rgb(237, 237, 237);
+    --neonYellow: rgb(162, 254, 63);
+    --neonBlue: rgb(16, 111, 244);
+
+    --pulse: 0.5;
 
     /* Shape & motion */
     --radius-lg: 18px;
@@ -89,16 +100,13 @@ body::after {
 ::-webkit-scrollbar {
     width: 10px;
 }
-
 ::-webkit-scrollbar-track {
     background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.08);
     border-radius: 999px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.16);
 }
@@ -122,13 +130,70 @@ button {
     align-items: center;
     justify-content: space-between;
     padding: 0.85rem 1.75rem;
-    background:
-        radial-gradient(circle at top left, rgba(123, 255, 136, 0.18), transparent 55%),
-        radial-gradient(circle at top right, rgba(78, 203, 255, 0.18), transparent 55%),
-        linear-gradient(145deg, #05070b, #050913);
+
     backdrop-filter: blur(22px);
     border-bottom: 1px solid var(--border-subtle);
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85);
+}
+
+.shop-header h1 {
+    margin: 0;
+    padding: 0;
+    letter-spacing: -0.1em;
+    font-size: 2rem;
+    line-height: 2rem;
+    font-family: "Share Tech Mono", monospace;
+    color: var(--text-primary);
+    text-shadow:
+        1px 1px 8px var(--neonGreen),
+        1px 1px 8px var(--neonGreen),
+        0 0 8px var(--neonGreen),
+        0 0 8px var(--neonGreen);
+}
+
+.text-neonGreen {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonGreen),
+        0 0 calc(4px * var(--pulse)) var(--neonGreen),
+        0 0 calc(6px * var(--pulse)) var(--neonGreen),
+        0 0 calc(18px * var(--pulse)) var(--neonGreen);
+}
+
+.text-neonGrey {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonGrey),
+        0 0 calc(4px * var(--pulse)) var(--neonGrey),
+        0 0 calc(6px * var(--pulse)) var(--neonGrey),
+        0 0 calc(18px * var(--pulse)) var(--neonGrey);
+}
+
+.text-neonWhite {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) rgba(235, 235, 235, 1),
+        0 0 calc(4px * var(--pulse)) rgba(235, 235, 235, 0.8),
+        0 0 calc(6px * var(--pulse)) rgba(235, 235, 235, 0.5),
+        0 0 calc(18px * var(--pulse)) rgba(235, 235, 235, 0.2);
+}
+
+.text-neonBlue {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonBlue),
+        0 0 calc(4px * var(--pulse)) var(--neonBlue),
+        0 0 calc(6px * var(--pulse)) var(--neonBlue),
+        0 0 calc(18px * var(--pulse)) var(--neonBlue);
+}
+
+.text-neonYellow {
+    color: var(--text-dark);
+    text-shadow:
+        0 0 calc(2px * var(--pulse)) var(--neonYellow),
+        0 0 calc(4px * var(--pulse)) var(--neonYellow),
+        0 0 calc(6px * var(--pulse)) var(--neonYellow),
+        0 0 calc(18px * var(--pulse)) var(--neonYellow);
 }
 
 /* Logo = pill with subtle glow */
