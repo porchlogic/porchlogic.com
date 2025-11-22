@@ -5,73 +5,96 @@
     <meta charset="utf-8" />
     <title>Porch Logic – Checkout</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="./shop.css" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="../css/pico.css" />
+    <style>
+        .hidden {
+            display: none !important;
+        }
+        .spinner {
+            border: 0.125rem solid transparent;
+            border-top-color: currentColor;
+            border-right-color: currentColor;
+            border-radius: 999px;
+            width: 1rem;
+            height: 1rem;
+            display: inline-block;
+            vertical-align: middle;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <header class="shop-header">
-        <a href="/" class="logo-link">Porch Logic</a>
-        <nav class="shop-nav">
-            <a href="./index.html" class="nav-link">Shop</a>
-            <a href="./cart.html" class="cart-link">
-                <span>Cart</span>
-                <span class="cart-count">0</span>
-            </a>
+    <header class="container">
+        <nav>
+            <ul>
+                <li>
+                    <a href="/" class="contrast"><strong>Porch Logic</strong></a>
+                </li>
+                <li><a href="./index.html">Shop</a></li>
+            </ul>
+            <ul>
+                <li>
+                    <a href="./cart.html">
+                        Cart <span class="cart-count" aria-live="polite">0</span>
+                    </a>
+                </li>
+            </ul>
         </nav>
     </header>
 
-    <main class="shop-main cart-main">
-        <h1>Checkout</h1>
+    <main class="container">
+        <header>
+            <p class="secondary">Checkout</p>
+            <h1>Complete your order</h1>
+        </header>
 
-        <section class="cart-layout">
-            <div class="checkout-panel card">
+        <article>
+            <header>
                 <h2>Payment</h2>
-                <p class="small-note">
-                    All payments handled by Stripe. We don’t see your card details.
+                <p class="secondary">
+                    All payments are handled by Stripe. We don’t see your card details.
                 </p>
+            </header>
 
-                <form id="payment-form">
-                    <div class="form-section">
-                        <label for="email">Email</label>
-                        <input id="email" type="email" autocomplete="email" required />
-                        <div id="email-errors" class="field-error"></div>
-                    </div>
+            <form id="payment-form">
+                <label for="email">Email</label>
+                <input id="email" type="email" autocomplete="email" required />
+                <div id="email-errors" class="field-error"></div>
 
-                    <div class="form-section">
-                        <label>
-                            <input type="checkbox" id="subscribe-checkbox" />
-                            <span>Keep me in the loop about future Porch Logic experiments.</span>
-                        </label>
-                    </div>
+                <label>
+                    <input type="checkbox" id="subscribe-checkbox" />
+                    <span>Keep me in the loop about future Porch Logic experiments.</span>
+                </label>
 
-                    <div class="form-section">
-                        <label>Shipping address</label>
-                        <div id="shipping-address-element" class="stripe-element"></div>
-                    </div>
+                <label>Shipping address</label>
+                <div id="shipping-address-element"></div>
 
-                    <div class="form-section">
-                        <label>Payment</label>
-                        <div id="payment-element" class="stripe-element"></div>
-                    </div>
+                <label>Payment</label>
+                <div id="payment-element"></div>
 
-                    <div id="payment-message" class="payment-message hidden"></div>
+                <p id="payment-message" class="payment-message hidden" role="status"></p>
 
-                    <button id="submit" class="button button-primary" type="submit">
-                        <span id="spinner" class="spinner hidden"></span>
-                        <span id="button-text">Pay</span>
-                    </button>
-                </form>
+                <button id="submit" type="submit">
+                    <span id="spinner" class="spinner hidden" aria-hidden="true"></span>
+                    <span id="button-text">Pay</span>
+                </button>
+            </form>
 
-                <p class="small-note">
-                    After payment, you’ll be redirected back to Porch Logic to confirm everything
-                    worked.
-                </p>
-            </div>
-        </section>
+            <p class="secondary">
+                After payment, you’ll be redirected back to Porch Logic to confirm everything worked.
+            </p>
+        </article>
     </main>
 
-    <footer class="shop-footer">
-        <p>Porch Logic &copy; <span id="year"></span></p>
+    <footer class="container">
+        <small>Porch Logic &copy; <span id="year"></span></small>
     </footer>
 
     <!-- Stripe.js v3 – Basil or newer -->

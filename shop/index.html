@@ -5,90 +5,90 @@
     <meta charset="utf-8" />
     <title>Porch Logic – Shop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="./shop.css" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="../css/pico.css" />
+    <link rel="stylesheet" href="../css/shop.css" />
 </head>
 
 <body>
-    <header class="shop-header">
-        <a href="/">
-            <h1 class="text-neonBlue">
-                <span class="text-neonGreen">p</span>
-                <span class="text-neonGreen">o</span>
-                <span class="text-neonGreen">r</span>
-                <span class="text-neonGrey">c</span>
-                <span class="text-neonGrey">h</span>
-        
-                <span class="text-neonWhite">L</span>
-                <span class="text-neonBlue">o</span>
-                <span class="text-neonYellow">g</span>
-                <span class="text-neonBlue">i</span>
-                <span class="text-neonWhite">c</span>
-            </h1>
-        </a>
+    <header class="container">
+        <nav>
+            <ul>
+                <li>
+                    <a href="/" class="contrast" aria-label="Porch Logic home">
+                        <strong>Porch Logic</strong>
+                    </a>
+                </li>
+            </ul>
+            <ul>
+                <li><a href="./cart.html">Cart</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <main class="shop-main">
-        <section class="hero">
-            <h1>Porch Logic Shop</h1>
-            <p>A minimal little storefront for things we’re building and iterating on.</p>
-        </section>
+    <main class="container">
+        <section aria-labelledby="shop-title">
+            <header>
+                <h1 id="shop-title">Shop</h1>
+                <p></p>
+            </header>
 
-        <section class="product-grid">
-            <article class="card card-product">
-                <header class="card-header">
-                    <h2>M8 Plate</h2>
-                    <p class="price">$32</p>
-                </header>
-                <div class="card-body">
-                    <p>
-                        PETG transparent smoke single-continuous-path 3D printed faceplate for Dirtywave M8 model 01
-                    </p>
-                    <ul class="feature-list">
-                        <li>Includes one future upgrade at 50% off</li>
-                    </ul>
-                </div>
-                <footer class="card-footer">
-                    <button id="buy-m8-plate-1" class="button button-product">
-                        Add to cart
-                    </button>
-                </footer>
-            </article>
+            <section class="grid">
+                <article class="product-card product-card--m8plate">
+                    <img class="product-card__image" src="/images/M8-Plate-1.png" alt="M8 Plate" />
+                
+                    <header>
+                        <h2>M8 Plate</h2>
+                        <p class="secondary">for Dirtywave M8 Tracker model:01</p>
+                    </header>              
+                    
+                
+                    <footer>
+                        <p class="product-card_price">$32</p>
+                        <button class="outline" id="buy-m8-plate-1">Buy</button>
+                    </footer>
+                </article>
+                
+                <article class="product-card product-card--smb1">
+                    <img class="product-card__image" src="/images/smb1_hero6.png" alt="M8 Plate" />
+                
+                    <header>
+                        <h2>SMB1</h2>
+                        <p class="secondary">connect your midi gear to</p>
+                    </header>
+     
+                
+                    <footer>
+                        <p class="product-card_price">$42</p>
+                        <button class="outline" id="buy-m8-plate-1">Buy</button>
+                    </footer>
+                </article>
 
-            <article class="card card-product coming-soon">
-                <header class="card-header">
-                    <h2>SMB1 Beta</h2>
-                    <p class="price">Coming soon</p>
-                </header>
-                <div class="card-body">
-                    <p>Experimental MIDI sync hardware for group performances and weird projects.</p>
-                    <p class="small-note">Not available yet – watch this space.</p>
-                </div>
-                <footer class="card-footer">
-                    <button class="button button-product" disabled>
-                        Coming soon
-                    </button>
-                </footer>
-            </article>
+            </section>
+
+            
+            
+            
         </section>
     </main>
 
-    <div id="cart-popup" class="cart-popup">
-        <div class="cart-popup-inner card">
+    <dialog id="cart-popup" aria-labelledby="cart-popup-title">
+        <article>
+            <header>
+                <h2 id="cart-popup-title">Cart updated</h2>
+            </header>
             <p id="popup-message"></p>
-            <div class="cart-popup-actions">
-                <button class="button" onclick="hideCartPopup()">Keep browsing</button>
-                <a href="./cart.html" class="button button-primary">Go to cart</a>
-            </div>
-        </div>
-    </div>
+            <footer>
+                <button type="button" class="secondary" data-close-cart>
+                    Keep browsing
+                </button>
+                <a href="./cart.html" role="button">Go to cart</a>
+            </footer>
+        </article>
+    </dialog>
 
-    <footer class="shop-footer">
-        <p>Porch Logic &copy; <span id="year"></span></p>
+    <footer class="container">
+        <small>Porch Logic &copy; <span id="year"></span></small>
     </footer>
 
     <script src="./cart.js"></script>
@@ -110,6 +110,16 @@
                     };
                     addItemToCart(item);
                     showCartPopup(`${item.name} added to cart.`);
+                });
+            }
+
+            const cartPopup = document.getElementById("cart-popup");
+            const closeCartBtn = document.querySelector("[data-close-cart]");
+            if (cartPopup && closeCartBtn) {
+                closeCartBtn.addEventListener("click", hideCartPopup);
+                cartPopup.addEventListener("cancel", (event) => {
+                    event.preventDefault();
+                    hideCartPopup();
                 });
             }
         });

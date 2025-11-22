@@ -1,0 +1,151 @@
+.full-width {
+    width:100%;
+}
+
+.product-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    color: #fff;
+    aspect-ratio: 1 / 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.0rem;
+    justify-content: space-between;
+}
+
+/* Full-bleed content image behaving like a background */
+.product-card__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Makes it behave like background-size: cover */
+    z-index: 0;
+}
+
+/* Optional overlay to keep text readable */
+.product-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Content on top */
+.product-card>*:not(.product-card__image) {
+    position: relative;
+    z-index: 2;
+}
+
+/* Adjustable header/footer backgrounds */
+.product-card header,
+.product-card footer {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+}
+
+.product-card footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    justify-items: center;
+}
+
+.product-card_price {
+    height: 100%;
+    width: 75%;
+    font-size: 2em;
+
+    display: flex;
+    justify-content: center;
+    /* horizontal */
+    align-items: center;
+    /* vertical */
+    text-align: center;
+    /* center multiline text */
+}
+
+.product-card button {
+    
+}
+
+.summary p {
+    text-align: right;
+}
+
+.summary footer {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-items: right;
+    gap: 1em;
+}
+
+.summary footer a {
+    font-size: 1em;
+
+    display: flex;
+    justify-content: center;
+    /* horizontal */
+    align-items: center;
+    /* vertical */
+    text-align: center;
+    /* center multiline text */
+}
+
+
+
+
+/* Smaller remove button */
+.remove-item-small {
+    padding: 0.15rem 0.35rem;
+    font-size: 0.75rem;
+    opacity: 0.75;
+}
+.remove-item-small:hover {
+    opacity: 1;
+}
+
+/* M8 plate row layout */
+.cart-m8-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.cart-m8-left {
+    flex: 1;
+}
+
+.cart-m8-right {
+    flex: 1;
+    min-width: 280px;
+}
+
+/* Live stream paragraph */
+.livestream-info {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    opacity: 0.75;
+}
+
+header {
+    padding-bottom: 2em;
+}
+
+.show-live-label {
+    margin-top: 0.25rem;
+}
+
+.show-live-description {
+    margin: 0.2rem 0 0;
+    font-size: 0.78rem;
+    color: var(--muted-soft);
+    max-width: 32rem;
+}
+
+

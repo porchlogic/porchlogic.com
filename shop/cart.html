@@ -5,216 +5,86 @@
     <meta charset="utf-8" />
     <title>Porch Logic – Cart</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="./shop.css" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="../css/pico.css" />
+    <link rel="stylesheet" href="../css/shop.css" />
+    <style>
+        .hidden {
+            display: none !important;
+        }
+        .spinner {
+            border: 0.125rem solid transparent;
+            border-top-color: currentColor;
+            border-right-color: currentColor;
+            border-radius: 999px;
+            width: 1rem;
+            height: 1rem;
+            display: inline-block;
+            vertical-align: middle;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <header class="shop-header">
-        <a href="/" class="logo-link">Porch Logic</a>
-        <nav class="shop-nav">
-            <a href="./index.html" class="nav-link">Shop</a>
-            <a href="./cart.html" class="cart-link">
-                <span>Cart</span>
-                <span class="cart-count">0</span>
-            </a>
+    <header class="container">
+        <nav>
+            <ul>
+                <li>
+                    <a href="/" class="contrast"><strong>Porch Logic</strong></a>
+                </li>
+                <li><a href="./index.html">Shop</a></li>
+            </ul>
+            <ul>
+                <li>
+                    <a href="./cart.html">
+                        Cart <span class="cart-count" aria-live="polite">0</span>
+                    </a>
+                </li>
+            </ul>
         </nav>
     </header>
 
-    <main class="shop-main cart-main">
-        <h1>Your cart</h1>
+    <main class="container">
+        <header>
+            <p class="secondary">Cart</p>
+            <h1>Your cart</h1>
+        </header>
 
-        <section class="cart-layout">
-            <!-- Full-width cart panel only -->
-            <div class="cart-panel card">
+        <section class="items full-width">
+            <article>
+            <header>
                 <h2>Items</h2>
-                <div id="cart-items-container" class="cart-items"></div>
+            </header>
+            <div id="cart-items-container"></div>
+            </article>
+        </section>
 
-                <div class="cart-summary">
-                    <span>Total</span>
-                    <strong id="cart-total">$0.00</strong>
-                </div>
+        <section class="summary full-width">
+            <article>
+            <header>
+                <h2>Summary</h2>
+            </header>
+            <p class="secondary">Items total</p>
+            <p><strong id="cart-total">$0.00</strong></p>
+            <footer>
+                
+                <button id="go-to-checkout" type="button">Checkout</button>
+                <a href="./index.html">Continue shopping</a>
+            </footer>
+            </article>
+        </section>
 
-                <div class="cart-actions">
-                    <a href="./index.html" class="button">Continue shopping</a>
-                    <button id="go-to-checkout" class="button button-primary" type="button">
-                        Checkout
-                    </button>
-                </div>
-            </div>
         </section>
     </main>
 
-    
-    
-    <!-- <canvas id="mound-grid" width="640" height="240"
-        style="border:1px solid #444; width:100%; max-width:640px; display:block; margin:auto;">
-    </canvas>
-
-    <div style="text-align:center; margin-top:10px;">
-        <button id="mode-toggle" style="padding:6px 14px; font-size:16px; cursor:pointer;">
-            ON
-        </button>
-    </div>
-    
-    <script>
-        (function () {
-
-            const ROWS = 8;
-            const COLS = 16;
-            const WIDTH = 640;
-            const HEIGHT = 240;
-
-            let moundData = Array.from({ length: ROWS }, () =>
-                Array.from({ length: COLS }, () => 0)
-            );
-
-            const canvas = document.getElementById("mound-grid");
-            const ctx = canvas.getContext("2d");
-            const toggleBtn = document.getElementById("mode-toggle");
-
-            let isDragging = false;
-            let dragButton = 0;  // 0 = left, 2 = right (right-click)
-            let changedThisDrag = new Set();
-            let mode = "ON";     // ON means left-click = add
-
-            toggleBtn.addEventListener("click", () => {
-                mode = (mode === "ON" ? "OFF" : "ON");
-                toggleBtn.innerText = mode;
-            });
-
-            function getHitInfo(x, y) {
-                const colWidth = WIDTH / COLS;
-                const rowHeight = HEIGHT / ROWS;
-
-                const col = Math.floor(x / colWidth);
-                const row = Math.floor(y / rowHeight);
-
-                if (row < 0 || row >= ROWS || col < 0 || col >= COLS) return null;
-                return { row, col };
-            }
-
-            function applyAction(row, col, button) {
-                const key = `${row}:${col}`;
-                if (changedThisDrag.has(key)) return;
-                changedThisDrag.add(key);
-
-                let turnOn;
-
-                if (mode === "ON") {
-                    // normal mode
-                    turnOn = (button === 0);   // left → on, right → off
-                } else {
-                    // inverted mode
-                    turnOn = (button === 2);   // right → on, left → off
-                }
-
-                moundData[row][col] = turnOn ? 1 : 0;
-                draw();
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, WIDTH, HEIGHT);
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = "#ccc";
-
-                const colWidth = WIDTH / COLS;
-                const rowHeight = HEIGHT / ROWS;
-
-                for (let r = 0; r < ROWS; r++) {
-                    const baseY = r * rowHeight + rowHeight / 2;
-
-                    ctx.beginPath();
-
-                    for (let c = 0; c < COLS; c++) {
-
-                        const h = moundData[r][c];
-                        const hNext = (c < COLS - 1) ? moundData[r][c + 1] : null;
-
-                        const x0 = c * colWidth;
-                        const x1 = x0 + colWidth;
-                        const midX = (x0 + x1) / 2;
-
-                        const yPeak = baseY - (h * (rowHeight * 0.35));
-
-                        if (c === 0)
-                            ctx.moveTo(x0, baseY);
-
-                        // plateau
-                        if (h === 1 && hNext === 1) {
-                            ctx.lineTo(x1, yPeak);
-                            continue;
-                        }
-
-                        // mound segment (ON)
-                        if (h === 1) {
-                            ctx.lineTo(midX, yPeak);  // up the left slope
-                            ctx.lineTo(x1, baseY);    // down the right slope
-                        }
-
-                        // flat segment (OFF)
-                        if (h === 0) {
-                            ctx.lineTo(x1, baseY);
-                        }
-                    }
-
-                    ctx.stroke();
-                }
-            }
-
-            function getCanvasCoords(evt) {
-                const rect = canvas.getBoundingClientRect();
-                return {
-                    x: (evt.clientX - rect.left) * (canvas.width / rect.width),
-                    y: (evt.clientY - rect.top) * (canvas.height / rect.height)
-                };
-            }
-
-            canvas.addEventListener("contextmenu", e => e.preventDefault());
-
-            canvas.addEventListener("mousedown", evt => {
-                isDragging = true;
-                dragButton = evt.button;
-                changedThisDrag.clear();
-
-                const { x, y } = getCanvasCoords(evt);
-                const hit = getHitInfo(x, y);
-                if (hit) applyAction(hit.row, hit.col, dragButton);
-            });
-
-            canvas.addEventListener("mousemove", evt => {
-                if (!isDragging) return;
-                const { x, y } = getCanvasCoords(evt);
-                const hit = getHitInfo(x, y);
-                if (hit) applyAction(hit.row, hit.col, dragButton);
-            });
-
-            canvas.addEventListener("mouseup", () => {
-                isDragging = false;
-                changedThisDrag.clear();
-            });
-            document.addEventListener("mouseup", () => {
-                isDragging = false;
-                changedThisDrag.clear();
-            });
-
-            // public API
-            window.moundGrid = {
-                getData: () => JSON.parse(JSON.stringify(moundData)),
-                setData: (d) => {
-                    moundData = JSON.parse(JSON.stringify(d));
-                    draw();
-                }
-            };
-
-            draw();
-
-        })();
-    </script> -->
-
-
-
-    <footer class="shop-footer">
-        <p>Porch Logic &copy; <span id="year"></span></p>
+    <footer class="container">
+        <small>Porch Logic &copy; <span id="year"></span></small>
     </footer>
 
     <!-- No Stripe here anymore -->

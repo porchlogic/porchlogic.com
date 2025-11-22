@@ -357,22 +357,53 @@ function renderCartItems() {
 
         // Optional glyph row for M8 plates
         if (item.id === 'm8_plate_1') {
-            const glyphRow = document.createElement('div');
-            glyphRow.className = 'cart-glyph-row';
 
-            const checkboxId = `glyph-checkbox-${uid}`;
-            const editorId = `glyph-editor-${uid}`;
+            const m8Wrapper = document.createElement('div');
+            m8Wrapper.className = 'cart-m8-container';
 
-            glyphRow.innerHTML = `
-				<label class="glyph-label" for="${checkboxId}">
-					<input type="checkbox" id="${checkboxId}" class="glyph-checkbox" data-item-uid="${uid}">
-					Add custom glyph
-				</label>
-				<div class="glyph-editor hidden" id="${editorId}"></div>
-			`;
+            const leftColumn = document.createElement('div');
+            leftColumn.className = 'cart-m8-left';
 
-            listItem.appendChild(glyphRow);
+            const rightColumn = document.createElement('div');
+            rightColumn.className = 'cart-m8-right';
+
+            // ---------- Custom Glyph Checkbox ----------
+            const glyphCheckboxId = `glyph-checkbox-${uid}`;
+            const glyphEditorId = `glyph-editor-${uid}`;
+
+            leftColumn.innerHTML += `
+        <label class="glyph-label" for="${glyphCheckboxId}">
+            <input type="checkbox" id="${glyphCheckboxId}" class="glyph-checkbox" data-item-uid="${uid}">
+            Add custom glyph
+        </label>
+    `;
+
+            // Space where editor goes
+            rightColumn.innerHTML = `
+        <div class="glyph-editor hidden" id="${glyphEditorId}"></div>
+    `;
+
+            // ---------- Show on Live Stream ----------
+            const liveCheckboxId = `live-checkbox-${uid}`;
+            const liveInfoId = `live-info-${uid}`;
+
+            leftColumn.innerHTML += `
+        <label class="live-label" for="${liveCheckboxId}" style="display:block;margin-top:0.5rem;">
+            <input type="checkbox" id="${liveCheckboxId}" class="live-checkbox" data-item-uid="${uid}">
+            Show on live stream
+        </label>
+        <p id="${liveInfoId}" class="livestream-info hidden">
+            This M8 plate will appear in your live stream overlay once purchased.
+        </p>
+    `;
+
+            m8Wrapper.appendChild(leftColumn);
+            m8Wrapper.appendChild(rightColumn);
+
+            listItem.appendChild(m8Wrapper);
         }
+
+        
 
         itemList.appendChild(listItem);
     });
@@ -421,6 +452,41 @@ function renderCartItems() {
             }
         });
     });
+
+    // Wire "show on live stream" checkboxes
+cartItemsContainer.querySelectorAll('.live-checkbox').forEach((checkbox) => {
+    const uid = checkbox.dataset.itemUid;
+    const p = document.getElementById(`live-info-${uid}`);
+    const item = cartItems.find(i => i.uid === uid);
+
+    // Ensure the item contains the flag
+    if (item.showOnLive === undefined) {
+        item.showOnLive = false;
+        saveCartItems(cartItems);
+    }
+
+    // Restore state
+    if (item.showOnLive) {
+        checkbox.checked = true;
+        p.classList.remove('hidden');
+    }
+
+    checkbox.addEventListener('change', () => {
+        const items = getCartItems();
+        const it = items.find(i => i.uid === uid);
+        if (!it) return;
+
+        it.showOnLive = checkbox.checked;
+        saveCartItems(items);
+
+        if (checkbox.checked) {
+            p.classList.remove('hidden');
+        } else {
+            p.classList.add('hidden');
+        }
+    });
+});
+
 }
 
 // Create or reattach mound grid inside the editor container
@@ -497,13 +563,25 @@ function showCartPopup(message) {
     const popupMessage = document.getElementById('popup-message');
     if (cartPopup && popupMessage) {
         popupMessage.textContent = message;
-        cartPopup.classList.add('visible');
+        if (typeof cartPopup.showModal === 'function') {
+            if (cartPopup.hasAttribute('open')) {
+                cartPopup.close();
+            }
+            cartPopup.showModal();
+        } else {
+            cartPopup.setAttribute('open', 'open');
+        }
     }
 }
 
 function hideCartPopup() {
     const cartPopup = document.getElementById('cart-popup');
     if (cartPopup) {
+        if (typeof cartPopup.close === 'function') {
+            cartPopup.close();
+        } else {
+            cartPopup.removeAttribute('open');
+        }
         cartPopup.classList.remove('visible');
     }
 }

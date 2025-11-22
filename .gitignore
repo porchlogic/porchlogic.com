@@ -1,0 +1,25 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+.pnp.*
+.npm/
+
+# Build artifacts
+dist/
+build/
+out/
+.next/
+coverage/
+.cache/
+
+# System junk
+.DS_Store
+Thumbs.db
+
+# IDE stuff
+.vscode/
+.idea/
+
