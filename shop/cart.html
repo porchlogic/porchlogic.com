@@ -12,6 +12,7 @@
         .hidden {
             display: none !important;
         }
+
         .spinner {
             border: 0.125rem solid transparent;
             border-top-color: currentColor;
@@ -23,6 +24,7 @@
             vertical-align: middle;
             animation: spin 0.8s linear infinite;
         }
+
         @keyframes spin {
             to {
                 transform: rotate(360deg);
@@ -58,29 +60,43 @@
 
         <section class="items full-width">
             <article>
-            <header>
-                <h2>Items</h2>
-            </header>
-            <div id="cart-items-container"></div>
+                <header>
+                    <h2>Items</h2>
+                </header>
+                <div id="cart-items-container"></div>
             </article>
         </section>
 
         <section class="summary full-width">
             <article>
-            <header>
-                <h2>Summary</h2>
-            </header>
-            <p class="secondary">Items total</p>
-            <p><strong id="cart-total">$0.00</strong></p>
-            <footer>
-                
-                <button id="go-to-checkout" type="button">Checkout</button>
-                <a href="./index.html">Continue shopping</a>
-            </footer>
+                <header>
+                    <h2>Summary</h2>
+                </header>
+                <p class="secondary">Items total</p>
+                <p><strong id="cart-total">$0.00</strong></p>
+                <footer>
+                    <button id="go-to-checkout" type="button">Checkout</button>
+                    <a href="./index.html">Continue shopping</a>
+                </footer>
             </article>
         </section>
 
-        </section>
+        <!-- Full-screen glyph editor modal -->
+        <div id="glyph-modal" class="glyph-modal hidden">
+            <div class="glyph-modal-inner card">
+                <header class="glyph-modal-header">
+                    <h2>Custom AM8 Glyph</h2>
+                    
+                </header>
+                <p class="glyph-modal-subtitle">
+                    Sculpt your glyph by clicking and dragging. Right-click to flatten segments.
+                </p>
+                <div id="glyph-modal-editor" class="glyph-modal-editor"></div>
+                <button type="button" class="button glyph-modal-close" aria-label="Close glyph editor">
+                    Close
+                </button>
+            </div>
+        </div>
     </main>
 
     <footer class="container">

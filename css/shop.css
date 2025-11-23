@@ -115,6 +115,7 @@
     display: flex;
     gap: 1rem;
     margin-top: 0.5rem;
+    min-height: 10rem;
 }
 
 .cart-m8-left {
@@ -149,3 +150,153 @@ header {
 }
 
 
+/* ---------------- Glyph editor row ---------------- */
+.glyph-modal {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+
+    background-color: #05070a;
+    padding: 2em;
+}
+
+.cart-glyph-row {
+    margin-top: 0.35rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.45rem;
+}
+
+.glyph-label {
+    font-size: 0.8rem;
+    color: var(--muted-soft);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.glyph-editor {
+    margin-top: 0.25rem;
+}
+
+/* Mode selector */
+
+.glyph-mode-wrapper {
+    text-align: center;
+    margin-top: 10px;
+    display: inline-flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.glyph-mode-btn {
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(148, 163, 184, 0.6);
+    background: #05070a;
+    color: var(--text);
+    transition:
+        background 0.15s ease-out,
+        border-color 0.15s ease-out,
+        transform 0.15s ease-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.glyph-mode-btn.active {
+    background: var(--accent-soft);
+    border-color: var(--accent-secondary);
+    transform: translateY(-1px);
+}
+
+/* Glyph icons */
+
+.glyph-icon {
+    display: block;
+    width: 32px;
+    height: 16px;
+    position: relative;
+}
+
+/* Flat: straight horizontal line */
+.glyph-icon-flat::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border-bottom: 2px solid var(--text);
+    border-radius: 999px;
+}
+
+/* Mound: little arch/mound */
+.glyph-icon-mound::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: 0;
+    height: 100%;
+    border: 2px solid var(--text);
+    border-bottom: none;
+    border-radius: 999px 999px 0 0;
+}
+
+.cart-m8-right {
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Wrapper around the small preview button */
+.glyph-thumb {
+    width: 8em;
+}
+
+/* Button that contains the preview canvas + label */
+.glyph-icon-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+    max-width: 220px;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-elevated-soft);
+    cursor: pointer;
+    text-align: center;
+    
+}
+
+.glyph-icon-button:hover {
+    background: rgba(15, 23, 42, 0.95);
+}
+
+.glyph-icon-button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Canvas scales to fit the button/container */
+.glyph-icon-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    aspect-ratio: 1/1;
+}
+
+/* Label under the preview */
+.glyph-icon-label {
+    font-size: 0.75rem;
+    color: var(--muted-soft);
+}

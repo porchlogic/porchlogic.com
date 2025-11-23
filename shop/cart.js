@@ -26,6 +26,7 @@ function ensureItemUid(item) {
 // ---------- mound grid factory (multi-instance) ----------
 
 const moundGridInstances = new Map(); // uid -> { getData, setData }
+let activeGlyphUid = null; // which cart line item is currently being edited in popup
 
 function createMoundGrid(canvas, controls, initialData, onChange) {
     const ROWS = 8;
@@ -103,7 +104,7 @@ function createMoundGrid(canvas, controls, initialData, onChange) {
 
     function draw() {
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        ctx.lineWidth = 9;         // thicker lines
+        ctx.lineWidth = 9; // thicker lines
         ctx.strokeStyle = '#ccc';
 
         const colWidth = WIDTH / COLS;
@@ -197,8 +198,6 @@ function createMoundGrid(canvas, controls, initialData, onChange) {
         },
     };
 }
-
-
 
 // ---------- cart logic ----------
 
@@ -299,7 +298,7 @@ function renderCartItems() {
 
     let cartItems = getCartItems();
 
-    // Ensure all items have uids
+    // Ensure all items have uids and glyph flags
     let mutated = false;
     cartItems.forEach((item) => {
         if (!item.uid) {
@@ -309,6 +308,10 @@ function renderCartItems() {
         if (item.customGlyphEnabled === undefined) {
             item.customGlyphEnabled = false;
             item.glyphData = item.glyphData || null;
+            mutated = true;
+        }
+        if (item.showOnLive === undefined) {
+            item.showOnLive = false;
             mutated = true;
         }
     });
@@ -355,9 +358,8 @@ function renderCartItems() {
 
         listItem.appendChild(headerRow);
 
-        // Optional glyph row for M8 plates
+        // Optional glyph / livestream row for M8 plates
         if (item.id === 'm8_plate_1') {
-
             const m8Wrapper = document.createElement('div');
             m8Wrapper.className = 'cart-m8-container';
 
@@ -367,43 +369,46 @@ function renderCartItems() {
             const rightColumn = document.createElement('div');
             rightColumn.className = 'cart-m8-right';
 
-            // ---------- Custom Glyph Checkbox ----------
+            // ---------- Custom Glyph Checkbox + thumbnail placeholder ----------
             const glyphCheckboxId = `glyph-checkbox-${uid}`;
-            const glyphEditorId = `glyph-editor-${uid}`;
+            const glyphThumbId = `glyph-thumb-${uid}`;
 
             leftColumn.innerHTML += `
-        <label class="glyph-label" for="${glyphCheckboxId}">
-            <input type="checkbox" id="${glyphCheckboxId}" class="glyph-checkbox" data-item-uid="${uid}">
-            Add custom glyph
-        </label>
-    `;
+                <label class="glyph-label" for="${glyphCheckboxId}">
+                    <input type="checkbox" id="${glyphCheckboxId}" class="glyph-checkbox" data-item-uid="${uid}">
+                    Add custom glyph
+                </label>
+            `;
 
-            // Space where editor goes
             rightColumn.innerHTML = `
-        <div class="glyph-editor hidden" id="${glyphEditorId}"></div>
-    `;
+	<div class="glyph-thumb hidden" id="${glyphThumbId}">
+		<button type="button" class="glyph-icon-button" data-item-uid="${uid}">
+			<canvas class="glyph-icon-canvas" width="160" height="80" data-item-uid="${uid}"></canvas>
+			<span class="glyph-icon-label">Edit glyph</span>
+		</button>
+	</div>
+`;
+
 
             // ---------- Show on Live Stream ----------
             const liveCheckboxId = `live-checkbox-${uid}`;
             const liveInfoId = `live-info-${uid}`;
 
             leftColumn.innerHTML += `
-        <label class="live-label" for="${liveCheckboxId}" style="display:block;margin-top:0.5rem;">
-            <input type="checkbox" id="${liveCheckboxId}" class="live-checkbox" data-item-uid="${uid}">
-            Show on live stream
-        </label>
-        <p id="${liveInfoId}" class="livestream-info hidden">
-            This M8 plate will appear in your live stream overlay once purchased.
-        </p>
-    `;
+                <label class="live-label" for="${liveCheckboxId}" style="display:block;margin-top:0.5rem;">
+                    <input type="checkbox" id="${liveCheckboxId}" class="live-checkbox" data-item-uid="${uid}">
+                    Show on live stream
+                </label>
+                <p id="${liveInfoId}" class="livestream-info hidden">
+                    This M8 plate will appear in your live stream overlay once purchased.
+                </p>
+            `;
 
             m8Wrapper.appendChild(leftColumn);
             m8Wrapper.appendChild(rightColumn);
 
             listItem.appendChild(m8Wrapper);
         }
-
-        
 
         itemList.appendChild(listItem);
     });
@@ -420,19 +425,26 @@ function renderCartItems() {
         });
     });
 
-    // Wire glyph checkboxes + instantiate mound grids
+    // Wire glyph checkboxes + thumbnail visibility
     cartItemsContainer.querySelectorAll('.glyph-checkbox').forEach((checkbox) => {
         const uid = checkbox.dataset.itemUid;
-        const editor = document.getElementById(`glyph-editor-${uid}`);
+        const thumbWrapper = document.getElementById(`glyph-thumb-${uid}`);
+        const thumbCanvas = thumbWrapper
+            ? thumbWrapper.querySelector('.glyph-icon-canvas')
+            : null;
         const item = cartItems.find((i) => i.uid === uid);
 
-        if (!item || !editor) return;
+        if (!item) return;
 
         // Restore state
         if (item.customGlyphEnabled) {
             checkbox.checked = true;
-            editor.classList.remove('hidden');
-            attachMoundGrid(uid, editor, item.glyphData);
+            if (thumbWrapper) {
+                thumbWrapper.classList.remove('hidden');
+            }
+            if (thumbCanvas) {
+                renderGlyphThumbnail(thumbCanvas, item.glyphData);
+            }
         }
 
         checkbox.addEventListener('change', () => {
@@ -443,50 +455,62 @@ function renderCartItems() {
             it.customGlyphEnabled = checkbox.checked;
             saveCartItems(items);
 
-            if (checkbox.checked) {
-                editor.classList.remove('hidden');
-                attachMoundGrid(uid, editor, it.glyphData);
-            } else {
-                editor.classList.add('hidden');
-                // keep glyphData but no need to destroy instance
+            if (thumbWrapper) {
+                if (checkbox.checked) {
+                    thumbWrapper.classList.remove('hidden');
+                    if (thumbCanvas) {
+                        renderGlyphThumbnail(thumbCanvas, it.glyphData);
+                    }
+                } else {
+                    thumbWrapper.classList.add('hidden');
+                }
             }
         });
     });
 
-    // Wire "show on live stream" checkboxes
-cartItemsContainer.querySelectorAll('.live-checkbox').forEach((checkbox) => {
-    const uid = checkbox.dataset.itemUid;
-    const p = document.getElementById(`live-info-${uid}`);
-    const item = cartItems.find(i => i.uid === uid);
-
-    // Ensure the item contains the flag
-    if (item.showOnLive === undefined) {
-        item.showOnLive = false;
-        saveCartItems(cartItems);
-    }
-
-    // Restore state
-    if (item.showOnLive) {
-        checkbox.checked = true;
-        p.classList.remove('hidden');
-    }
-
-    checkbox.addEventListener('change', () => {
-        const items = getCartItems();
-        const it = items.find(i => i.uid === uid);
-        if (!it) return;
-
-        it.showOnLive = checkbox.checked;
-        saveCartItems(items);
-
-        if (checkbox.checked) {
-            p.classList.remove('hidden');
-        } else {
-            p.classList.add('hidden');
-        }
+    // Wire glyph thumbnail buttons to open full-screen editor
+    cartItemsContainer.querySelectorAll('.glyph-icon-button').forEach((button) => {
+        const uid = button.dataset.itemUid;
+        button.addEventListener('click', () => {
+            openGlyphModal(uid);
+        });
     });
-});
 
+    // Wire "show on live stream" checkboxes
+    cartItemsContainer.querySelectorAll('.live-checkbox').forEach((checkbox) => {
+        const uid = checkbox.dataset.itemUid;
+        const p = document.getElementById(`live-info-${uid}`);
+        const item = cartItems.find((i) => i.uid === uid);
+
+        if (!item || !p) return;
+
+        // Ensure the item contains the flag
+        if (item.showOnLive === undefined) {
+            item.showOnLive = false;
+            saveCartItems(cartItems);
+        }
+
+        // Restore state
+        if (item.showOnLive) {
+            checkbox.checked = true;
+            p.classList.remove('hidden');
+        }
+
+        checkbox.addEventListener('change', () => {
+            const items = getCartItems();
+            const it = items.find((i) => i.uid === uid);
+            if (!it) return;
+
+            it.showOnLive = checkbox.checked;
+            saveCartItems(items);
+
+            if (checkbox.checked) {
+                p.classList.remove('hidden');
+            } else {
+                p.classList.add('hidden');
+            }
+        });
+    });
 }
 
 // Create or reattach mound grid inside the editor container
@@ -495,8 +519,8 @@ function attachMoundGrid(uid, editorEl, existingData) {
     editorEl.innerHTML = '';
 
     const canvas = document.createElement('canvas');
-    canvas.width = 640;   // square
-    canvas.height = 640;  // square
+    canvas.width = 640; // square
+    canvas.height = 640; // square
     canvas.style.border = '1px solid #444';
     canvas.style.width = '100%';
     canvas.style.maxWidth = '640px';
@@ -524,7 +548,7 @@ function attachMoundGrid(uid, editorEl, existingData) {
     editorEl.appendChild(canvas);
     editorEl.appendChild(controlsWrapper);
 
-    // When grid changes, persist to sessionStorage
+    // When grid changes, persist to sessionStorage and update thumbnail
     const instance = createMoundGrid(
         canvas,
         { flatBtn, moundBtn },
@@ -535,13 +559,87 @@ function attachMoundGrid(uid, editorEl, existingData) {
             if (!it) return;
             it.glyphData = data;
             saveCartItems(items);
+
+            updateGlyphThumbnail(uid, data);
         }
     );
 
     moundGridInstances.set(uid, instance);
 }
 
+// Update the thumbnail for a given uid (if present in DOM)
+function updateGlyphThumbnail(uid, glyphData) {
+    const canvas = document.querySelector(
+        `.glyph-icon-canvas[data-item-uid="${uid}"]`
+    );
+    if (!canvas) return;
+    renderGlyphThumbnail(canvas, glyphData);
+}
 
+// Render a small preview of the glyph into a canvas
+function renderGlyphThumbnail(canvas, glyphData) {
+    const ROWS = 8;
+    const COLS = 16;
+
+    let data = Array.from({ length: ROWS }, () =>
+        Array.from({ length: COLS }, () => 0)
+    );
+
+    if (
+        Array.isArray(glyphData) &&
+        glyphData.length === ROWS &&
+        glyphData.every((row) => Array.isArray(row) && row.length === COLS)
+    ) {
+        data = glyphData;
+    }
+
+    const ctx = canvas.getContext('2d');
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#bfc7d5';
+
+    const colWidth = WIDTH / COLS;
+    const rowHeight = HEIGHT / ROWS;
+
+    for (let r = 0; r < ROWS; r++) {
+        const baseY = r * rowHeight + rowHeight / 2;
+
+        ctx.beginPath();
+
+        for (let c = 0; c < COLS; c++) {
+            const h = data[r][c];
+            const hNext = c < COLS - 1 ? data[r][c + 1] : null;
+
+            const x0 = c * colWidth;
+            const x1 = x0 + colWidth;
+            const midX = (x0 + x1) / 2;
+
+            const yPeak = baseY - h * (rowHeight * 0.35);
+
+            if (c === 0) ctx.moveTo(x0, baseY);
+
+            if (h === 1 && hNext === 1) {
+                ctx.lineTo(x1, yPeak);
+                continue;
+            }
+
+            if (h === 1) {
+                ctx.lineTo(midX, yPeak);
+                ctx.lineTo(x1, baseY);
+            }
+
+            if (h === 0) {
+                ctx.lineTo(x1, baseY);
+            }
+        }
+
+        ctx.stroke();
+    }
+}
 
 // Calculate and display the cart total
 function updateCartTotal() {
@@ -556,7 +654,7 @@ function updateCartTotal() {
     }
 }
 
-// Popup helpers
+// Popup helpers (for generic cart popup, unchanged)
 
 function showCartPopup(message) {
     const cartPopup = document.getElementById('cart-popup');
@@ -586,6 +684,39 @@ function hideCartPopup() {
     }
 }
 
+// Glyph editor modal helpers
+
+function openGlyphModal(uid) {
+    const modal = document.getElementById('glyph-modal');
+    const editorEl = document.getElementById('glyph-modal-editor');
+    if (!modal || !editorEl) return;
+
+    const items = getCartItems();
+    const item = items.find((i) => i.uid === uid);
+    if (!item) return;
+
+    activeGlyphUid = uid;
+
+    modal.classList.remove('hidden');
+    modal.classList.add('visible');
+    modal.classList.add('test');
+
+    attachMoundGrid(uid, editorEl, item.glyphData || null);
+}
+
+function closeGlyphModal() {
+    const modal = document.getElementById('glyph-modal');
+    const editorEl = document.getElementById('glyph-modal-editor');
+    if (!modal || !editorEl) return;
+
+    modal.classList.remove('visible');
+    modal.classList.add('hidden');
+
+    // Clear editor DOM to free canvas + listeners
+    editorEl.innerHTML = '';
+    activeGlyphUid = null;
+}
+
 // Initialize cart on page load
 document.addEventListener('DOMContentLoaded', () => {
     updateCartIconCount();
@@ -595,4 +726,28 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         updateCheckoutButtonState();
     }
+
+    // Glyph modal wiring (close button, backdrop, ESC)
+    const glyphModal = document.getElementById('glyph-modal');
+    const glyphCloseBtn = document.querySelector('.glyph-modal-close');
+
+    if (glyphModal) {
+        glyphModal.addEventListener('click', (event) => {
+            if (event.target === glyphModal) {
+                closeGlyphModal();
+            }
+        });
+    }
+
+    if (glyphCloseBtn) {
+        glyphCloseBtn.addEventListener('click', () => {
+            closeGlyphModal();
+        });
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeGlyphModal();
+        }
+    });
 });
