@@ -34,41 +34,102 @@
             </header>
 
             <section class="grid">
-                <article class="product-card product-card--m8plate">
-                    <img class="product-card__image" src="/images/M8-Plate-1.png" alt="M8 Plate" />
-                
-                    <header>
-                        <h2>M8 Plate</h2>
-                        <p class="secondary">for Dirtywave M8 Tracker model:01</p>
-                    </header>              
-                    
-                
-                    <footer>
-                        <p class="product-card_price">$32</p>
-                        <button class="outline" id="buy-m8-plate-1">Buy</button>
-                    </footer>
+                <!-- M8 Plate card -->
+                <article class="product-card product-card--m8plate" data-product-card>
+                    <!-- FRONT VIEW -->
+                    <div class="product-card__view product-card__view--front">
+                        <img class="product-card__image" src="/images/M8-Plate-1.png" alt="M8 Plate" />
+
+                        <header>
+                            <h2>M8 Plate</h2>
+                            <p class="secondary">for Dirtywave M8 Tracker model:01</p>
+                        </header>
+
+                        <footer>
+                            <p class="product-card_price">$32</p>
+                            <button type="button" class="outline product-card__configure" data-card-configure>
+                                Configure
+                            </button>
+                        </footer>
+                    </div>
+
+                    <!-- CONFIG VIEW (looks like the back) -->
+                    <div class="product-card__view product-card__view--config">
+                        <header>
+                            <h2>M8 Plate</h2>
+                            <p class="secondary">Configuration</p>
+                        </header>
+
+                        <div class="product-card__config-body">
+                            <p class="product-card__config-note">
+                                Standard transparent smoke PETG single-path print. Future options (glyphs, editions,
+                                etc.)
+                                will appear here and be stored with your order.
+                            </p>
+                        </div>
+
+                        <footer>
+                            <p class="product-card_price">$32</p>
+                            <div class="product-card__actions">
+                                <button type="button" class="secondary" data-card-back>
+                                    Back
+                                </button>
+                                <button type="button" class="outline" id="buy-m8-plate-1">
+                                    Buy
+                                </button>
+                            </div>
+                        </footer>
+                    </div>
                 </article>
-                
-                <article class="product-card product-card--smb1">
-                    <img class="product-card__image" src="/images/smb1_hero6.png" alt="M8 Plate" />
-                
-                    <header>
-                        <h2>SMB1</h2>
-                        <p class="secondary">connect your midi gear to</p>
-                    </header>
-     
-                
-                    <footer>
-                        <p class="product-card_price">$42</p>
-                        <button class="outline" id="buy-m8-plate-1">Buy</button>
-                    </footer>
+
+                <!-- SMB1 card -->
+                <article class="product-card product-card--smb1" data-product-card>
+                    <!-- FRONT VIEW -->
+                    <div class="product-card__view product-card__view--front">
+                        <img class="product-card__image" src="/images/smb1_hero6.png" alt="SMB1" />
+
+                        <header>
+                            <h2>SMB1</h2>
+                            <p class="secondary">connect your MIDI gear to the swarm</p>
+                        </header>
+
+                        <footer>
+                            <p class="product-card_price">$42</p>
+                            <button type="button" class="outline product-card__configure" data-card-configure>
+                                Configure
+                            </button>
+                        </footer>
+                    </div>
+
+                    <!-- CONFIG VIEW -->
+                    <div class="product-card__view product-card__view--config">
+                        <header>
+                            <h2>SMB1</h2>
+                            <p class="secondary">Configuration</p>
+                        </header>
+
+                        <div class="product-card__config-body">
+                            <p class="product-card__config-note">
+                                SMB1 ships with the standard firmware for clock + transport relay. Firmware channel or
+                                pack options will show here once they’re available.
+                            </p>
+                        </div>
+
+                        <footer>
+                            <p class="product-card_price">$42</p>
+                            <div class="product-card__actions">
+                                <button type="button" class="secondary" data-card-back>
+                                    Back
+                                </button>
+                                <button type="button" class="outline" id="buy-smb1-1">
+                                    Buy
+                                </button>
+                            </div>
+                        </footer>
+                    </div>
                 </article>
 
             </section>
-
-            
-            
-            
         </section>
     </main>
 
@@ -98,21 +159,65 @@
             const y = document.getElementById("year");
             if (y) y.textContent = new Date().getFullYear();
 
-            // M8 Plate buy button
-            const buyBtn = document.getElementById("buy-m8-plate-1");
-            if (buyBtn) {
-                buyBtn.addEventListener("click", () => {
+            // --- Swap front/config views (fake "flip") ---
+            const configureButtons = document.querySelectorAll("[data-card-configure]");
+            configureButtons.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const card = btn.closest("[data-product-card]");
+                    if (card) {
+                        card.classList.add("product-card--config");
+                    }
+                });
+            });
+
+            const backButtons = document.querySelectorAll("[data-card-back]");
+            backButtons.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const card = btn.closest("[data-product-card]");
+                    if (card) {
+                        card.classList.remove("product-card--config");
+                    }
+                });
+            });
+
+            // --- Buy buttons on config view ---
+            const m8BuyBtn = document.getElementById("buy-m8-plate-1");
+            if (m8BuyBtn) {
+                m8BuyBtn.addEventListener("click", () => {
                     const item = {
-                        id: "m8_plate_1",       // MUST match PRICE_LOOKUP on the server
+                        id: "m8_plate_1", // MUST match server PRICE_LOOKUP
                         name: "M8 Plate",
                         price: 32.0,
                         quantity: 1
                     };
-                    addItemToCart(item);
-                    showCartPopup(`${item.name} added to cart.`);
+                    if (typeof addItemToCart === "function") {
+                        addItemToCart(item);
+                    }
+                    if (typeof showCartPopup === "function") {
+                        showCartPopup(`${item.name} added to cart.`);
+                    }
                 });
             }
 
+            const smb1BuyBtn = document.getElementById("buy-smb1-1");
+            if (smb1BuyBtn) {
+                smb1BuyBtn.addEventListener("click", () => {
+                    const item = {
+                        id: "smb1_1", // make sure this matches your server-side ID
+                        name: "SMB1",
+                        price: 42.0,
+                        quantity: 1
+                    };
+                    if (typeof addItemToCart === "function") {
+                        addItemToCart(item);
+                    }
+                    if (typeof showCartPopup === "function") {
+                        showCartPopup(`${item.name} added to cart.`);
+                    }
+                });
+            }
+
+            // Cart popup close wiring
             const cartPopup = document.getElementById("cart-popup");
             const closeCartBtn = document.querySelector("[data-close-cart]");
             if (cartPopup && closeCartBtn) {

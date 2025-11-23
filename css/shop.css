@@ -1,6 +1,42 @@
-.full-width {
-    width:100%;
+:root {
+    /* Backgrounds */
+    --bg: #0e0e10;
+    --bg-light: #1a1a1d;
+
+    /* Text */
+    --text-primary: rgba(165, 181, 175, 0.954);
+    --text-strong: rgba(123, 220, 183, 0.954);
+    --text-secondary: rgb(94, 103, 107);
+    --text-dark: rgb(16, 16, 16);
+
+    /* Accent Colors */
+    --neonGreen: rgb(34, 186, 52);
+    --neonGrey: rgb(95, 94, 94);
+    --neonWhite: rgb(237, 237, 237);
+    --neonYellow: rgb(162, 254, 63);
+    --neonBlue: rgb(16, 111, 244);
+    --neonPurple: rgb(130, 80, 250);
+    --neonPink: rgb(248, 57, 117);
+    --neonRed: rgba(218, 22, 22, 0.886);
+
+    /* Borders / Shadows */
+    --border-color: #4b5563;
+    --shadow-color: rgba(0, 0, 0, 0.5);
 }
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* =========================================================
+   PRODUCT CARDS – front/config view swap (no 3D mirror)
+   ========================================================= */
 
 .product-card {
     position: relative;
@@ -8,26 +44,41 @@
     border-radius: 12px;
     color: #fff;
     aspect-ratio: 1 / 1;
-
-    display: flex;
-    flex-direction: column;
-    gap: 0.0rem;
-    justify-content: space-between;
 }
 
-/* Full-bleed content image behaving like a background */
-.product-card__image {
+/* Each "side" of the card lives in a view that fills the card */
+.product-card__view {
+    position: absolute;
+    inset: 0;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0;
+    transition:
+        opacity 0.22s ease-out,
+        transform 0.22s ease-out;
+}
+
+/* FRONT VIEW (default, visible) */
+.product-card__view--front {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* Full-bleed image, behaves like background */
+.product-card__view--front .product-card__image {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Makes it behave like background-size: cover */
     z-index: 0;
 }
 
-/* Optional overlay to keep text readable */
-.product-card::before {
+/* Overlay to keep text readable */
+.product-card__view--front::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -36,26 +87,50 @@
     pointer-events: none;
 }
 
-/* Content on top */
-.product-card>*:not(.product-card__image) {
+/* Content on top of overlay+image */
+.product-card__view--front>*:not(.product-card__image) {
     position: relative;
     z-index: 2;
 }
 
-/* Adjustable header/footer backgrounds */
-.product-card header,
-.product-card footer {
-    background: rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
+/* CONFIG VIEW (logical "back", initially hidden) */
+.product-card__view--config {
+    background: var(--bg-elevated-soft, #111827);
+    border: 1px solid var(--border-subtle, #1f2937);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(6px);
 }
 
-.product-card footer {
+/* When configured, swap which view is visible */
+.product-card--config .product-card__view--front {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px);
+}
+
+.product-card--config .product-card__view--config {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* Shared header/footer styling inside views */
+.product-card__view header,
+.product-card__view footer {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+}
+
+.product-card__view footer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    justify-items: center;
+    align-items: center;
 }
 
+/* Price area */
 .product-card_price {
     height: 100%;
     width: 75%;
@@ -63,16 +138,46 @@
 
     display: flex;
     justify-content: center;
-    /* horizontal */
     align-items: center;
-    /* vertical */
     text-align: center;
-    /* center multiline text */
 }
 
-.product-card button {
-    
+/* Back/config content block */
+.product-card__config-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
 }
+
+.product-card__config-note {
+    font-size: 0.85rem;
+    color: var(--muted-soft, #9ca3af);
+}
+
+/* Actions on config view: Buy + Back on the right */
+.product-card__actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Configure button on front */
+.product-card__configure {
+    align-self: center;
+
+    border: 2px solid var(--neonGreen);
+    background-color: rgba(6, 56, 117, 0.136);
+    color: rgb(149, 202, 231);
+    box-shadow: 0 2px 4px var(--neonBlue);
+}
+
+/* =========================================================
+   SUMMARY / CART & GLYPH STYLES (unchanged)
+   ========================================================= */
 
 .summary p {
     text-align: right;
@@ -97,15 +202,13 @@
     /* center multiline text */
 }
 
-
-
-
 /* Smaller remove button */
 .remove-item-small {
     padding: 0.15rem 0.35rem;
     font-size: 0.75rem;
     opacity: 0.75;
 }
+
 .remove-item-small:hover {
     opacity: 1;
 }
@@ -148,7 +251,6 @@ header {
     color: var(--muted-soft);
     max-width: 32rem;
 }
-
 
 /* ---------------- Glyph editor row ---------------- */
 .glyph-modal {
@@ -274,7 +376,6 @@ header {
     background: var(--bg-elevated-soft);
     cursor: pointer;
     text-align: center;
-    
 }
 
 .glyph-icon-button:hover {
