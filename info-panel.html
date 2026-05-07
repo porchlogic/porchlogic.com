@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Song Card Flexbox Layout</title>
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #f4f4f4;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+
+		.song-card {
+			display: flex;
+			align-items: center;
+			gap: 48px;
+			width: min(1125px, 100vw);
+			min-height: 370px;
+			padding: 24px;
+			border: 2px solid black;
+			background: white;
+		}
+
+		.main-art {
+			width: 315px;
+			aspect-ratio: 1 / 1;
+			background: #d3d3d3;
+			flex: 0 0 auto;
+		}
+
+		.song-info {
+			flex: 1;
+			min-width: 0;
+			text-align: right;
+			line-height: 1;
+		}
+
+		.artist,
+		.song-title {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: clip;
+		}
+
+		.artist {
+			font-size: 88px;
+			font-weight: 400;
+			color: black;
+		}
+
+		.song-title {
+			margin-top: 12px;
+			font-size: 70px;
+			font-weight: 400;
+			color: #555;
+		}
+
+		.thumb-art {
+			width: 180px;
+			aspect-ratio: 1 / 1;
+			background: #d3d3d3;
+			flex: 0 0 auto;
+		}
+
+		@media (max-width: 800px) {
+			.song-card {
+				gap: 24px;
+			}
+
+			.main-art {
+				width: 35vw;
+			}
+
+			.thumb-art {
+				width: 18vw;
+			}
+
+			.artist {
+				font-size: 10vw;
+			}
+
+			.song-title {
+				font-size: 7vw;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="song-card">
+		<div class="main-art" aria-label="Main artwork placeholder"></div>
+
+		<section class="song-info" aria-label="Song information">
+			<div class="artist">artist</div>
+			<div class="song-title">song-title with a very long title that will get cut off</div>
+		</section>
+
+		<div class="thumb-art" aria-label="Secondary artwork placeholder"></div>
+	</main>
+</body>
+</html>

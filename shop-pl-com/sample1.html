@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>M8 PLATE Layout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --bg: #f3f3f3;
+            --border: #dedede;
+            --text-main: #111;
+            --text-muted: #777;
+            --accent: #ff9a2c;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                sans-serif;
+            color: var(--text-main);
+        }
+
+        main {
+            max-width: 760px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding: 3.5rem 1.5rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* --- HERO BAND --- */
+
+        .hero-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            column-gap: 3rem;
+            row-gap: 0;
+            min-height: 50vh;
+        }
+
+        .hero-title-col {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 0.5rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            letter-spacing: 0.28em;
+            transform: rotate(90deg);
+            transform-origin: center;
+            white-space: nowrap;
+        }
+
+        .hero-media-col {
+            flex: 0 1 360px;
+            min-width: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- CAROUSEL --- */
+
+        .carousel {
+            position: relative;
+            margin: 0 auto;
+            max-width: 320px;
+            width: 100%;
+        }
+
+        .carousel input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .carousel-viewport {
+            position: relative;
+            width: 100%;
+            padding-bottom: 145%;
+            /* aspect ratio box */
+            overflow: visible;
+        }
+
+        .carousel-viewport figure {
+            position: absolute;
+            inset: 0;
+            margin: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            filter: drop-shadow(0 14px 40px rgba(0, 0, 0, 0.35));
+        }
+
+        .carousel-viewport img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* show slide for checked radio */
+        #hero-1:checked~.carousel-viewport .slide-1,
+        #hero-2:checked~.carousel-viewport .slide-2 {
+            opacity: 1;
+        }
+
+        .carousel-dots {
+            margin-top: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.55rem;
+        }
+
+        .carousel-dots label {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            border: 1px solid var(--text-muted);
+            cursor: pointer;
+        }
+
+        #hero-1:checked~.carousel-dots label[for="hero-1"],
+        #hero-2:checked~.carousel-dots label[for="hero-2"] {
+            background: var(--text-main);
+        }
+
+        /* --- SPECS BAND --- */
+
+        .product-meta {
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .product-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            border-left: 1px solid var(--border);
+        }
+
+        .spec {
+            padding: 1.4rem 1.1rem;
+            text-align: left;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .spec h2 {
+            margin: 0 0 0.45rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--text-muted);
+        }
+
+        .spec p {
+            margin: 0;
+            font-size: 1.05rem;
+            letter-spacing: 0.08em;
+        }
+
+        .spec .sub {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.16em;
+        }
+
+        /* --- FORM ELEMENTS --- */
+
+        fieldset {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* color pills */
+
+        .color-options {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .color-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .color-pill input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .color-pill span {
+            white-space: nowrap;
+        }
+
+        .color-pill input:checked+span {
+            color: #fff;
+            background: var(--text-main);
+            border-radius: 999px;
+            padding: 0.1rem 0.7rem;
+        }
+
+        /* glyph toggle + thumb */
+
+        .glyph-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.25rem;
+            flex-wrap: nowrap;
+        }
+
+        .glyph-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background:
+                repeating-linear-gradient(45deg,
+                    #ccc 0,
+                    #ccc 4px,
+                    #f5f5f5 4px,
+                    #f5f5f5 8px);
+            flex-shrink: 0;
+        }
+
+        /* toggle */
+
+        .toggle {
+            display: inline-flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .toggle-track {
+            width: 44px;
+            height: 24px;
+            border-radius: 12px;
+            background: #ddd;
+            display: inline-flex;
+            align-items: center;
+            padding: 3px;
+            transition: background 0.15s ease;
+        }
+
+        .toggle-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: white;
+            transform: translateX(0);
+            transition: transform 0.15s ease;
+        }
+
+        .toggle input:checked+.toggle-track {
+            background: var(--accent);
+        }
+
+        .toggle input:checked+.toggle-track .toggle-thumb {
+            transform: translateX(20px);
+        }
+
+        /* --- RESPONSIVE TWEAKS (layout stays the same) --- */
+
+        @media (max-width: 768px) {
+            main {
+                padding: 2.75rem 1.25rem 2.25rem;
+            }
+
+            .hero-row {
+                column-gap: 2.2rem;
+                min-height: 46vh;
+            }
+
+            h1 {
+                font-size: 1.2rem;
+                letter-spacing: 0.22em;
+            }
+
+            .hero-media-col {
+                flex-basis: 300px;
+            }
+
+            .carousel {
+                max-width: 280px;
+            }
+
+            .product-meta {
+                margin-top: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 2rem 1rem 1.8rem;
+            }
+
+            .hero-row {
+                column-gap: 1.5rem;
+                min-height: 44vh;
+            }
+
+            .hero-title-col {
+                padding-left: 0;
+            }
+
+            h1 {
+                font-size: 1rem;
+                letter-spacing: 0.18em;
+            }
+
+            .hero-media-col {
+                flex-basis: 240px;
+            }
+
+            .carousel {
+                max-width: 240px;
+            }
+
+            .spec {
+                padding: 1.05rem 0.75rem;
+            }
+
+            .spec p {
+                font-size: 0.95rem;
+            }
+
+            .glyph-thumb {
+                width: 34px;
+                height: 34px;
+            }
+
+            .color-pill {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.65rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="hero-title-col">
+            <h1>M8 PLATE</h1>
+        </div>
+        <section class="hero-row" aria-label="Product hero">
+            
+
+            <div class="hero-media-col">
+                <section class="carousel" aria-label="Product photos">
+                    <input type="radio" name="hero" id="hero-1" checked />
+                    <input type="radio" name="hero" id="hero-2" />
+
+                    <div class="carousel-viewport">
+                        <figure class="slide-1">
+                            <img src="/images/m8-plate shot 1 small.png" alt="M8 plate – front view" />
+                        </figure>
+                        <figure class="slide-2">
+                            <img src="m8-plate-2.png" alt="M8 plate – detail view" />
+                        </figure>
+                    </div>
+
+                    <div class="carousel-dots" aria-hidden="true">
+                        <label for="hero-1"></label>
+                        <label for="hero-2"></label>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <section class="product-meta" aria-label="Product details">
+            <div class="product-meta-grid">
+                <section class="spec">
+                    <h2>Material</h2>
+                    <p>PETG</p>
+                </section>
+
+                <section class="spec spec-color">
+                    <h2>Color</h2>
+                    <fieldset class="color-options">
+                        <legend class="visually-hidden">Faceplate color</legend>
+
+                        <label class="color-pill">
+                            <input type="radio" name="color" value="smoke" checked />
+                            <span>Smoke</span>
+                        </label>
+
+                        <label class="color-pill">
+                            <input type="radio" name="color" value="clear" />
+                            <span>Clear</span>
+                        </label>
+                    </fieldset>
+                </section>
+
+                <section class="spec spec-glyph">
+                    <h2>+ Custom Glyph</h2>
+                    <div class="glyph-row">
+                        <label class="toggle">
+                            <input type="checkbox" checked />
+                            <span class="toggle-track">
+                                <span class="toggle-thumb"></span>
+                            </span>
+                        </label>
+                        <div class="glyph-thumb" aria-hidden="true"></div>
+                    </div>
+                </section>
+
+                <section class="spec">
+                    <h2>For</h2>
+                    <p>
+                        M8 TRACKER
+                        <span class="sub">model:01</span>
+                    </p>
+                </section>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Cart – Porch Logic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <main>
+        <h1>CART</h1>
+
+        <div class="content">
+            <section class="cart-grid">
+                <div class="cart-panel cart-items">
+                    <div class="cart-header-row">
+                        <span class="col-label col-label--item">Item</span>
+                        <span class="col-label">Options</span>
+                        <span class="col-label col-label--qty">Qty</span>
+                        <span class="col-label col-label--total">Total</span>
+                    </div>
+
+                    <!-- Example line item 1 -->
+                    <div class="cart-row">
+                        <div class="cart-cell cart-cell--item">
+                            <div class="cart-item-name">M8 PLATE</div>
+                            <div class="cart-item-sub">PETG • Smoke</div>
+                        </div>
+                        <div class="cart-cell cart-cell--options">
+                            <div class="cart-pill">Custom glyph</div>
+                            <div class="cart-glyph-mini"></div>
+                        </div>
+                        <div class="cart-cell cart-cell--qty">
+                            <span class="qty-pill">1</span>
+                        </div>
+                        <div class="cart-cell cart-cell--total">
+                            <span class="price">$42.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Example line item 2 -->
+                    <div class="cart-row">
+                        <div class="cart-cell cart-cell--item">
+                            <div class="cart-item-name">M8 PLATE</div>
+                            <div class="cart-item-sub">PETG • Clear</div>
+                        </div>
+                        <div class="cart-cell cart-cell--options">
+                            <div class="cart-pill cart-pill--muted">No glyph</div>
+                        </div>
+                        <div class="cart-cell cart-cell--qty">
+                            <span class="qty-pill">1</span>
+                        </div>
+                        <div class="cart-cell cart-cell--total">
+                            <span class="price">$42.00</span>
+                        </div>
+                    </div>
+
+                    <p class="cart-note">
+                        Adjust quantities or remove items at checkout. Custom glyph preview shown for
+                        reference only.
+                    </p>
+                </div>
+
+                <div class="cart-panel cart-summary">
+                    <h2 class="summary-label">Order Summary</h2>
+
+                    <div class="summary-lines">
+                        <div class="summary-line">
+                            <span>Subtotal</span>
+                            <span>$84.00</span>
+                        </div>
+                        <div class="summary-line summary-line--muted">
+                            <span>Shipping</span>
+                            <span>Calculated at checkout</span>
+                        </div>
+                        <div class="summary-line summary-line--muted">
+                            <span>Tax</span>
+                            <span>Calculated at checkout</span>
+                        </div>
+                        <div class="summary-line summary-line--total">
+                            <span>Total</span>
+                            <span>$84.00</span>
+                        </div>
+                    </div>
+
+                    <p class="summary-note">
+                        All prices in USD. Duties and import fees may apply for international orders.
+                    </p>
+
+                    <a href="/checkout/" class="summary-button">
+                        Proceed to checkout
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+</html>

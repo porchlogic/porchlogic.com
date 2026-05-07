@@ -1,0 +1,144 @@
+:root {
+    --glyph-border: var(--muted-color);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.config-stack,
+.cart-m8-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 0.75rem;
+    min-height: 0;
+    width: 100%;
+}
+
+.config-row,
+.cart-m8-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4.25rem;
+    width: 100%;
+}
+
+.config-left,
+.cart-m8-left {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.config-right,
+.cart-m8-right {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.livestream-info {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    line-height: 1.35;
+}
+
+.glyph-thumb {
+    width: 8rem;
+}
+
+.glyph-icon-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--glyph-border);
+    border-radius: var(--border-radius, 0.5rem);
+    background: var(--card-background-color);
+    cursor: pointer;
+    text-align: center;
+}
+
+.glyph-icon-button:hover {
+    background: var(--muted-border-color);
+}
+
+.glyph-icon-canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    border-radius: var(--border-radius, 0.5rem);
+    border: 1px solid var(--glyph-border);
+    background: var(--surface-color);
+}
+
+.glyph-icon-label {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+}
+
+.glyph-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    z-index: 1000;
+}
+
+.glyph-modal .card {
+    width: min(960px, 95vw);
+    max-height: 95vh;
+    overflow: auto;
+}
+
+.glyph-modal .glyph-modal-editor {
+    margin-block: 1rem;
+}
+
+.cart-item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cart-item {
+    border: 1px solid var(--muted-border-color);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    background: var(--card-background-color);
+}
+
+.cart-item-header {
+    display: grid;
+    grid-template-columns: 2fr auto auto auto;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.cart-item-name {
+    font-weight: 600;
+}
+
+.cart-item-qty,
+.cart-item-price {
+    text-align: right;
+}
+
+.remove-item-small {
+    justify-self: end;
+}

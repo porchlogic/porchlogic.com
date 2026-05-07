@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>NEON//SHOP — Cyber Tech Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        /* --------------
+       Design Tokens
+    -----------------*/
+        :root {
+            --bg: #050608;
+            --bg-alt: #0b0f16;
+            --bg-elevated: #101623;
+            --fg: #f5f7fb;
+            --muted: #9095a3;
+            --accent-green: #7bff88;
+            --accent-blue: #4ecbff;
+            --accent-blue-soft: rgba(78, 203, 255, 0.3);
+            --accent-green-soft: rgba(123, 255, 136, 0.25);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-strong: rgba(255, 255, 255, 0.16);
+            --card-radius: 18px;
+            --transition-fast: 180ms ease-out;
+            --transition-med: 260ms cubic-bezier(0.19, 1, 0.22, 1);
+            --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.65);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #141b2e 0, #050608 52%, #020308 100%);
+            color: var(--fg);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Cyber grid background */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.2;
+            mix-blend-mode: screen;
+            z-index: 0;
+        }
+
+        body::after {
+            /* subtle noise overlay */
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.55;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E");
+            mix-blend-mode: soft-light;
+            z-index: 0;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .shell {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 20px 80px;
+        }
+
+        /* --------------
+       Top Nav
+    -----------------*/
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 28px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            padding: 12px 12px 10px;
+            border-radius: 999px;
+            background: radial-gradient(circle at top left, #101623, #050913 60%);
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(22px);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-mark {
+            width: 28px;
+            height: 28px;
+            border-radius: 11px;
+            border: 1px solid var(--border-strong);
+            background: radial-gradient(circle at 30% 0, var(--accent-green-soft), #050608);
+            box-shadow:
+                0 0 0 1px rgba(0, 0, 0, 0.7),
+                0 0 22px rgba(123, 255, 136, 0.35);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-mark::before {
+            content: "";
+            position: absolute;
+            width: 90%;
+            height: 2px;
+            top: 35%;
+            left: 5%;
+            background: linear-gradient(90deg,
+                    transparent 0,
+                    rgba(255, 255, 255, 0.85) 50%,
+                    transparent 100%);
+            opacity: 0.7;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .logo-main {
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .logo-main span {
+            color: var(--accent-green);
+        }
+
+        .logo-sub {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--muted);
+        }
+
+        .nav-link {
+            position: relative;
+            cursor: pointer;
+            padding-bottom: 4px;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            transition: width var(--transition-fast);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-chip {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            border-radius: 999px;
+            padding: 7px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--muted);
+            background: rgba(8, 14, 25, 0.8);
+            backdrop-filter: blur(16px);
+        }
+
+        .nav-cta {
+            border-radius: 999px;
+            padding: 8px 14px;
+            border: none;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            cursor: pointer;
+            color: #020409;
+            background: linear-gradient(120deg, var(--accent-green), var(--accent-blue));
+            box-shadow:
+                0 0 18px rgba(123, 255, 136, 0.4),
+                0 0 30px rgba(78, 203, 255, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        .nav-cta span {
+            font-size: 9px;
+            opacity: 0.6;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                0 0 22px rgba(123, 255, 136, 0.65),
+                0 0 40px rgba(78, 203, 255, 0.5);
+        }
+
+        .nav-cta:active {
+            transform: translateY(0);
+            box-shadow:
+                0 0 14px rgba(123, 255, 136, 0.6),
+                0 0 28px rgba(78, 203, 255, 0.45);
+        }
+
+        /* --------------
+       Layout
+    -----------------*/
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.1fr);
+            gap: 22px;
+            align-items: stretch;
+            margin-top: 22px;
+        }
+
+        @media (max-width: 860px) {
+            .nav {
+                flex-wrap: wrap;
+                border-radius: 18px;
+                row-gap: 10px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .layout {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .shell {
+                padding-inline: 14px;
+            }
+        }
+
+        /* --------------
+       Hero
+    -----------------*/
+        .hero {
+            border-radius: 26px;
+            padding: 24px 24px 22px;
+            background:
+                radial-gradient(circle at top left, rgba(16, 209, 110, 0.25), transparent 55%),
+                radial-gradient(circle at top right, rgba(52, 196, 255, 0.18), transparent 60%),
+                linear-gradient(145deg, #05070b, #050913);
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(78, 203, 255, 0.12), transparent 60%);
+            top: -260px;
+            right: -160px;
+            filter: blur(4px);
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .hero-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-pill {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--border-strong);
+            background: rgba(2, 6, 12, 0.9);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+        }
+
+        .hero-pill-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--accent-green);
+            box-shadow: 0 0 10px rgba(123, 255, 136, 0.8);
+        }
+
+        .hero-badge {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            border-radius: 999px;
+            padding: 6px 10px;
+            background: rgba(6, 17, 28, 0.9);
+            border: 1px solid rgba(78, 203, 255, 0.6);
+            color: var(--accent-blue);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-badge span {
+            color: var(--muted);
+        }
+
+        .hero-title {
+            font-size: clamp(28px, 3.2vw, 36px);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-top: 8px;
+            line-height: 1.2;
+        }
+
+        .hero-title strong {
+            font-weight: 700;
+            background: linear-gradient(120deg, #ffffff, #d6f7ff);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            margin-top: 8px;
+            max-width: 460px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--muted);
+        }
+
+        .hero-subtitle span {
+            color: var(--accent-green);
+        }
+
+        .hero-cta-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            border-radius: 999px;
+            padding: 9px 18px;
+            border: none;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            cursor: pointer;
+            color: #020409;
+            background: linear-gradient(120deg, var(--accent-green), var(--accent-blue));
+            box-shadow:
+                0 0 22px rgba(123, 255, 136, 0.45),
+                0 0 40px rgba(78, 203, 255, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform var(--transition-med), box-shadow var(--transition-med), filter var(--transition-med);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+            box-shadow:
+                0 0 30px rgba(123, 255, 136, 0.8),
+                0 0 50px rgba(78, 203, 255, 0.7);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow:
+                0 0 18px rgba(123, 255, 136, 0.6),
+                0 0 32px rgba(78, 203, 255, 0.5);
+        }
+
+        .btn-ghost {
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: rgba(6, 15, 26, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+        }
+
+        .btn-ghost svg {
+            opacity: 0.6;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(11, 27, 40, 0.9);
+            border-color: rgba(78, 203, 255, 0.7);
+            color: var(--accent-blue);
+            transform: translateY(-1px);
+        }
+
+        .hero-metadata {
+            display: flex;
+            gap: 14px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+            font-size: 11px;
+        }
+
+        .meta-pill {
+            padding: 7px 10px;
+            border-radius: 999px;
+            border: 1px dashed rgba(255, 255, 255, 0.18);
+            background: rgba(6, 14, 26, 0.8);
+            color: var(--muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .meta-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 999px;
+            background: var(--accent-blue);
+            box-shadow: 0 0 8px rgba(78, 203, 255, 0.7);
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .hero-stat {
+            padding: 10px 10px 9px;
+            border-radius: 14px;
+            background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), rgba(7, 15, 25, 0.96));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hero-stat-label {
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--muted);
+        }
+
+        .hero-stat-value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .hero-stat-pill {
+            font-size: 10px;
+            color: var(--accent-green);
+        }
+
+        @media (max-width: 520px) {
+            .hero-stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        /* --------------
+       Spotlight Product
+    -----------------*/
+        .spotlight {
+            border-radius: 26px;
+            padding: 20px 18px 18px;
+            background:
+                radial-gradient(circle at 0 0, rgba(123, 255, 136, 0.16), transparent 55%),
+                radial-gradient(circle at 100% 10%, rgba(78, 203, 255, 0.16), transparent 55%),
+                linear-gradient(150deg, #05070c, #020309);
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spotlight-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .spotlight-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .spotlight-label span {
+            width: 4px;
+            height: 16px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-green));
+            box-shadow: 0 0 14px rgba(78, 203, 255, 0.8);
+        }
+
+        .spotlight-tag {
+            font-size: 10px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(123, 255, 136, 0.8);
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+        }
+
+        .spotlight-body {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
+            gap: 14px;
+            align-items: center;
+        }
+
+        @media (max-width: 480px) {
+            .spotlight-body {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .spotlight-product-name {
+            font-size: 16px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .spotlight-product-desc {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .spotlight-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .spotlight-price-main {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .spotlight-price-old {
+            text-decoration: line-through;
+            color: rgba(144, 149, 163, 0.7);
+            font-size: 11px;
+        }
+
+        .spotlight-price-pill {
+            font-size: 10px;
+            color: var(--accent-green);
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(17, 66, 34, 0.7);
+            border: 1px solid rgba(123, 255, 136, 0.7);
+        }
+
+        .spotlight-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .spotlight-chip {
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: rgba(10, 18, 32, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .spotlight-visual {
+            position: relative;
+            border-radius: 18px;
+            border: 1px solid rgba(78, 203, 255, 0.55);
+            padding: 14px;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 0 0, rgba(123, 255, 136, 0.16), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(78, 203, 255, 0.14), transparent 55%),
+                linear-gradient(135deg, #05070c, #090e1a);
+            box-shadow:
+                0 0 40px rgba(78, 203, 255, 0.4),
+                0 0 26px rgba(123, 255, 136, 0.25);
+        }
+
+        .spotlight-inner {
+            position: relative;
+            border-radius: 14px;
+            background:
+                radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.11), transparent 50%),
+                linear-gradient(120deg, #060818, #050609);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 22px 18px 18px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+            gap: 10px;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        @media (max-width: 1024px) {
+            .spotlight-inner {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .device-mock {
+            height: 120px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(123, 255, 136, 0.6), transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(78, 203, 255, 0.7), transparent 50%),
+                linear-gradient(135deg, #060918, #05060b);
+            box-shadow:
+                0 0 40px rgba(78, 203, 255, 0.7),
+                0 0 28px rgba(123, 255, 136, 0.45);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-mock::before,
+        .device-mock::after {
+            content: "";
+            position: absolute;
+            inset: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            mix-blend-mode: screen;
+            opacity: 0.7;
+        }
+
+        .device-mock::after {
+            inset: 20px;
+            border-style: dashed;
+            border-color: rgba(255, 255, 255, 0.18);
+            opacity: 0.5;
+        }
+
+        .device-glow-strip {
+            position: absolute;
+            left: 12%;
+            right: 12%;
+            top: 55%;
+            height: 40px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(123, 255, 136, 0.4), rgba(78, 203, 255, 0.8), rgba(123, 255, 136, 0.3));
+            filter: blur(10px);
+            opacity: 0.85;
+            mix-blend-mode: screen;
+        }
+
+        .device-lines {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+            background-size: 24px 24px;
+            mix-blend-mode: soft-light;
+            opacity: 0.35;
+        }
+
+        .spotlight-specs {
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            color: var(--muted);
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .spec-label {
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-size: 9px;
+        }
+
+        .spec-value {
+            color: var(--accent-blue);
+        }
+
+        .spotlight-footer {
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .spotlight-progress {
+            flex: 1;
+            height: 3px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .spotlight-progress::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            transform-origin: left;
+            transform: scaleX(0.7);
+            box-shadow: 0 0 18px rgba(78, 203, 255, 0.8);
+        }
+
+        /* --------------
+       Filters & Product Grid
+    -----------------*/
+        .grid-section {
+            margin-top: 26px;
+        }
+
+        .filters-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filters-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filters-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+        }
+
+        .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .chip {
+            font-size: 11px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(5, 9, 16, 0.9);
+            color: var(--muted);
+            cursor: pointer;
+            transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+        }
+
+        .chip--active {
+            color: var(--accent-blue);
+            border-color: rgba(78, 203, 255, 0.8);
+            background: rgba(6, 16, 28, 0.96);
+            box-shadow: 0 0 16px rgba(78, 203, 255, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .chip:hover:not(.chip--active) {
+            background: rgba(9, 19, 32, 0.98);
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+
+        .filters-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .filters-sort {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(5, 9, 16, 0.9);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .filters-density {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(5, 9, 16, 0.9);
+        }
+
+        .density-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .density-dot--active {
+            background: var(--accent-green);
+            border-color: rgba(123, 255, 136, 0.8);
+            box-shadow: 0 0 10px rgba(123, 255, 136, 0.85);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        @media (max-width: 960px) {
+            .product-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .product-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        /* --------------
+       Product Card
+    -----------------*/
+        .product-card {
+            border-radius: var(--card-radius);
+            padding: 10px 10px 12px;
+            background: radial-gradient(circle at top, rgba(255, 255, 255, 0.06), rgba(6, 10, 18, 0.98));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform var(--transition-med), box-shadow var(--transition-med), border-color var(--transition-med), background var(--transition-med);
+        }
+
+        .product-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 0 0, rgba(123, 255, 136, 0.15), transparent 50%);
+            opacity: 0;
+            transition: opacity var(--transition-med);
+            pointer-events: none;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px) translateZ(0);
+            box-shadow:
+                0 18px 45px rgba(0, 0, 0, 0.9),
+                0 0 35px rgba(78, 203, 255, 0.28);
+            border-color: rgba(78, 203, 255, 0.65);
+            background: radial-gradient(circle at top, rgba(255, 255, 255, 0.09), rgba(7, 12, 22, 0.98));
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-new {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(123, 255, 136, 0.8);
+            color: var(--accent-green);
+            background: rgba(17, 66, 34, 0.85);
+        }
+
+        .badge-hot {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(78, 203, 255, 0.7);
+            color: var(--accent-blue);
+            background: rgba(10, 34, 51, 0.9);
+        }
+
+        .badge-stock {
+            font-size: 9px;
+            color: var(--muted);
+        }
+
+        .product-visual {
+            position: relative;
+            border-radius: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 6px;
+            margin-bottom: 4px;
+            height: 120px;
+            background:
+                radial-gradient(circle at 0 0, rgba(123, 255, 136, 0.38), transparent 55%),
+                radial-gradient(circle at 100% 0, rgba(78, 203, 255, 0.46), transparent 55%),
+                linear-gradient(145deg, #05070e, #070b13);
+            overflow: hidden;
+        }
+
+        .product-visual::before {
+            content: "";
+            position: absolute;
+            inset: 12px;
+            border-radius: 11px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow:
+                0 0 24px rgba(78, 203, 255, 0.6),
+                0 0 16px rgba(123, 255, 136, 0.4);
+            opacity: 0.9;
+            mix-blend-mode: screen;
+        }
+
+        .product-visual::after {
+            /* light streak */
+            content: "";
+            position: absolute;
+            width: 120%;
+            height: 80px;
+            top: 50%;
+            left: -10%;
+            background: linear-gradient(115deg,
+                    transparent 0,
+                    rgba(255, 255, 255, 0.7) 50%,
+                    transparent 100%);
+            opacity: 0.18;
+            transform: translateY(-50%) skewX(-18deg);
+            mix-blend-mode: screen;
+        }
+
+        .product-main {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .product-name {
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .product-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .product-tag {
+            padding: 3px 6px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+        }
+
+        .product-rating {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .product-rating-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: var(--accent-green);
+            box-shadow: 0 0 10px rgba(123, 255, 136, 0.8);
+        }
+
+        .product-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .product-price-main {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .product-price-sub {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .product-action {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(78, 203, 255, 0.7);
+            color: var(--accent-blue);
+            background: rgba(8, 18, 32, 0.92);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .product-action svg {
+            opacity: 0.8;
+        }
+
+        .product-card:hover .product-action {
+            background: rgba(12, 32, 54, 0.98);
+            box-shadow: 0 0 18px rgba(78, 203, 255, 0.65);
+        }
+
+        /* --------------
+       Bottom Dock (Cart Preview)
+    -----------------*/
+        .dock {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 22px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), #05070f);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            min-width: 260px;
+            max-width: 90vw;
+            box-shadow:
+                0 14px 50px rgba(0, 0, 0, 0.95),
+                0 0 18px rgba(78, 203, 255, 0.5);
+            backdrop-filter: blur(18px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            z-index: 30;
+        }
+
+        .dock-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 11px;
+        }
+
+        .dock-label {
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .dock-main {
+            display: inline-flex;
+            gap: 6px;
+            align-items: baseline;
+        }
+
+        .dock-count {
+            font-weight: 600;
+        }
+
+        .dock-total {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .dock-btn {
+            border-radius: 999px;
+            padding: 7px 14px;
+            border: none;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            cursor: pointer;
+            color: #020409;
+            background: linear-gradient(120deg, var(--accent-green), var(--accent-blue));
+            box-shadow:
+                0 0 22px rgba(123, 255, 136, 0.55),
+                0 0 34px rgba(78, 203, 255, 0.45);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dock-btn svg {
+            opacity: 0.9;
+        }
+
+        .dock-sub {
+            font-size: 9px;
+            color: var(--muted);
+        }
+
+        @media (max-width: 420px) {
+            .dock {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .dock-btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="shell">
+        <header class="nav">
+            <div class="nav-left">
+                <div class="logo-mark"></div>
+                <div class="logo-text">
+                    <div class="logo-main">NEON<span>//SHOP</span></div>
+                    <div class="logo-sub">Cyber Hardware Studio</div>
+                </div>
+            </div>
+
+            <nav class="nav-links" aria-label="Primary">
+                <div class="nav-link">Keyboards</div>
+                <div class="nav-link">Headsets</div>
+                <div class="nav-link">Mice</div>
+                <div class="nav-link">Desks</div>
+            </nav>
+
+            <div class="nav-right">
+                <div class="nav-chip">v4.9 • RT Ready</div>
+                <button class="nav-cta" type="button">
+                    Checkout
+                    <span>3 items</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="layout">
+            <!-- Hero -->
+            <section class="hero">
+                <div class="hero-header-row">
+                    <div class="hero-pill">
+                        <span class="hero-pill-dot"></span>
+                        Live Drop • Q4/2025
+                    </div>
+                    <div class="hero-badge">
+                        Ultra-Low Latency
+                        <span>— 240Hz+ ready</span>
+                    </div>
+                </div>
+
+                <h1 class="hero-title">
+                    Curated <strong>cyber-grade</strong> gear for
+                    <strong>night shift</strong> operators.
+                </h1>
+
+                <p class="hero-subtitle">
+                    Build a grayscale command center with controlled
+                    <span>neon green</span> &amp; <span>electric blue</span> accents.
+                    Latency-tuned, glare-tested, retina-approved.
+                </p>
+
+                <div class="hero-cta-row">
+                    <button class="btn-primary" type="button">
+                        Explore builds
+                        <svg width="14" height="14" viewBox="0 0 16 16">
+                            <path d="M3 8h7.2L7 4.8 8.2 3.5 13 8l-4.8 4.5L7 11.2 10.2 8H3z" fill="currentColor" />
+                        </svg>
+                    </button>
+                    <button class="btn-ghost" type="button">
+                        View dark mode lab
+                        <svg width="14" height="14" viewBox="0 0 16 16">
+                            <circle cx="8" cy="8" r="5.5" stroke="currentColor" fill="none" />
+                            <circle cx="8" cy="8" r="1.3" fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="hero-metadata">
+                    <div class="meta-pill">
+                        <span class="meta-dot"></span>
+                        Ship in &lt; 48h
+                    </div>
+                    <div class="meta-pill">
+                        <span class="meta-dot"></span>
+                        Color-locked greyscale palettes
+                    </div>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-label">Latency Match</div>
+                        <div class="hero-stat-value">0.9 ms</div>
+                        <div class="hero-stat-pill">Average input lag</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-label">Noise Floor</div>
+                        <div class="hero-stat-value">18 dBA</div>
+                        <div class="hero-stat-pill">Across fan stack</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-label">Profiles</div>
+                        <div class="hero-stat-value">32</div>
+                        <div class="hero-stat-pill">Saved desk presets</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Spotlight product -->
+            <aside class="spotlight" aria-label="Featured product">
+                <div class="spotlight-header">
+                    <div class="spotlight-label">
+                        <span></span>
+                        Spotlight Build
+                    </div>
+                    <div class="spotlight-tag">Limited / 500 Units</div>
+                </div>
+
+                <div class="spotlight-body">
+                    <div>
+                        <h2 class="spotlight-product-name">NEON//CHASSIS_01</h2>
+                        <p class="spotlight-product-desc">
+                            Full-tower, frosted steel, 360-degree cable-less facade with
+                            sub-surface RGB lines locked to grayscale-safe blue &amp; green.
+                        </p>
+
+                        <div class="spotlight-price-row">
+                            <div class="spotlight-price-main">$ 389</div>
+                            <div class="spotlight-price-old">$ 439</div>
+                            <div class="spotlight-price-pill">Drop − 11%</div>
+                        </div>
+
+                        <div class="spotlight-meta">
+                            <div class="spotlight-chip">E-glass side • 0 reflections</div>
+                            <div class="spotlight-chip">PWM hub / 12 ports</div>
+                            <div class="spotlight-chip">Cable-silent front IO</div>
+                        </div>
+                    </div>
+
+                    <div class="spotlight-visual">
+                        <div class="spotlight-inner">
+                            <div class="device-mock">
+                                <div class="device-lines"></div>
+                                <div class="device-glow-strip"></div>
+                            </div>
+                            <div class="spotlight-specs">
+                                <div class="spec-row">
+                                    <div class="spec-label">Thermals</div>
+                                    <div class="spec-value">Δ 7 °C vs open bench</div>
+                                </div>
+                                <div class="spec-row">
+                                    <div class="spec-label">Routing</div>
+                                    <div class="spec-value">4 hidden cable planes</div>
+                                </div>
+                                <div class="spec-row">
+                                    <div class="spec-label">Sync</div>
+                                    <div class="spec-value">NeonSync / 3 layers</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="spotlight-footer">
+                            <div>Lock a slot now — design won’t restock.</div>
+                            <div class="spotlight-progress"></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Product grid -->
+        <section class="grid-section" aria-label="Catalog">
+            <div class="filters-row">
+                <div class="filters-left">
+                    <div class="filters-label">Catalog View</div>
+                    <div class="chip-group">
+                        <button type="button" class="chip chip--active">All</button>
+                        <button type="button" class="chip">Keyboards</button>
+                        <button type="button" class="chip">Pointers</button>
+                        <button type="button" class="chip">Audio</button>
+                        <button type="button" class="chip">Desk Mods</button>
+                    </div>
+                </div>
+                <div class="filters-right">
+                    <div class="filters-sort">
+                        Sort • Signal Clean
+                        <svg width="12" height="12" viewBox="0 0 16 16">
+                            <path d="M4 4h8v1.4H4V4zm2 3.3h6v1.4H6V7.3zM8 10.6h4V12H8v-1.4z" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <div class="filters-density">
+                        <span class="density-dot density-dot--active"></span>
+                        <span class="density-dot"></span>
+                        <span class="density-dot"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-grid">
+                <!-- Card 1 -->
+                <article class="product-card">
+                    <div class="product-top-row">
+                        <div class="badge-new">New Signal</div>
+                        <div class="badge-stock">In stock • 24</div>
+                    </div>
+                    <div class="product-visual" aria-hidden="true"></div>
+                    <div class="product-main">
+                        <h3 class="product-name">Eclipse_TKL//GREYSCALE</h3>
+                        <div class="product-meta-row">
+                            <div class="product-tag">TKL • Hot-swap</div>
+                            <div class="product-rating">
+                                <span class="product-rating-dot"></span> 4.9 / 5.0
+                            </div>
+                        </div>
+                        <div class="product-price-row">
+                            <div>
+                                <div class="product-price-main">$ 169</div>
+                                <div class="product-price-sub">Silenced linears • RGB bound</div>
+                            </div>
+                            <div class="product-action">
+                                Queue
+                                <svg width="13" height="13" viewBox="0 0 16 16">
+                                    <path d="M3 8h6.3L7 5.7 8 4.7 12 8l-4 3.3-1-1L9.3 8H3z" fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="product-card">
+                    <div class="product-top-row">
+                        <div class="badge-hot">Hot Sync</div>
+                        <div class="badge-stock">Low • 7 left</div>
+                    </div>
+                    <div class="product-visual" aria-hidden="true"></div>
+                    <div class="product-main">
+                        <h3 class="product-name">Vector_Mouse//02</h3>
+                        <div class="product-meta-row">
+                            <div class="product-tag">54 g • 8k Hz</div>
+                            <div class="product-rating">
+                                <span class="product-rating-dot"></span> 4.8 / 5.0
+                            </div>
+                        </div>
+                        <div class="product-price-row">
+                            <div>
+                                <div class="product-price-main">$ 129</div>
+                                <div class="product-price-sub">Tracking jitter &lt; 0.1%</div>
+                            </div>
+                            <div class="product-action">
+                                Queue
+                                <svg width="13" height="13" viewBox="0 0 16 16">
+                                    <path d="M3 8h6.3L7 5.7 8 4.7 12 8l-4 3.3-1-1L9.3 8H3z" fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="product-card">
+                    <div class="product-top-row">
+                        <div class="badge-new">ISO Only</div>
+                        <div class="badge-stock">Made-to-order</div>
+                    </div>
+                    <div class="product-visual" aria-hidden="true"></div>
+                    <div class="product-main">
+                        <h3 class="product-name">Ghostline_DeskMat_120</h3>
+                        <div class="product-meta-row">
+                            <div class="product-tag">XL • 3mm</div>
+                            <div class="product-rating">
+                                <span class="product-rating-dot"></span> 5.0 / 5.0
+                            </div>
+                        </div>
+                        <div class="product-price-row">
+                            <div>
+                                <div class="product-price-main">$ 59</div>
+                                <div class="product-price-sub">Spectral-mapped surface grid</div>
+                            </div>
+                            <div class="product-action">
+                                Queue
+                                <svg width="13" height="13" viewBox="0 0 16 16">
+                                    <path d="M3 8h6.3L7 5.7 8 4.7 12 8l-4 3.3-1-1L9.3 8H3z" fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 4 -->
+                <article class="product-card">
+                    <div class="product-top-row">
+                        <div class="badge-hot">Lab Tuned</div>
+                        <div class="badge-stock">Batch • 40</div>
+                    </div>
+                    <div class="product-visual" aria-hidden="true"></div>
+                    <div class="product-main">
+                        <h3 class="product-name">Null_Hum_Headset</h3>
+                        <div class="product-meta-row">
+                            <div class="product-tag">ANC • 42 h</div>
+                            <div class="product-rating">
+                                <span class="product-rating-dot"></span> 4.7 / 5.0
+                            </div>
+                        </div>
+                        <div class="product-price-row">
+                            <div>
+                                <div class="product-price-main">$ 219</div>
+                                <div class="product-price-sub">Grey-tuned EQ profile</div>
+                            </div>
+                            <div class="product-action">
+                                Queue
+                                <svg width="13" height="13" viewBox="0 0 16 16">
+                                    <path d="M3 8h6.3L7 5.7 8 4.7 12 8l-4 3.3-1-1L9.3 8H3z" fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 5 -->
+                <article class="product-card">
+                    <div class="product-top-row">
+                        <div class="badge-new">Studio Pick</div>
+                        <div class="badge-stock">Ships in 24h</div>
+                    </div>
+                    <div class="product-visual" aria-hidden="true"></div>
+                    <div class="product-main">
+                        <h3 class="product-name">Signal_Riser//Dual</h3>
+                        <div class="product-meta-row">
+                            <div class="product-tag">Monitor stand</div>
+                            <div class="product-rating">
+                                <span class="product-rating-dot"></span> 4.9 / 5.0
+                            </div>
+                        </div>
+                        <div class="product-price-row">
+                            <div>
+                                <div class="product-price-main">$ 89</div>
+                                <div class="product-price-sub">Dual 27" / cable-stealth</div>
+                            </div>
+                            <div class="product-action">
+                                Queue
+                                <svg width="13" height="13" viewBox="0 0 16 16">
+                                    <path d="M3 8h6.3L7 5.7 8 4.7 12 8l-4 3.3-1-1L9.3 8H3z" fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 6 -->
+                <article class="product-card">
+                    <div class="product-top-row">
+                        <div class="badge-hot">Sync Ready</div>
+                        <div class="badge-stock">Pre-order</div>
+                    </div>
+                    <div class="product-visual" aria-hidden="true"></div>
+                    <div class="product-main">
+                        <h3 class="product-name">Atmos_Line_Strip</h3>
+                        <div class="product-meta-row">
+                            <div class="product-tag">Desk edge • RGB</div>
+                            <div class="product-rating">
+                                <span class="product-rating-dot"></span> 4.6 / 5.0
+                            </div>
+                        </div>
+                        <div class="product-price-row">
+                            <div>
+                                <div class="product-price-main">$ 39</div>
+                                <div class="product-price-sub">Locked to #7BFF88 / #4ECBFF</div>
+                            </div>
+                            <div class="product-action">
+                                Queue
+                                <svg width="13" height="13" viewBox="0 0 16 16">
+                                    <path d="M3 8h6.3L7 5.7 8 4.7 12 8l-4 3.3-1-1L9.3 8H3z" fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+
+    <!-- Bottom dock / cart preview (visual only) -->
+    <div class="dock" aria-label="Cart preview">
+        <div class="dock-left">
+            <div class="dock-label">Active Cart</div>
+            <div class="dock-main">
+                <div class="dock-count">3 items</div>
+                <div class="dock-total">/ $ 487 total</div>
+            </div>
+            <div class="dock-sub">Greyscale palette locked • Neon safe</div>
+        </div>
+        <button class="dock-btn" type="button">
+            Open Cart
+            <svg width="14" height="14" viewBox="0 0 16 16">
+                <path d="M4 4.5h8.5l-1 6H6l-2-6zm.7 7h6.8v1H4v-1h.7z" fill="currentColor" />
+            </svg>
+        </button>
+    </div>
+</body>
+
+</html>

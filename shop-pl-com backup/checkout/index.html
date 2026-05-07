@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Checkout – Porch Logic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <main>
+        <h1>CHECKOUT</h1>
+
+        <div class="content">
+            <section class="checkout-grid">
+                <div class="checkout-panel checkout-details">
+                    <div class="field-group">
+                        <h2 class="field-group__label">Contact</h2>
+                        <div class="field-row">
+                            <label class="field">
+                                <span class="field__label">Email</span>
+                                <input type="email" placeholder="you@example.com" />
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <h2 class="field-group__label">Shipping</h2>
+
+                        <div class="field-row field-row--split">
+                            <label class="field">
+                                <span class="field__label">First name</span>
+                                <input type="text" />
+                            </label>
+                            <label class="field">
+                                <span class="field__label">Last name</span>
+                                <input type="text" />
+                            </label>
+                        </div>
+
+                        <div class="field-row">
+                            <label class="field">
+                                <span class="field__label">Address</span>
+                                <input type="text" />
+                            </label>
+                        </div>
+
+                        <div class="field-row field-row--split">
+                            <label class="field">
+                                <span class="field__label">City</span>
+                                <input type="text" />
+                            </label>
+                            <label class="field">
+                                <span class="field__label">Region</span>
+                                <input type="text" />
+                            </label>
+                        </div>
+
+                        <div class="field-row field-row--split">
+                            <label class="field">
+                                <span class="field__label">Postal code</span>
+                                <input type="text" />
+                            </label>
+                            <label class="field">
+                                <span class="field__label">Country</span>
+                                <input type="text" value="United States" />
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <h2 class="field-group__label">Payment</h2>
+                        <div class="field-row">
+                            <div class="payment-placeholder">
+                                <span class="payment-placeholder__label">Card details</span>
+                                <span class="payment-placeholder__hint">
+                                    Stripe Elements will appear here.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-panel checkout-summary">
+                    <h2 class="summary-label">Order</h2>
+
+                    <div class="summary-items">
+                        <div class="summary-item">
+                            <div>
+                                <div class="summary-item__name">M8 PLATE</div>
+                                <div class="summary-item__meta">
+                                    PETG • Smoke • Custom glyph
+                                </div>
+                            </div>
+                            <div class="summary-item__qty">×1</div>
+                            <div class="summary-item__price">$42.00</div>
+                        </div>
+
+                        <div class="summary-item">
+                            <div>
+                                <div class="summary-item__name">M8 PLATE</div>
+                                <div class="summary-item__meta">
+                                    PETG • Clear
+                                </div>
+                            </div>
+                            <div class="summary-item__qty">×1</div>
+                            <div class="summary-item__price">$42.00</div>
+                        </div>
+                    </div>
+
+                    <div class="summary-lines">
+                        <div class="summary-line">
+                            <span>Subtotal</span>
+                            <span>$84.00</span>
+                        </div>
+                        <div class="summary-line summary-line--muted">
+                            <span>Shipping</span>
+                            <span>Calculated next step</span>
+                        </div>
+                        <div class="summary-line summary-line--muted">
+                            <span>Tax</span>
+                            <span>Calculated next step</span>
+                        </div>
+                        <div class="summary-line summary-line--total">
+                            <span>Total</span>
+                            <span>$84.00</span>
+                        </div>
+                    </div>
+
+                    <p class="summary-note">
+                        By placing your order you agree to the Porch Logic terms and refund policy.
+                    </p>
+
+                    <button type="submit" class="summary-button">
+                        Place order
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+</html>

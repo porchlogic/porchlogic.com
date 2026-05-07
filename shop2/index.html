@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Porch Logic – Shop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="../css/pico.css" />
+    <link rel="stylesheet" href="./shop.css" />
+    <link rel="stylesheet" href="../theme-light-gray.css" />
+</head>
+
+<body data-theme="light">
+    <header class="container">
+        <nav>
+            <ul>
+                <li>
+                    <a href="/" class="contrast" aria-label="Porch Logic home">
+                        <strong>Porch Logic</strong>
+                    </a>
+                </li>
+            </ul>
+            <ul>
+                <li><a href="./cart.html">Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section aria-labelledby="shop-title">
+            <header>
+                <h1 id="shop-title">Shop</h1>
+                <p>Built with Pico defaults and semantic structure.</p>
+            </header>
+
+            <div class="grid">
+                <article class="card">
+                    <header>
+                        <h2>M8 Plate</h2>
+                        <p class="secondary">for Dirtywave M8 Tracker model:01</p>
+                    </header>
+                    <img src="/images/M8-Plate-1.png" alt="M8 Plate" style="border-radius: var(--border-radius);" />
+                    <p>Transparent smoke PETG single-path print made to spec for the Dirtywave M8 Tracker model:01.</p>
+
+                    <div class="config-stack" aria-label="M8 Plate configuration">
+                        <div class="config-row">
+                            <label class="config-left" for="m8-glyph-checkbox">
+                                <input type="checkbox" id="m8-glyph-checkbox" />
+                                <span>Add custom glyph</span>
+                            </label>
+                            <div class="config-right">
+                                <div class="glyph-thumb hidden" id="m8-glyph-thumb">
+                                    <button type="button" class="glyph-icon-button" id="m8-glyph-edit">
+                                        <canvas class="glyph-icon-canvas" width="160" height="80" id="m8-glyph-canvas"></canvas>
+                                        <span class="glyph-icon-label">Edit glyph</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="config-row">
+                            <label class="config-left" for="m8-live-checkbox">
+                                <input type="checkbox" id="m8-live-checkbox" />
+                                <span>Show on live stream</span>
+                            </label>
+                            <div class="config-right">
+                                <p id="m8-live-info" class="livestream-info hidden">
+                                    This M8 plate will appear in your live stream overlay once purchased.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer class="grid">
+                        <p><strong>$32</strong></p>
+                        <button type="button" id="buy-m8-plate-1">Buy</button>
+                    </footer>
+                </article>
+
+                <article class="card">
+                    <header>
+                        <h2>SMB1</h2>
+                        <p class="secondary">Connect your MIDI gear to the swarm.</p>
+                    </header>
+                    <img src="/images/smb1_hero6.png" alt="SMB1" style="border-radius: var(--border-radius);" />
+                    <p>SMB1 ships with clock + transport relay firmware. More channel/pack options coming soon.</p>
+
+                    <footer class="grid">
+                        <p><strong>$42</strong></p>
+                        <button type="button" id="buy-smb1-1">Buy</button>
+                    </footer>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- Full-screen glyph editor modal -->
+    <div id="glyph-modal" class="glyph-modal hidden">
+        <div class="glyph-modal-inner card">
+            <header class="glyph-modal-header">
+                <h2>Custom AM8 Glyph</h2>
+                
+            </header>
+            <p class="glyph-modal-subtitle">
+                Sculpt your glyph by clicking and dragging. Right-click to flatten segments.
+            </p>
+            <div id="glyph-modal-editor" class="glyph-modal-editor"></div>
+            <button type="button" class="button glyph-modal-close" aria-label="Close glyph editor">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <dialog id="cart-popup" aria-labelledby="cart-popup-title">
+        <article>
+            <header>
+                <h2 id="cart-popup-title">Cart updated</h2>
+            </header>
+            <p id="popup-message"></p>
+            <footer class="grid">
+                <button type="button" class="secondary" data-close-cart>
+                    Keep browsing
+                </button>
+                <a href="./cart.html" role="button">Go to cart</a>
+            </footer>
+        </article>
+    </dialog>
+
+    <footer class="container">
+        <small>Porch Logic &copy; <span id="year"></span></small>
+    </footer>
+
+    <script src="./cart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const y = document.getElementById("year");
+            if (y) y.textContent = new Date().getFullYear();
+
+            const m8ConfigState = {
+                customGlyphEnabled: false,
+                glyphData: null,
+                showOnLive: false
+            };
+
+            const glyphCheckbox = document.getElementById("m8-glyph-checkbox");
+            const glyphThumb = document.getElementById("m8-glyph-thumb");
+            const glyphCanvas = document.getElementById("m8-glyph-canvas");
+            const glyphEditBtn = document.getElementById("m8-glyph-edit");
+            const liveCheckbox = document.getElementById("m8-live-checkbox");
+            const liveInfo = document.getElementById("m8-live-info");
+            const glyphModal = document.getElementById("glyph-modal");
+            const glyphModalEditor = document.getElementById("glyph-modal-editor");
+
+            const renderGlyphPreview = (data) => {
+                if (glyphCanvas && typeof renderGlyphThumbnail === "function") {
+                    renderGlyphThumbnail(glyphCanvas, data);
+                }
+            };
+
+            const syncGlyphThumb = () => {
+                if (!glyphThumb) return;
+                if (glyphCheckbox && glyphCheckbox.checked) {
+                    glyphThumb.classList.remove("hidden");
+                    renderGlyphPreview(m8ConfigState.glyphData);
+                } else {
+                    glyphThumb.classList.add("hidden");
+                }
+            };
+
+            const syncLiveInfo = () => {
+                if (!liveInfo || !liveCheckbox) return;
+                if (liveCheckbox.checked) {
+                    liveInfo.classList.remove("hidden");
+                } else {
+                    liveInfo.classList.add("hidden");
+                }
+            };
+
+            glyphCheckbox?.addEventListener("change", () => {
+                m8ConfigState.customGlyphEnabled = glyphCheckbox.checked;
+                syncGlyphThumb();
+            });
+
+            liveCheckbox?.addEventListener("change", () => {
+                m8ConfigState.showOnLive = liveCheckbox.checked;
+                syncLiveInfo();
+            });
+
+            const openM8GlyphEditor = () => {
+                if (!glyphModal || !glyphModalEditor || typeof attachMoundGrid !== "function") return;
+
+                glyphModal.classList.remove("hidden");
+                glyphModal.classList.add("visible");
+
+                attachMoundGrid(
+                    "m8-product-config",
+                    glyphModalEditor,
+                    m8ConfigState.glyphData || null,
+                    {
+                        onDataChange: (data) => {
+                            m8ConfigState.glyphData = data;
+                        },
+                        onThumbnailUpdate: (data) => {
+                            renderGlyphPreview(data);
+                        }
+                    }
+                );
+            };
+
+            glyphEditBtn?.addEventListener("click", () => {
+                if (!glyphCheckbox?.checked) return;
+                openM8GlyphEditor();
+            });
+
+            syncGlyphThumb();
+            syncLiveInfo();
+
+            const m8BuyBtn = document.getElementById("buy-m8-plate-1");
+            m8BuyBtn?.addEventListener("click", () => {
+                const item = {
+                    id: "m8_plate_1",
+                    name: "M8 Plate",
+                    price: 32.0,
+                    quantity: 1,
+                    customGlyphEnabled: m8ConfigState.customGlyphEnabled,
+                    glyphData: m8ConfigState.glyphData,
+                    showOnLive: m8ConfigState.showOnLive
+                };
+                if (typeof addItemToCart === "function") {
+                    addItemToCart(item);
+                }
+                if (typeof showCartPopup === "function") {
+                    showCartPopup(`${item.name} added to cart.`);
+                }
+            });
+
+            const smb1BuyBtn = document.getElementById("buy-smb1-1");
+            smb1BuyBtn?.addEventListener("click", () => {
+                const item = {
+                    id: "smb1_1",
+                    name: "SMB1",
+                    price: 42.0,
+                    quantity: 1
+                };
+                if (typeof addItemToCart === "function") {
+                    addItemToCart(item);
+                }
+                if (typeof showCartPopup === "function") {
+                    showCartPopup(`${item.name} added to cart.`);
+                }
+            });
+
+            // Cart popup close wiring
+            const cartPopup = document.getElementById("cart-popup");
+            const closeCartBtn = document.querySelector("[data-close-cart]");
+            if (cartPopup && closeCartBtn) {
+                closeCartBtn.addEventListener("click", hideCartPopup);
+                cartPopup.addEventListener("cancel", (event) => {
+                    event.preventDefault();
+                    hideCartPopup();
+                });
+            }
+
+            // Glyph modal close
+            const glyphCloseBtn = document.querySelector(".glyph-modal-close");
+            glyphModal?.addEventListener("click", (event) => {
+                if (event.target === glyphModal) {
+                    glyphModal.classList.add("hidden");
+                    glyphModalEditor.innerHTML = "";
+                }
+            });
+            glyphCloseBtn?.addEventListener("click", () => {
+                glyphModal.classList.add("hidden");
+                glyphModalEditor.innerHTML = "";
+            });
+        });
+    </script>
+</body>
+
+</html>

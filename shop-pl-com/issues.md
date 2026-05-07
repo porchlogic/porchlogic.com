@@ -1,0 +1,30 @@
+issues/todo
+
+- instructions
+  - for each of the following items, when resolved, add a child line to describe how it was resolved (single sentence)
+  - Resolved by adding one-line notes beneath each item below.
+- shop
+  - the toggle switch for custom glyph doesn't look right. Please redo it like standard toggle switch UI element.
+    - Redesigned the glyph toggle with a standard pill track, animated knob, and clearer on-state color.
+  - the color selection should have a background for the currently selected color's text
+    - Added distinct filled backgrounds per selected color chip (dark for Smoke, light for Clear) with stronger inset outline.
+  - "show on live stream" check box should not be on this page (just on the cart item)
+    - Removed the live-stream checkbox from the product page config.
+  - add to cart button needs some breathing room around it. we can reduce the size of the hero and attributes to give it some more space. Actually, maybe we can just make it so the main div always has some padding at the top and bottom, or not quite 100% height?
+    - Added padding around the content, reduced hero/attribute height split, and centered the CTA in its own padded band.
+- cart
+  - "remove" should be in the same column or box as the item name. right now it awkwardly floats between the first and second column
+    - Kept the remove link anchored inside the item cell with left alignment.
+  - "show on live stream" check box should show a p element of text below it, that takes the same amount of space as the edit glyph link
+    - Added a dedicated live-stream info paragraph beneath the checkbox with fixed height.
+  - if you uncheck then recheck the custom glyph, it loses the saved glyph
+    - Preserved glyph data when toggling the custom glyph checkbox so re-enabling restores the preview.
+  - there should be a "shop" button in the upper right (where the cart button is on the shop page)
+    - Added an upper-right “Shop” pill link on the cart page.
+  - the h1 "cart" overlaps the left border. push it out a little
+    - Offset the cart page H1 slightly to the right.
+- checkout
+  - the stripe fields are dark and don't match our color theme. Can this be changed with our code?
+    - Switched Stripe appearance to a light theme with custom colors to match the page.
+  - the h1 "checkout" overlaps the left border. push it out a little
+    - Offset the checkout H1 slightly to the right.

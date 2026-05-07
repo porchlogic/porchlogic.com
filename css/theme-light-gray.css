@@ -1,0 +1,32 @@
+/* theme-light-gray.css */
+:root,
+:root[data-theme="light"] {
+    /* Base background + surface */
+    --background-color: #f7f7f8;
+    /* page background */
+    --card-background-color: #ffffff;
+    --form-element-background-color: #ffffff;
+    --muted-color: #777b80;
+    /* subtle text */
+
+    /* Borders */
+    --border-color: #e0e1e3;
+    --form-element-border-color: #d4d6da;
+    --form-element-active-border-color: #9ca3af;
+
+    /* Text */
+    --color: #18181b;
+    /* main text */
+    --h1-color: #111827;
+    --h2-color: #111827;
+    --h3-color: #111827;
+
+    /* Accents (keep these if you like Pico’s default accent) */
+    /* You can soften them a bit if you want less “neon” */
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-focus: rgba(37, 99, 235, 0.25);
+
+    /* Shadows – keep very subtle */
+    --shadow-color: rgba(15, 23, 42, 0.08);
+}
