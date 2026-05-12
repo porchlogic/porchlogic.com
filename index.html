@@ -59,25 +59,28 @@
         .social-links {
             position: absolute;
             left: 50%;
-            bottom: clamp(20px, 4vh, 44px);
+            bottom: max(env(safe-area-inset-bottom, 0px), clamp(20px, 4vh, 44px));
             transform: translateX(-50%);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: clamp(16px, 3vw, 30px);
-            padding: 10px 16px;
+            padding: 14px 22px;
             border-radius: 999px;
             background: rgba(0, 0, 0, 0.12);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
+            z-index: 10;
+            visibility: visible;
+            opacity: 1;
         }
 
         .social-links a {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 24px;
-            height: 24px;
+            width: 48px;
+            height: 48px;
             color: var(--link-color);
             text-decoration: none;
             filter: drop-shadow(0 1px 8px var(--shadow));
@@ -118,13 +121,8 @@
 
         @media (max-width: 520px) {
             .social-links {
-                gap: 16px;
-                padding: 9px 13px;
-            }
-
-            .social-links a {
-                width: 22px;
-                height: 22px;
+                gap: 14px;
+                padding: 12px 18px;
             }
         }
     </style>
@@ -132,7 +130,6 @@
 
 <body>
     <main class="page" aria-label="Landing page">
-        <!-- Replace this with your image path, for example: ./images/hero.jpg -->
         <img class="hero-image" src="images/NPC1.jpg" alt="" />
         <div class="vignette" aria-hidden="true"></div>
 

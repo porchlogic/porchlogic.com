@@ -9,3 +9,7 @@ Update shop/cart.html and shop/checkout.html to drop the old shop.css, load the 
 
 ## ⬜ Summarize shop/index.html contents
 - COMPLETE : Read shop/index.html and produced a one-paragraph description covering layout, products, and interactions.
+
+## ⬜ Keep social buttons visible and enlarge on all screen sizes
+- COMPLETE : Updated landing page social button styles so they always render on mobile and increased icon size to about 2x.
+  - Files: index.html
