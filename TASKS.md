@@ -13,3 +13,7 @@ Update shop/cart.html and shop/checkout.html to drop the old shop.css, load the 
 ## ⬜ Keep social buttons visible and enlarge on all screen sizes
 - COMPLETE : Updated landing page social button styles so they always render on mobile and increased icon size to about 2x.
   - Files: index.html
+
+## ⬜ Increase mobile bottom spacing for social buttons
+- COMPLETE : Raised mobile bottom offset so social buttons are no longer clipped on Android viewport chrome.
+  - Files: index.html
